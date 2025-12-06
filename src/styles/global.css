@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+  
+  /* Custom max-width tokens */
+  --max-w-blog: 48rem;
+  --max-w-content: 45rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-zinc-50 text-zinc-900 font-sans antialiased;
+  }
+
+  /* Improve focus visibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-sky-500;
+  }
+}
+
+@layer utilities {
+  /* Line clamp utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Animated gradient for hero text */
+  .gradient-sky-purple {
+    background-image: linear-gradient(
+      120deg,
+      #38bdf8 0%,
+      #38bdf8 10%,
+      #0ea5e9 25%,
+      #6366f1 45%,
+      #a855f7 65%,
+      #a855f7 100%
+    );
+  }
+
+  .animate-gradient {
+    background-size: 250% 250%;
+    animation: gradient-move 8s ease infinite;
+  }
+
+  /* Custom max-widths */
+  .max-w-blog {
+    max-width: var(--max-w-blog);
+  }
+
+  .max-w-content {
+    max-width: var(--max-w-content);
+  }
+}
+
+@keyframes gradient-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Global button cursor */
+button {
+  @apply cursor-pointer;
+}
+
+/* Prose customizations for article content */
+.prose {
+  --tw-prose-links: theme(colors.sky.600);
+}
+
+.prose :where(a):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  text-decoration-color: theme(colors.sky.400 / 70%);
+  text-underline-offset: 4px;
+}
+
+.prose :where(a):not(:where([class~="not-prose"], [class~="not-prose"] *)):hover {
+  color: theme(colors.sky.500);
+}

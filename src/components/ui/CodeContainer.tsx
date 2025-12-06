@@ -1,4 +1,3 @@
-// src/CodeContainer.tsx
 import React, { useState } from "react";
 import { Copy, Check } from "lucide-react";
 
@@ -29,12 +28,13 @@ export const CodeContainer: React.FC<CodeContainerProps> = ({
 
   return (
     <div className="rounded-xl border border-zinc-200/80 bg-zinc-900 text-xs text-zinc-100 shadow-sm ring-1 ring-zinc-900/60 dark:border-zinc-800 dark:bg-zinc-950">
+      {/* Header with traffic lights and filename */}
       <div className="flex items-center justify-between gap-2 border-b border-zinc-800 px-4 py-2">
         <div className="flex items-center gap-1">
           <span className="h-2 w-2 rounded-full bg-red-500" />
           <span className="h-2 w-2 rounded-full bg-amber-400" />
           <span className="h-2 w-2 rounded-full bg-emerald-500" />
-          <span className="ml-3 text-[11px] text-zinc-500 truncate">
+          <span className="ml-3 truncate text-[11px] text-zinc-500">
             {fileName}
           </span>
         </div>
@@ -61,7 +61,7 @@ export const CodeContainer: React.FC<CodeContainerProps> = ({
         )}
       </div>
 
-      {/* Content */}
+      {/* Code content */}
       <div className="overflow-x-auto px-4 py-3">{children}</div>
     </div>
   );

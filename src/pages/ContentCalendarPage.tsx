@@ -1,57 +1,17 @@
-// src/ContentCalendarPage.tsx
 import React, { useMemo, useState } from "react";
-import type { ArticleCategory } from "./ArticleCategoryBadge";
-import { ArticleCategoryBadge } from "./ArticleCategoryBadge";
-import { usePageTitle } from "./usePageTitle";
-
-type CalendarArticle = {
-  date: string; // ISO
-  title: string;
-  category: ArticleCategory;
-  tags: string[];
-  status: "planned" | "published";
-  slug?: string;
-};
-
-const calendarArticles: CalendarArticle[] = [
-  {
-    date: "2025-12-10",
-    title: "React Performance in the Real World",
-    category: "deep-dive",
-    tags: ["react", "performance"],
-    status: "planned",
-  },
-  {
-    date: "2025-12-15",
-    title: "Building Accessible Components with Tailwind",
-    category: "tutorial",
-    tags: ["accessibility", "tailwind"],
-    status: "planned",
-  },
-];
-
-const getMonthMatrix = (year: number, month: number) => {
-  const firstDay = new Date(year, month, 1);
-  const startDay = firstDay.getDay(); // 0-6
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  const weeks: (Date | null)[][] = [];
-  let current = 1 - startDay;
-
-  while (current <= daysInMonth) {
-    const week: (Date | null)[] = [];
-    for (let i = 0; i < 7; i++) {
-      if (current < 1 || current > daysInMonth) {
-        week.push(null);
-      } else {
-        week.push(new Date(year, month, current));
-      }
-      current++;
-    }
-    weeks.push(week);
-  }
-  return weeks;
-};
+import { usePageTitle } from "@/hooks";
+import { ArticleCategoryBadge } from "@/components/articles";
+import { Tag } from "@/components/ui";
+import { SAMPLE_CALENDAR_ARTICLES } from "@/constants";
+import {
+  formatDate,
+  isToday,
+  toISODateString,
+  getCategoryColor,
+  getMonthMatrix,
+  cn,
+} from "@/utils";
+import type { CalendarArticle } from "@/types";
 
 export const ContentCalendarPage: React.FC = () => {
   usePageTitle("Content Calendar");
@@ -69,7 +29,7 @@ export const ContentCalendarPage: React.FC = () => {
 
   const articlesByDate = useMemo(() => {
     const map = new Map<string, CalendarArticle[]>();
-    for (const article of calendarArticles) {
+    for (const article of SAMPLE_CALENDAR_ARTICLES) {
       const key = article.date.slice(0, 10);
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(article);
@@ -77,13 +37,12 @@ export const ContentCalendarPage: React.FC = () => {
     return map;
   }, []);
 
-  const selectedKey = selectedDate && selectedDate.toISOString().slice(0, 10);
-
+  const selectedKey = selectedDate && toISODateString(selectedDate);
   const selectedArticles = selectedKey
     ? articlesByDate.get(selectedKey) ?? []
     : [];
 
-  const upcoming = [...calendarArticles]
+  const upcoming = [...SAMPLE_CALENDAR_ARTICLES]
     .sort((a, b) => a.date.localeCompare(b.date))
     .slice(0, 10);
 
@@ -94,21 +53,10 @@ export const ContentCalendarPage: React.FC = () => {
     setSelectedDate(null);
   };
 
-  const isToday = (d: Date) => d.toDateString() === today.toDateString();
-
-  const legendDot = "inline-flex h-2 w-2 rounded-full";
-
-  const categoryColor = (c: ArticleCategory) =>
-    c === "trending"
-      ? "bg-orange-500"
-      : c === "tutorial"
-      ? "bg-sky-500"
-      : "bg-purple-500";
-
   return (
     <div className="space-y-10">
       {/* Header */}
-      <header className="text-center space-y-2">
+      <header className="space-y-2 text-center">
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
           Content Calendar
         </h1>
@@ -120,7 +68,7 @@ export const ContentCalendarPage: React.FC = () => {
 
       {/* Calendar card */}
       <section className="rounded-xl border border-zinc-200/80 bg-zinc-50/80 p-4 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900/70">
-        {/* Month header */}
+        {/* Month navigation */}
         <div className="mb-4 flex items-center justify-between">
           <button
             type="button"
@@ -149,13 +97,16 @@ export const ContentCalendarPage: React.FC = () => {
         {/* Legend */}
         <div className="mb-4 flex flex-wrap gap-3 text-[11px] text-zinc-500 dark:text-zinc-400">
           <span className="flex items-center gap-1">
-            <span className={`${legendDot} bg-orange-500`} /> 🔥 Trending
+            <span className="inline-flex h-2 w-2 rounded-full bg-orange-500" />{" "}
+            🔥 Trending
           </span>
           <span className="flex items-center gap-1">
-            <span className={`${legendDot} bg-sky-500`} /> 📚 Tutorial
+            <span className="inline-flex h-2 w-2 rounded-full bg-sky-500" /> 📚
+            Tutorial
           </span>
           <span className="flex items-center gap-1">
-            <span className={`${legendDot} bg-purple-500`} /> 🔬 Deep Dive
+            <span className="inline-flex h-2 w-2 rounded-full bg-purple-500" />{" "}
+            🔬 Deep Dive
           </span>
         </div>
 
@@ -180,7 +131,8 @@ export const ContentCalendarPage: React.FC = () => {
                   />
                 );
               }
-              const key = date.toISOString().slice(0, 10);
+
+              const key = toISODateString(date);
               const hasArticles = articlesByDate.has(key);
               const isSelected = selectedDate && key === selectedKey;
 
@@ -193,22 +145,26 @@ export const ContentCalendarPage: React.FC = () => {
               const selectedClasses = "border-sky-500 ring-1 ring-sky-500/60";
 
               const dotColor =
-                hasArticles &&
-                categoryColor(articlesByDate.get(key)![0].category);
+                hasArticles && getCategoryColor(articlesByDate.get(key)![0].category);
 
               return (
                 <button
                   key={key}
                   type="button"
                   onClick={() => hasArticles && setSelectedDate(date)}
-                  className={`${baseClasses} ${
-                    isToday(date) ? todayClasses : defaultClasses
-                  } ${isSelected ? selectedClasses : ""}`}
+                  className={cn(
+                    baseClasses,
+                    isToday(date) ? todayClasses : defaultClasses,
+                    isSelected && selectedClasses
+                  )}
                 >
                   <span className="text-xs font-medium">{date.getDate()}</span>
                   {hasArticles && (
                     <span
-                      className={`mt-0.5 inline-flex h-1.5 w-1.5 rounded-full ${dotColor}`}
+                      className={cn(
+                        "mt-0.5 inline-flex h-1.5 w-1.5 rounded-full",
+                        dotColor
+                      )}
                       aria-hidden="true"
                     />
                   )}
@@ -229,11 +185,7 @@ export const ContentCalendarPage: React.FC = () => {
                   <ArticleCategoryBadge category={article.category} />
                   <span>•</span>
                   <time dateTime={article.date} className="font-mono">
-                    {new Date(article.date).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "2-digit",
-                      year: "numeric",
-                    })}
+                    {formatDate(article.date)}
                   </time>
                   <span>•</span>
                   <span className="rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] uppercase tracking-wide text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
@@ -245,12 +197,7 @@ export const ContentCalendarPage: React.FC = () => {
                 </h2>
                 <div className="flex flex-wrap gap-1">
                   {article.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
-                    >
-                      #{tag}
-                    </span>
+                    <Tag key={tag} label={tag} />
                   ))}
                 </div>
                 {article.status === "published" && article.slug && (
@@ -283,13 +230,13 @@ export const ContentCalendarPage: React.FC = () => {
                 dateTime={article.date}
                 className="w-24 font-mono text-[11px] text-zinc-500 dark:text-zinc-400"
               >
-                {new Date(article.date).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "2-digit",
-                })}
+                {formatDate(article.date, { month: "short", day: "2-digit" })}
               </time>
               <span
-                className={`${legendDot} ${categoryColor(article.category)}`}
+                className={cn(
+                  "inline-flex h-2 w-2 rounded-full",
+                  getCategoryColor(article.category)
+                )}
                 aria-hidden="true"
               />
               <span className="text-zinc-700 dark:text-zinc-200">

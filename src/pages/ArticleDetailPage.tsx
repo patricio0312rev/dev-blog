@@ -1,19 +1,17 @@
-// src/ArticleDetailPage.tsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Linkedin, Instagram, Twitter } from "lucide-react";
-import {
-  ArticleCategoryBadge,
-  type ArticleCategory,
-} from "./ArticleCategoryBadge";
-import { usePageTitle } from "./usePageTitle";
+import { usePageTitle, useReadingProgress } from "@/hooks";
+import { ArticleCategoryBadge } from "@/components/articles";
+import { Tag } from "@/components/ui";
+import { formatDate } from "@/utils";
+import type { ArticleCategory } from "@/types";
 
 export interface ArticleDetailProps {
   title: string;
   description: string;
   category: ArticleCategory;
-  date: string; // ISO or parseable string
+  date: string;
   tags: string[];
-  // Optional: you can later add `content` as ReactNode or MDX component
 }
 
 export const ArticleDetailPage: React.FC<ArticleDetailProps> = ({
@@ -24,32 +22,11 @@ export const ArticleDetailPage: React.FC<ArticleDetailProps> = ({
   tags,
 }) => {
   usePageTitle(title);
-
-  const [progress, setProgress] = useState(0);
-
-  // Reading progress bar logic
-  useEffect(() => {
-    const onScroll = () => {
-      const doc = document.documentElement;
-      const total = doc.scrollHeight - doc.clientHeight;
-      const current = window.scrollY;
-      const value = total > 0 ? (current / total) * 100 : 0;
-      setProgress(value);
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const formattedDate = new Date(date).toLocaleDateString("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  });
+  const progress = useReadingProgress();
 
   return (
-    <div className="relative mx-auto max-w-content space-y-10">
-      {/* Reading progress bar (sits under navbar) */}
+    <div className="relative mx-auto max-w-3xl space-y-10">
+      {/* Reading progress bar */}
       <div
         className="fixed inset-x-0 top-16 z-30 h-0.5 bg-sky-500/80 transition-[width] duration-150"
         style={{ width: `${progress}%` }}
@@ -57,13 +34,12 @@ export const ArticleDetailPage: React.FC<ArticleDetailProps> = ({
       />
 
       {/* Header */}
-      <header className="pt-4 space-y-4">
-        {/* Breadcrumb-style meta */}
+      <header className="space-y-4 pt-4">
         <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
           <ArticleCategoryBadge category={category} />
           <span className="text-zinc-400 dark:text-zinc-500">•</span>
           <time dateTime={date} className="font-mono">
-            {formattedDate}
+            {formatDate(date)}
           </time>
         </div>
 
@@ -75,15 +51,9 @@ export const ArticleDetailPage: React.FC<ArticleDetailProps> = ({
           {description}
         </p>
 
-        {/* Tags */}
         <div className="flex flex-wrap gap-1.5 pt-1">
           {tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] text-zinc-500 dark:border-zinc-700 dark:text-zinc-400"
-            >
-              #{tag}
-            </span>
+            <Tag key={tag} label={tag} />
           ))}
         </div>
 
@@ -91,8 +61,8 @@ export const ArticleDetailPage: React.FC<ArticleDetailProps> = ({
       </header>
 
       {/* Article content */}
-      <article className="prose prose-zinc max-w-none text-sm leading-relaxed dark:prose-invert prose-code:font-mono prose-pre:bg-zinc-900 prose-pre:text-zinc-50 prose-pre:rounded-xl prose-pre:border prose-pre:border-zinc-800 prose-blockquote:border-l-2 prose-blockquote:border-sky-500 prose-blockquote:text-zinc-700 dark:prose-blockquote:text-zinc-200 prose-img:rounded-xl">
-        {/* Example content – replace with MDX / real content later */}
+      <article className="prose prose-zinc max-w-none text-sm leading-relaxed dark:prose-invert prose-code:font-mono prose-pre:rounded-xl prose-pre:border prose-pre:border-zinc-800 prose-pre:bg-zinc-900 prose-pre:text-zinc-50 prose-blockquote:border-l-2 prose-blockquote:border-sky-500 prose-blockquote:text-zinc-700 prose-img:rounded-xl dark:prose-blockquote:text-zinc-200">
+        {/* Placeholder content */}
         <p>
           This is a placeholder for your article content. You can swap this
           section with MDX, a markdown renderer, or pass in custom React nodes

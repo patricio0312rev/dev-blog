@@ -1,7 +1,6 @@
-// src/ThemeToggle.tsx
 import React from "react";
 import { Sun, Moon } from "lucide-react";
-import { useTheme } from "./ThemeProvider";
+import { useTheme } from "@/hooks";
 
 export const ThemeToggle: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
