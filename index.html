@@ -1,10 +1,50 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>dev-blog</title>
+    <title>patricio.dev - Personal developer blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Personal developer blog by Patricio — full-stack dev from Lima, Peru."
+    />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+
+    <!-- Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Theme pre-hydration: set data-theme before React/Tailwind run -->
+    <script>
+      (function () {
+        try {
+          const stored = localStorage.getItem("theme");
+          const prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)"
+          ).matches;
+
+          const theme =
+            stored === "light" || stored === "dark"
+              ? stored
+              : prefersDark
+              ? "dark"
+              : "light";
+
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {
+          // fallback to light handled in React
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
