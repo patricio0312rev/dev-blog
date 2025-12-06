@@ -1,6 +1,6 @@
 import { useLayoutEffect } from "react";
 
-const BASE_TITLE = "patricio.dev";
+const BASE_TITLE = "patricioMarroquin.dev";
 
 /**
  * Sets the document title with the site name suffix

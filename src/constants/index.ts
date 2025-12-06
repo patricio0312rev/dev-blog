@@ -3,8 +3,8 @@ import type { NavLink, Article } from "@/types";
 
 /** Site metadata - Used for SEO */
 export const SITE_CONFIG = {
-  name: "patricio.dev",
-  title: "patricio.dev",
+  name: "patricioMarroquin.dev",
+  title: "patricioMarroquin.dev",
   description:
     "Personal developer blog by Juan Patricio — full-stack dev from Lima, Peru. Software development insights, tutorials, and hot takes.",
   author: "Juan Patricio",
