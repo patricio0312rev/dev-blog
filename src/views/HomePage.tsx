@@ -52,7 +52,7 @@ export const HomePage: React.FC<HomePageProps> = ({ articles }) => {
           </div>
         </div>
 
-        <div className="flex-1">
+        <div className="flex-1 w-full">
           <CodeContainer
             fileName="patricio.ts"
             codeToCopy={HERO_CODE}
