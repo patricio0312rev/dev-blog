@@ -68,13 +68,15 @@ export const HomePage: React.FC<HomePageProps> = ({ articles }) => {
                 &nbsp;&nbsp;<span className="text-purple-300">role</span>
                 <span className="text-sky-300">:</span>{" "}
                 <span className="text-emerald-300">
-                  &quot;Full-Stack Dev&quot;
+                  &quot;Senior Full-Stack Developer&quot;
                 </span>
                 ,{"\n"}
                 &nbsp;&nbsp;<span className="text-purple-300">location</span>
                 <span className="text-sky-300">:</span>{" "}
-                <span className="text-emerald-300">&quot;Lima 🇵🇪&quot;</span>,
-                {"\n"}
+                <span className="text-emerald-300">
+                  &quot;Lima, Peru 🇵🇪&quot;
+                </span>
+                ,{"\n"}
                 &nbsp;&nbsp;<span className="text-purple-300">stack</span>
                 <span className="text-sky-300">:</span>{" "}
                 <span className="text-sky-200">[</span>
