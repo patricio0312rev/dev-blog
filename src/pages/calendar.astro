@@ -8,16 +8,31 @@ const planModules = import.meta.glob<{ default: any }>(
 );
 
 const allArticles = Object.values(planModules)
-  .flatMap((mod) => mod.default?.articles || [])
-  .map((article: any) => ({
-    slug: article.slug || article.id,
-    title: article.title,
-    description: article.description || "",
-    category: article.category,
-    tags: article.tags || [],
-    date: article.scheduledDate || article.date,
-    status: article.status || "planned",
-  }))
+  .flatMap((mod) => {
+    const data = mod.default || {};
+    if (Array.isArray(data.articles)) return data.articles;
+    if (Array.isArray(data.items)) return data.items;
+    return [];
+  })
+  .map((article: any) => {
+    const baseSlug: string = article.slug || article.id || "";
+    const date: string = article.date || article.scheduledDate || "";
+
+    const entrySlug =
+      article.entrySlug ||
+      (date && baseSlug ? `${date}-${baseSlug}` : baseSlug);
+
+    return {
+      slug: entrySlug,
+      title: article.title,
+      description: article.description || article.summary || "",
+      category: article.category,
+      tags: article.tags || [],
+      date,
+      status: article.status || "planned",
+    };
+  })
+  .filter((article) => !!article.date)
   .sort((a, b) => a.date.localeCompare(b.date));
 ---
 
