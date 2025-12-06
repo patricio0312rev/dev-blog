@@ -198,3 +198,7 @@ button {
   background-color: transparent !important;
   color: inherit;
 }
+
+pre code {
+  @apply p-0!;
+}
