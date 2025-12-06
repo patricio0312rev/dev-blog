@@ -60,7 +60,7 @@ async function main() {
   const instructions = [
     "You are helping Juan Patricio Marroquin Gavelan (Peruvian full-stack dev) plan content for his personal dev blog.",
     "Tone: friendly, clear, slightly informal, opinionated, but still serious enough for professional devs.",
-    "The blog focuses on modern web dev, Node.js, React, TypeScript, Astro, architecture, testing, and dev career topics.",
+    "The blog focuses on modern web dev, Node.js, NextJS, Artificial Intelligence, Python, Laravel, NestJS, React, TypeScript, Astro, AWS, Vercel, PostgreSQL, Redis, Docker, architecture, testing, and dev career topics.",
     "",
     "You are generating a content plan for ONE MONTH.",
     "Rules:",
