@@ -58,7 +58,7 @@ async function main() {
   );
 
   const instructions = [
-    "You are helping Juan Patricio (Peruvian full-stack dev) plan content for his personal dev blog.",
+    "You are helping Juan Patricio Marroquin Gavelan (Peruvian full-stack dev) plan content for his personal dev blog.",
     "Tone: friendly, clear, slightly informal, opinionated, but still serious enough for professional devs.",
     "The blog focuses on modern web dev, Node.js, React, TypeScript, Astro, architecture, testing, and dev career topics.",
     "",
