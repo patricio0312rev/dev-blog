@@ -1,20 +1,60 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
-import { ArticleCategoryBadge } from "@/components/articles/ArticleCategoryBadge";
-import { Tag } from "@/components/ui/Tag";
-import { formatDate } from "@/utils";
 import { SITE_CONFIG } from "@/constants";
+import { Flame, BookOpen, FlaskConical, Headphones } from "@lucide/astro";
 
 interface Props {
   article: CollectionEntry<"articles">;
 }
 
-const { article } = Astro.props;
-const { title, description, category, tags, publishDate, ogImage } =
-  article.data;
+const { article } = Astro.props as Props;
+const {
+  title,
+  description,
+  category,
+  tags = [],
+  publishDate,
+  ogImage,
+} = article.data;
 
 const articleUrl = new URL(`/blog/${article.slug}`, Astro.site).href;
+
+const formattedDate = publishDate.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+
+const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+  title
+)}&url=${encodeURIComponent(articleUrl)}`;
+const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+  articleUrl
+)}`;
+
+// Category styles with real Lucide Astro components
+const categoryStyles: Record<string, { bg: string; text: string; Icon: any }> =
+  {
+    trending: {
+      bg: "bg-orange-100 dark:bg-orange-900/30",
+      text: "text-orange-700 dark:text-orange-300",
+      Icon: Flame,
+    },
+    tutorial: {
+      bg: "bg-sky-100 dark:bg-sky-900/30",
+      text: "text-sky-700 dark:text-sky-300",
+      Icon: BookOpen,
+    },
+    "deep-dive": {
+      bg: "bg-purple-100 dark:bg-purple-900/30",
+      text: "text-purple-700 dark:text-purple-300",
+      Icon: FlaskConical,
+    },
+  };
+
+const catStyle = categoryStyles[category] ?? categoryStyles.tutorial;
+const CategoryIcon = catStyle.Icon;
 ---
 
 <BaseLayout
@@ -25,60 +65,149 @@ const articleUrl = new URL(`/blog/${article.slug}`, Astro.site).href;
   publishDate={publishDate}
   canonicalUrl={articleUrl}
 >
-  <article class="mx-auto max-w-3xl">
-    <!-- Article Header -->
-    <header class="mb-10 space-y-4">
+  <article class="relative mx-auto max-w-3xl">
+    <!-- Reading progress bar -->
+    <div class="fixed inset-x-0 top-16 z-30 h-0.5 bg-transparent">
       <div
-        class="flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400"
+        data-reading-progress
+        class="mx-auto h-0.5 max-w-3xl bg-sky-500/80 transition-[width] duration-150"
+        style="width: 0%;"
       >
-        <ArticleCategoryBadge category={category} client:load />
-        <span class="text-zinc-400 dark:text-zinc-500">•</span>
-        <time datetime={publishDate.toISOString()} class="font-mono">
-          {formatDate(publishDate.toISOString())}
-        </time>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="mb-8">
+      <div
+        class="mb-4 flex flex-wrap items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400"
+      >
+        <!-- Category badge -->
+        <span
+          class={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium ${catStyle.bg} ${catStyle.text}`}
+        >
+          <span class="flex items-center justify-center">
+            <CategoryIcon class="h-3.5 w-3.5" />
+          </span>
+          <span class="capitalize">
+            {category.replace("-", " ")}
+          </span>
+        </span>
+
+        <span class="h-1 w-1 rounded-full bg-zinc-400" aria-hidden="true"
+        ></span>
+
+        <!-- Date -->
+        <time datetime={publishDate.toISOString()}>{formattedDate}</time>
+
+        <span class="h-1 w-1 rounded-full bg-zinc-400" aria-hidden="true"
+        ></span>
+
+        <!-- Reading time -->
+        <span data-reading-time class="text-zinc-500 dark:text-zinc-400"></span>
+
+        <!-- Listen button -->
+        <button
+          type="button"
+          data-listen-button
+          class="inline-flex items-center gap-1 rounded-full border border-zinc-300 px-2.5 py-0.5 text-[11px] font-medium text-zinc-700 transition-colors duration-150 hover:border-sky-500 hover:text-sky-500 dark:border-zinc-700 dark:text-zinc-200 dark:hover:border-sky-400 dark:hover:text-sky-400"
+        >
+          <Headphones class="h-3.5 w-3.5" />
+          <span data-listen-label>Listen</span>
+        </button>
       </div>
 
       <h1
-        class="text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50"
+        data-article-title
+        class="mb-3 text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50"
       >
         {title}
       </h1>
 
-      <p class="text-base text-zinc-600 dark:text-zinc-300">
+      <p
+        data-article-description
+        class="mb-4 text-base text-zinc-600 dark:text-zinc-300"
+      >
         {description}
       </p>
 
-      <div class="flex flex-wrap gap-1.5">
-        {tags.map((tag) => <Tag label={tag} client:load />)}
-      </div>
+      <!-- Tags -->
+      {
+        tags.length > 0 && (
+          <div class="mb-6 flex flex-wrap gap-2">
+            {tags.map((tag: string) => (
+              <span class="rounded-full bg-sky-50 px-2.5 py-0.5 text-[11px] text-sky-700 dark:bg-sky-900/40 dark:text-sky-200">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )
+      }
 
       <hr class="border-zinc-200 dark:border-zinc-800" />
     </header>
 
-    <!-- Article Content -->
-    <div
-      class="prose prose-zinc max-w-none dark:prose-invert prose-headings:scroll-mt-24 prose-a:text-sky-600 prose-a:underline-offset-4 hover:prose-a:text-sky-500 prose-code:font-mono prose-pre:rounded-xl prose-pre:border prose-pre:border-zinc-200 dark:prose-pre:border-zinc-800 prose-img:rounded-xl"
-    >
+    <!-- Article body -->
+    <section data-article-body class="prose max-w-none pb-10">
       <slot />
-    </div>
+    </section>
 
-    <!-- Share Section -->
-    <footer class="mt-12 border-t border-zinc-200 pt-6 dark:border-zinc-800">
+    <!-- Share section -->
+    <footer class="border-t border-zinc-200 pt-6 dark:border-zinc-800">
       <div
-        class="flex flex-wrap items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400"
+        class="flex flex-wrap items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400"
       >
         <span class="font-medium text-zinc-700 dark:text-zinc-300">Share:</span>
 
-        href={
-          `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(articleUrl)}`
-        }
-        target="_blank" rel="noopener noreferrer" class="hover:text-sky-500" > Twitter
-      </div>
+        <!-- Twitter -->
+        <a
+          href={twitterUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 transition-colors duration-150 hover:text-sky-500 dark:hover:text-sky-400"
+        >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.2 2.2.1 4.4-.6 6-2C3 15.5 1.5 9.6 4 6c2.2 2.6 5.2 4.1 8.5 4.3-.9-3.7 4-5.4 6.1-3.1.9 0 3.4-1.2 3.4-1.2Z"
+            ></path>
+          </svg>
+          <span>Twitter</span>
+        </a>
 
-      href={
-        `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleUrl)}`
-      }
-      target="_blank" rel="noopener noreferrer" class="hover:text-sky-500" > LinkedIn
+        <!-- LinkedIn -->
+        <a
+          href={linkedinUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 transition-colors duration-150 hover:text-sky-500 dark:hover:text-sky-400"
+        >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6Z"
+            ></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
     </footer>
   </article>
 </BaseLayout>
@@ -108,3 +237,115 @@ const articleUrl = new URL(`/blog/${article.slug}`, Astro.site).href;
     },
   })}
 />
+
+<!-- Scripts: reading progress, reading time, TTS -->
+<script is:inline>
+  function initArticleFeatures() {
+    const progressEl = document.querySelector("[data-reading-progress]");
+    const listenButton = document.querySelector("[data-listen-button]");
+    const listenLabel = document.querySelector("[data-listen-label]");
+    const articleBody = document.querySelector("[data-article-body]");
+    const readingTimeEl = document.querySelector("[data-reading-time]");
+    const titleEl = document.querySelector("[data-article-title]");
+    const descriptionEl = document.querySelector("[data-article-description]");
+
+    // Reading progress
+    const updateProgress = () => {
+      if (!progressEl) return;
+      const doc = document.documentElement;
+      const scrollTop = window.scrollY || doc.scrollTop;
+      const scrollHeight = doc.scrollHeight - doc.clientHeight;
+      if (scrollHeight <= 0) {
+        progressEl.style.width = "0%";
+        return;
+      }
+      const value = (scrollTop / scrollHeight) * 100;
+      progressEl.style.width = value + "%";
+    };
+
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+
+    // Reading time
+    if (articleBody && readingTimeEl) {
+      const text = articleBody.innerText || articleBody.textContent || "";
+      const words = text.trim().split(/\s+/).filter(Boolean).length;
+      const minutes = Math.max(1, Math.round(words / 200));
+      readingTimeEl.textContent = minutes + " min read";
+    }
+
+    // Text-to-speech
+    if (!listenButton || !listenLabel) {
+      return;
+    }
+
+    // Avoid attaching multiple times on page transitions
+    if (listenButton.dataset.initialized === "true") {
+      return;
+    }
+    listenButton.dataset.initialized = "true";
+
+    if (!("speechSynthesis" in window)) {
+      listenButton.disabled = true;
+      listenLabel.textContent = "Not supported";
+      return;
+    }
+
+    if (!articleBody) return;
+
+    let isSpeaking = false;
+
+    listenButton.addEventListener("click", () => {
+      const synth = window.speechSynthesis;
+
+      if (isSpeaking) {
+        synth.cancel();
+        isSpeaking = false;
+        listenLabel.textContent = "Listen";
+        return;
+      }
+
+      const titleText =
+        (titleEl && (titleEl.innerText || titleEl.textContent)) || "";
+      const descriptionText =
+        (descriptionEl &&
+          (descriptionEl.innerText || descriptionEl.textContent)) ||
+        "";
+      const bodyText = articleBody.innerText || articleBody.textContent || "";
+
+      const parts = [titleText, descriptionText, bodyText]
+        .map((t) => t.trim())
+        .filter(Boolean);
+
+      const fullText = parts.join(". ");
+
+      if (!fullText.trim()) return;
+
+      const utterance = new SpeechSynthesisUtterance(fullText);
+
+      utterance.onend = () => {
+        isSpeaking = false;
+        listenLabel.textContent = "Listen";
+      };
+      utterance.onerror = () => {
+        isSpeaking = false;
+        listenLabel.textContent = "Listen";
+      };
+
+      synth.cancel();
+      synth.speak(utterance);
+      isSpeaking = true;
+      listenLabel.textContent = "Stop listening";
+    });
+
+    window.addEventListener("beforeunload", () => {
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+    });
+  }
+
+  // Run on initial load and after View Transitions
+  initArticleFeatures();
+  document.addEventListener("astro:page-load", initArticleFeatures);
+</script>
