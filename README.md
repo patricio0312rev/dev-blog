@@ -192,7 +192,7 @@ interface CalendarArticle extends Article {
 
 ## 📄 License
 
-MIT © Juan Patricio
+MIT © Patricio Marroquin
 
 ---
 
