@@ -1,0 +1,29 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ContentCalendarPage from "@/views/ContentCalendarPage";
+
+const planModules = import.meta.glob<{ default: any }>(
+  "/content-plans/*.json",
+  { eager: true }
+);
+
+const allArticles = Object.values(planModules)
+  .flatMap((mod) => mod.default?.articles || [])
+  .map((article: any) => ({
+    slug: article.slug || article.id,
+    title: article.title,
+    description: article.description || "",
+    category: article.category,
+    tags: article.tags || [],
+    date: article.scheduledDate || article.date,
+    status: article.status || "planned",
+  }))
+  .sort((a, b) => a.date.localeCompare(b.date));
+---
+
+<BaseLayout
+  title="Content Calendar"
+  description="See what's coming up on the blog."
+>
+  <ContentCalendarPage articles={allArticles} client:load />
+</BaseLayout>
