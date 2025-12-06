@@ -7,7 +7,7 @@
     "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
     Consolas, "Liberation Mono", "Courier New", monospace;
-  
+
   /* Custom max-width tokens */
   --max-w-blog: 48rem;
   --max-w-content: 45rem;
@@ -92,13 +92,109 @@ button {
 /* Prose customizations for article content */
 .prose {
   --tw-prose-links: theme(colors.sky.600);
+  @apply text-sm leading-relaxed text-zinc-800 dark:text-zinc-200;
+  font-family: var(--font-sans);
 }
 
+/* Headings */
+.prose h1 {
+  @apply text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 mb-4;
+}
+
+.prose h2 {
+  @apply text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 mt-8 mb-3;
+}
+
+.prose h3 {
+  @apply text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 mt-6 mb-2;
+}
+
+/* Paragraphs */
+.prose p {
+  @apply my-4 text-zinc-700 dark:text-zinc-200;
+}
+
+/* Lists */
+.prose ul,
+.prose ol {
+  @apply my-4 pl-6 text-zinc-700 dark:text-zinc-200;
+}
+
+/* Ensure bullets / numbers appear */
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose li {
+  @apply my-1;
+}
+
+/* Blockquotes */
+.prose blockquote {
+  @apply my-6 border-l-4 border-zinc-200 pl-4 italic text-zinc-600 dark:border-zinc-700 dark:text-zinc-300;
+}
+
+/* Horizontal rules */
+.prose hr {
+  @apply my-8 border-zinc-200 dark:border-zinc-800;
+}
+
+/* Inline code */
+.prose code {
+  font-family: var(--font-mono);
+  @apply rounded bg-zinc-900/90 px-1.5 py-0.5 text-[0.75rem] text-zinc-100 dark:bg-zinc-900/90 dark:text-zinc-100;
+}
+
+/* Fenced code blocks: dejamos que nuestro CodeBlock maneje el fondo/bordes,
+   así que anulamos padding/margins del pre por defecto. */
+.prose pre {
+  font-family: var(--font-mono);
+  @apply bg-transparent p-0 m-0;
+}
+
+/* Links */
+
 .prose :where(a):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-  text-decoration-color: theme(colors.sky.400 / 70%);
+  /* Keep normal text color until hover */
+  color: inherit;
+
+  /* Underline styling */
+  text-decoration-line: underline;
+  text-decoration-color: rgba(56, 189, 248, 0.7); /* ~ sky-400 / 70% */
   text-underline-offset: 4px;
 }
 
-.prose :where(a):not(:where([class~="not-prose"], [class~="not-prose"] *)):hover {
-  color: theme(colors.sky.500);
+/* Hover state for links */
+.prose
+  :where(a):not(:where([class~="not-prose"], [class~="not-prose"] *)):hover {
+  color: #0ea5e9; /* sky-500 */
+}
+
+/* Inline code only (NOT inside pre) */
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  @apply rounded bg-zinc-900/90 px-1.5 py-0.5 text-[0.75rem] text-zinc-100 dark:bg-zinc-900;
+}
+
+/* Fenced code blocks: our container handles bg/border,
+   so reset default prose pre styles. */
+.prose pre {
+  font-family: var(--font-mono);
+  @apply bg-transparent p-0 m-0;
+}
+
+/* Override Shiki / astro-code backgrounds just inside our custom wrapper */
+[data-code-wrapper] .astro-code-block {
+  background-color: transparent !important;
+  color: inherit;
+}
+
+/* Ensure inner <code> also inherits container color/bg */
+[data-code-wrapper] .astro-code-block code {
+  background-color: transparent !important;
+  color: inherit;
 }
