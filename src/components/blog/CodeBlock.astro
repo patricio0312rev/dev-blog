@@ -1,5 +1,55 @@
 ---
-const { class: className, "data-language": lang, ...rest } = Astro.props;
+interface Props {
+  class?: string;
+  "data-language"?: string;
+  meta?: string;
+  metastring?: string;
+  "data-meta"?: string;
+  [key: string]: any;
+}
+
+const {
+  class: className,
+  "data-language": dataLang,
+  meta,
+  metastring,
+  "data-meta": dataMeta,
+  ...rest
+} = Astro.props as Props;
+
+// 1) Determine language: prefer data-language, else parse from className
+let language = dataLang;
+
+if (!language && typeof className === "string") {
+  const match = className.match(/language-([\w+-]+)/);
+  if (match) {
+    language = match[1];
+  }
+}
+
+// 2) Determine filename from any meta-like prop
+const rawMeta = meta ?? metastring ?? dataMeta;
+
+let fileName: string | undefined;
+
+if (typeof rawMeta === "string") {
+  // Supports:
+  // filename="Profile.server.tsx"
+  // filename='Profile.server.tsx'
+  // filename=Profile.server.tsx
+  const match = rawMeta.match(/filename=(?:"([^"]+)"|'([^']+)'|([^\s]+))/);
+  if (match) {
+    fileName = match[1] ?? match[2] ?? match[3];
+  }
+}
+
+// 3) Fallback: if no explicit filename, derive from language
+if (!fileName) {
+  fileName = `snippet.${language || "txt"}`;
+}
+
+// Uncomment while debugging if you want:
+// console.log("CodeBlock → className:", className, "rawMeta:", rawMeta, "language:", language, "fileName:", fileName);
 ---
 
 <div
@@ -15,15 +65,15 @@ const { class: className, "data-language": lang, ...rest } = Astro.props;
       <span class="h-2 w-2 rounded-full bg-amber-400"></span>
       <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
       <span class="ml-3 truncate text-[11px] text-zinc-500" data-code-filename>
-        snippet.{lang || "txt"}
+        {fileName}
       </span>
     </div>
 
     <div class="flex items-center gap-2">
       {
-        lang && (
+        language && (
           <span class="text-[11px] uppercase tracking-wide text-zinc-400">
-            {lang}
+            {language}
           </span>
         )
       }
@@ -33,7 +83,6 @@ const { class: className, "data-language": lang, ...rest } = Astro.props;
         class="inline-flex items-center gap-1 rounded-full border border-zinc-700 bg-zinc-900/80 px-2.5 py-0.5 text-[11px] font-medium text-zinc-300 transition-colors duration-150 hover:border-sky-500 hover:text-sky-300 dark:bg-zinc-950"
         data-code-copy
       >
-        <!-- Lucide-style Copy icon (inline SVG) -->
         <svg
           class="h-3 w-3"
           viewBox="0 0 24 24"
@@ -55,13 +104,12 @@ const { class: className, "data-language": lang, ...rest } = Astro.props;
 
   <!-- Code content -->
   <div class="overflow-x-auto px-4 py-3">
+    <!-- NOTE: inline <slot /> inside <pre> to avoid extra newline -->
     <pre
       {...rest}
       class={`astro-code-block ${className || ""}`}
       tabindex="0"
-      data-code-block>
-      <slot />
-    </pre>
+      data-code-block><slot /></pre>
   </div>
 </div>
 

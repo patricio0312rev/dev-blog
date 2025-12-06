@@ -28,6 +28,13 @@ export default defineConfig({
         light: "github-dark",
         dark: "github-dark",
       },
+      transformers: [
+        {
+          pre(hast) {
+            hast.properties["data-meta"] = this.options.meta?.__raw;
+          },
+        },
+      ],
     },
   },
 });
