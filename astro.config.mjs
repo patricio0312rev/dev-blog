@@ -6,7 +6,7 @@ import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  site: "https://patricio.dev", // Change to your domain
+  site: "https://patriciomarroquin.dev",
   output: "static",
   adapter: vercel({
     webAnalytics: { enabled: true },
@@ -25,7 +25,7 @@ export default defineConfig({
   markdown: {
     shikiConfig: {
       themes: {
-        light: "github-light",
+        light: "github-dark",
         dark: "github-dark",
       },
     },
