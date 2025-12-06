@@ -4,12 +4,15 @@ import { ButtonLink, CodeContainer } from "@/components/ui";
 import { ArticleCard } from "@/components/articles";
 import { HERO_CODE, SITE_CONFIG } from "@/constants";
 import type { Article } from "@/types";
+import { usePageTitle } from "@/hooks";
 
 export interface HomePageProps {
   articles: Article[];
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ articles }) => {
+  usePageTitle("Home");
+
   return (
     <div className="space-y-16">
       {/* Hero Section */}
