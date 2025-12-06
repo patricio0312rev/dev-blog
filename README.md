@@ -1,4 +1,4 @@
-# patricio.dev - Personal Developer Blog
+# patriciomarroquin.dev - Personal Developer Blog
 
 A modern, fast developer blog built with React, TypeScript, and Tailwind CSS.
 
