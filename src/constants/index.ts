@@ -6,8 +6,8 @@ export const SITE_CONFIG = {
   name: "patricioMarroquin.dev",
   title: "patricioMarroquin.dev",
   description:
-    "Personal developer blog by Juan Patricio — full-stack dev from Lima, Peru. Software development insights, tutorials, and hot takes.",
-  author: "Juan Patricio",
+    "Personal developer blog by Patricio Marroquin — full-stack dev from Lima, Peru. Software development insights, tutorials, and hot takes.",
+  author: "Juan Patricio Marroquin Gavelan",
   location: "Lima, Peru",
   twitterHandle: "@patricio0312rev",
   repo: "https://github.com/patricio0312rev/dev-blog",
