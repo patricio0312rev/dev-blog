@@ -343,7 +343,7 @@ Flow:
 - [x] Migrate to Astro for SSG and SEO
 - [x] Content calendar view
 - [x] AI-generated monthly plan + daily article script
-- [ ] RSS feed generation
+- [x] RSS feed generation
 - [ ] Full-text search (Pagefind / Algolia)
 - [ ] Comments (Giscus)
 - [ ] View counter per article
