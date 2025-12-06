@@ -27,7 +27,7 @@ importers:
         specifier: ^0.556.0
         version: 0.556.0(astro@5.16.4(@types/node@24.10.1)(@vercel/functions@2.2.13)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.53.3)(typescript@5.9.3))
       '@vercel/analytics':
-        specifier: ^1.4.0
+        specifier: ^1.6.1
         version: 1.6.1(react@19.2.1)
       astro:
         specifier: ^5.0.0
