@@ -1,0 +1,266 @@
+{
+  "month": "2025-12",
+  "startDate": "2025-12-01",
+  "endDate": "2025-12-31",
+  "articles": [
+    {
+      "date": "2025-12-06",
+      "category": "trending",
+      "slug": "react-19-biggest-features-i-am-excited-about",
+      "title": "React 19: The 5 Big Features That’ll Actually Change How You Code",
+      "description": "A deep look at React 19’s top new features and why they matter for your daily dev work — spoiler: it’s not just hype.",
+      "tags": [
+        "react",
+        "javascript",
+        "front-end",
+        "react19",
+        "webdev"
+      ],
+      "status": "published",
+      "angle": "Many posts just skim React releases. I break down what features actually solve painful problems and how you can start using them now.",
+      "outline": [
+        "Introduction to React 19 and dev landscape",
+        "Feature 1: Suspense improvements",
+        "Feature 2: Server Components evolution",
+        "Feature 3: New concurrent rendering APIs",
+        "Wrapping up with migration tips and thoughts"
+      ],
+      "codeIdeas": [
+        "Simple Suspense example with improved APIs",
+        "Basic Server Component showing new syntax",
+        "Concurrent rendering demo and effects"
+      ],
+      "mediaIdeas": [
+        "Side-by-side code before/after React 19",
+        "Flow diagram of rendering lifecycle changes"
+      ],
+      "entrySlug": "2025-12-06-react-19-biggest-features-i-am-excited-about"
+    },
+    {
+      "date": "2025-12-08",
+      "category": "tutorial",
+      "slug": "building-a-rocket-fuel-nodejs-api-with-typescript",
+      "title": "Building a Rocket-Fuel Node.js API with TypeScript - Step by Step",
+      "description": "A practical guide to crafting a scalable Node.js REST API using TypeScript, best architecture, and error handling that won’t make you cry.",
+      "tags": [
+        "nodejs",
+        "typescript",
+        "api",
+        "backend",
+        "tutorial",
+        "architecture"
+      ],
+      "status": "planned",
+      "angle": "Every API tutorial glosses over structure or error handling. I’ll show how to nail these essentials so your API works and stays maintainable.",
+      "outline": [
+        "Setting up a Node.js project with TypeScript",
+        "Designing folder structure and layering",
+        "Implementing routes with type safety",
+        "Smart error handling and validation",
+        "Testing API endpoints with real examples"
+      ],
+      "codeIdeas": [
+        "Type-safe request and response models",
+        "Custom error middleware in Express",
+        "Unit tests for routes using Jest"
+      ],
+      "mediaIdeas": [
+        "Folder structure visual diagram",
+        "Flow diagram of request lifecycle"
+      ]
+    },
+    {
+      "date": "2025-12-11",
+      "category": "deep-dive",
+      "slug": "why-i-swear-by-strict-typing-in-large-react-projects",
+      "title": "Why I Swear By Strict Typing in Large React Projects (and Why You Should Too)",
+      "description": "An honest look at how strict TypeScript settings save tons of debugging time, improve collaboration, and boost confidence in complex React apps.",
+      "tags": [
+        "typescript",
+        "react",
+        "architecture",
+        "bestpractices",
+        "developer-experience"
+      ],
+      "status": "planned",
+      "angle": "TypeScript’s strict mode often feels like a pain, but here’s the payoff when your project scales and your team collaborates effectively.",
+      "outline": [
+        "What does strict typing mean in React projects?",
+        "Common bugs caught early thanks to strict types",
+        "How strict typing improves developer DX",
+        "Real-world examples from my projects",
+        "Tips to adopt strictness incrementally"
+      ],
+      "codeIdeas": [
+        "Component props with union and intersection types",
+        "Strict null checks catching hidden bugs",
+        "Improved autocomplete and refactor safety"
+      ],
+      "mediaIdeas": [
+        "Before/after type safety bug comparison",
+        "Checklist for enabling strict TS features"
+      ]
+    },
+    {
+      "date": "2025-12-15",
+      "category": "trending",
+      "slug": "how-ai-coding-assistants-are-changing-nodejs-devs-workflow",
+      "title": "How AI Coding Assistants Are Actually Changing Node.js Dev Workflows",
+      "description": "Cutting through the hype: a practical look at how AI tools like GitHub Copilot & GPT helpers improve (and sometimes frustrate) Node.js development.",
+      "tags": [
+        "nodejs",
+        "ai",
+        "devtools",
+        "automation",
+        "productivity"
+      ],
+      "status": "planned",
+      "angle": "Everyone talks about AI like it’s magic. I show real examples where it saves time, where it wastes time, and how to make it work for you.",
+      "outline": [
+        "Quick overview: AI coding assistants in 2025",
+        "Best ways to integrate AI into Node.js coding",
+        "Pitfalls and when AI suggestions go wrong",
+        "Setting boundaries for better productivity",
+        "Final thoughts on future AI + dev symbiosis"
+      ],
+      "codeIdeas": [
+        "AI-generated API error-handling boilerplate",
+        "Using AI to autocomplete complex type signatures",
+        "Examples of buggy AI code and fixes"
+      ],
+      "mediaIdeas": [
+        "Screenshots of AI suggestions vs handwritten code",
+        "Workflow diagram showing AI-assisted coding loop"
+      ]
+    },
+    {
+      "date": "2025-12-18",
+      "category": "tutorial",
+      "slug": "hands-on-astro-themes-building-a-mdx-powered-blog",
+      "title": "Hands-On Astro Themes: Building Your MDX-Powered Blog from Scratch",
+      "description": "How to create a blazing-fast blog using Astro with MDX, from zero setup to deploying with themes, layouts, and custom components.",
+      "tags": [
+        "astro",
+        "mdx",
+        "static-site-generator",
+        "tutorial",
+        "frontend"
+      ],
+      "status": "planned",
+      "angle": "Astro is gaining traction but setting up MDX-powered blogs isn’t trivial. I guide you through the real setup, themeing, and deployment steps.",
+      "outline": [
+        "Why choose Astro and MDX for blogging?",
+        "Setting up Astro project with TypeScript",
+        "Adding MDX support and custom components",
+        "Working with Astro themes and layout patterns",
+        "Deploying your blog to production"
+      ],
+      "codeIdeas": [
+        "MDX files with React components inside",
+        "Custom Astro component for blog post metadata",
+        "Build script showing production optimizations"
+      ],
+      "mediaIdeas": [
+        "Site architecture diagram",
+        "Live preview screenshots of blog components"
+      ]
+    },
+    {
+      "date": "2025-12-22",
+      "category": "deep-dive",
+      "slug": "the-testing-pyramid-in-2025-does-it-still-make-sense",
+      "title": "The Testing Pyramid in 2025: Does It Still Make Sense for Modern Apps?",
+      "description": "A skeptical take on the classic testing pyramid. Should we adapt or rethink our testing strategies with modern tools like E2E puppeteer & component testing?",
+      "tags": [
+        "testing",
+        "test-strategy",
+        "e2e",
+        "unit-testing",
+        "react",
+        "nodejs"
+      ],
+      "status": "planned",
+      "angle": "The testing pyramid guided us for years, but today’s ecosystems and tooling might require a fresh look. I share what I’m seeing in real projects.",
+      "outline": [
+        "Recap: what the testing pyramid is and why it was born",
+        "How modern testing tools shift the balance",
+        "Trade-offs with more E2E and component tests",
+        "Case studies from big React + Node apps",
+        "My opinion: evolving the pyramid for 2025+"
+      ],
+      "codeIdeas": [
+        "Example unit test with Jest",
+        "Component test with React Testing Library",
+        "E2E test setup using Playwright or Cypress"
+      ],
+      "mediaIdeas": [
+        "Classic vs modern testing pyramid diagram",
+        "Test coverage charts from example apps"
+      ]
+    },
+    {
+      "date": "2025-12-26",
+      "category": "tutorial",
+      "slug": "debugging-nodejs-memory-leaks-step-by-step",
+      "title": "Debugging Node.js Memory Leaks Step-by-Step (With Real Tools & Tips)",
+      "description": "Memory leaks kill apps silently. I walk you through using tools like Chrome DevTools and heap snapshots to track down leaks in Node.js.",
+      "tags": [
+        "nodejs",
+        "debugging",
+        "memory-leaks",
+        "performance",
+        "tutorial"
+      ],
+      "status": "planned",
+      "angle": "Don’t wait until your server crashes. This guide helps you catch memory leaks early with proven steps and tools you already have.",
+      "outline": [
+        "How to spot signs of memory leaks",
+        "Using Chrome DevTools for snapshots and allocation profiling",
+        "Common leak patterns in Node.js",
+        "Fixing leaks and verifying the solution",
+        "Best practices for memory management"
+      ],
+      "codeIdeas": [
+        "Sample code with intentional memory leak",
+        "Heap snapshot before and after fixing leak",
+        "Profiling scripts to detect leaks automatically"
+      ],
+      "mediaIdeas": [
+        "Heap snapshot screenshot showing leak",
+        "Timeline graphs of memory usage"
+      ]
+    },
+    {
+      "date": "2025-12-29",
+      "category": "trending",
+      "slug": "typescript-6-whats-new-and-should-you-adopt-it-now",
+      "title": "TypeScript 6: What’s New and Should You Adopt It Now?",
+      "description": "TS 6 just dropped with features aimed at speed and utility types. I explain what’s actually useful today and when to hold off upgrading.",
+      "tags": [
+        "typescript",
+        "javascript",
+        "typescript6",
+        "frontend",
+        "backend"
+      ],
+      "status": "planned",
+      "angle": "I cut through the release notes noise to give you clear advice: which new features are ready for prime time, and which might cause headaches.",
+      "outline": [
+        "Overview of TypeScript 6 changes",
+        "Detailed exploration of utility types enhancements",
+        "Performance improvements under the hood",
+        "Compatibility and migration concerns",
+        "My recommendation for teams"
+      ],
+      "codeIdeas": [
+        "Examples of new utility types in action",
+        "Comparing compile times before and after",
+        "Migration scripts and error fixes"
+      ],
+      "mediaIdeas": [
+        "Feature comparison tables",
+        "Timeline graphic of TS version adoptions"
+      ]
+    }
+  ]
+}
