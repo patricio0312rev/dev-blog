@@ -18,12 +18,10 @@ const allArticles = Object.values(planModules)
     const baseSlug: string = article.slug || article.id || "";
     const date: string = article.date || article.scheduledDate || "";
 
-    const entrySlug =
-      article.entrySlug ||
-      (date && baseSlug ? `${date}-${baseSlug}` : baseSlug);
+    const routeSlug: string = baseSlug || article.entrySlug || "";
 
     return {
-      slug: entrySlug,
+      slug: routeSlug,
       title: article.title,
       description: article.description || article.summary || "",
       category: article.category,

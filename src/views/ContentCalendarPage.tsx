@@ -20,6 +20,8 @@ export const ContentCalendarPage: React.FC<ContentCalendarPageProps> = ({
   articles,
 }) => {
   const today = new Date();
+  const todayISO = toISODateString(today);
+
   const [viewDate, setViewDate] = useState(
     new Date(today.getFullYear(), today.getMonth(), 1)
   );
@@ -45,7 +47,11 @@ export const ContentCalendarPage: React.FC<ContentCalendarPageProps> = ({
     ? articlesByDate.get(selectedKey) ?? []
     : [];
 
+  // Upcoming = only planned + today or future
   const upcoming = [...articles]
+    .filter(
+      (article) => article.status !== "published" && article.date >= todayISO
+    )
     .sort((a, b) => a.date.localeCompare(b.date))
     .slice(0, 10);
 
@@ -182,41 +188,87 @@ export const ContentCalendarPage: React.FC<ContentCalendarPageProps> = ({
       {/* Article preview panel */}
       <section aria-label="Selected day articles">
         {selectedArticles.length > 0 ? (
-          <div className="space-y-4 rounded-xl border-l-4 border-sky-500 bg-zinc-50/80 p-4 text-sm dark:border-sky-500 dark:bg-zinc-900/70">
-            {selectedArticles.map((article) => (
-              <div key={article.title} className="space-y-2">
-                <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-                  <ArticleCategoryBadge
-                    category={article.category}
-                    iconSize="sm"
-                  />
-                  <span>•</span>
-                  <time dateTime={article.date} className="font-mono">
-                    {formatDate(article.date)}
-                  </time>
-                  <span>•</span>
-                  <span className="rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] uppercase tracking-wide text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
-                    {article.status === "planned" ? "Coming soon" : "Published"}
-                  </span>
+          <div className="space-y-2 rounded-xl border-l-4 border-sky-500 bg-zinc-50/80 p-2 text-sm dark:border-sky-500 dark:bg-zinc-900/70">
+            {selectedArticles.map((article) => {
+              const isPublished =
+                article.status === "published" && Boolean(article.slug);
+              const href = isPublished ? `/blog/${article.slug}` : undefined;
+
+              const cardBaseClasses =
+                "block -mx-1 rounded-lg px-3 py-2 transition-colors duration-150";
+              const cardHoverClasses =
+                "hover:bg-zinc-100/70 dark:hover:bg-zinc-800/70";
+
+              const statusBadgeClasses = cn(
+                "rounded-full border px-2 py-0.5 text-[11px] uppercase tracking-wide",
+                isPublished
+                  ? "border-emerald-400 bg-emerald-50 text-emerald-700 dark:border-emerald-500 dark:bg-emerald-900/30 dark:text-emerald-200"
+                  : "border-zinc-200 text-zinc-500 dark:border-zinc-700 dark:text-zinc-400"
+              );
+
+              const inner = (
+                <div className="space-y-2">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+                    <ArticleCategoryBadge
+                      category={article.category}
+                      iconSize="sm"
+                    />
+                    <span>•</span>
+                    <time dateTime={article.date} className="font-mono">
+                      {formatDate(article.date)}
+                    </time>
+                    <span>•</span>
+                    <span className={statusBadgeClasses}>
+                      {article.status === "planned"
+                        ? "Coming soon"
+                        : "Published"}
+                    </span>
+                  </div>
+                  <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-50">
+                    {article.title}
+                  </h2>
+                  <div className="flex flex-wrap gap-1">
+                    {article.tags.map((tag) => (
+                      <Tag key={tag} label={tag} />
+                    ))}
+                  </div>
+                  {isPublished && (
+                    <span className="inline-flex text-xs font-medium text-sky-600 underline-offset-4 hover:underline dark:text-sky-400">
+                      Read article →
+                    </span>
+                  )}
                 </div>
-                <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-50">
-                  {article.title}
-                </h2>
-                <div className="flex flex-wrap gap-1">
-                  {article.tags.map((tag) => (
-                    <Tag key={tag} label={tag} />
-                  ))}
-                </div>
-                {article.status === "published" && article.slug && (
+              );
+
+              if (isPublished) {
+                return (
                   <a
-                    href={`/blog/${article.slug}`}
-                    className="inline-flex text-xs font-medium text-sky-600 underline-offset-4 hover:underline dark:text-sky-400"
+                    key={article.slug ?? article.title}
+                    href={href}
+                    className={cn(
+                      cardBaseClasses,
+                      cardHoverClasses,
+                      "cursor-pointer"
+                    )}
                   >
-                    Read article →
+                    {inner}
                   </a>
-                )}
-              </div>
-            ))}
+                );
+              }
+
+              return (
+                <div
+                  key={article.slug ?? article.title}
+                  className={cn(
+                    cardBaseClasses,
+                    cardHoverClasses,
+                    "cursor-default"
+                  )}
+                >
+                  {inner}
+                </div>
+              );
+            })}
           </div>
         ) : (
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
