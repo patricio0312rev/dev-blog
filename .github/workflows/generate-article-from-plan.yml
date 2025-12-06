@@ -1,0 +1,66 @@
+name: Generate Daily Article From Plan
+
+on:
+  workflow_dispatch:
+
+  # Every day at 17:00 UTC (12:00 Lima, UTC-5)
+  schedule:
+    - cron: "0 17 * * *"
+
+jobs:
+  generate-article:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate article from plan
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: pnpm generate:article
+
+      - name: Compute today key
+        id: meta
+        run: |
+          TODAY=$(date -u +'%Y-%m-%d')
+          echo "today=$TODAY" >> "$GITHUB_OUTPUT"
+
+      - name: Create Pull Request for generated article
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: "feat/article/${{ steps.meta.outputs.today }}"
+          base: main
+          commit-message: "feat(blog): add article for ${{ steps.meta.outputs.today }}"
+          title: "feat(blog): add article for ${{ steps.meta.outputs.today }}"
+          body: |
+            This PR adds the generated article for **${{ steps.meta.outputs.today }}**.
+
+            - Generated automatically by the **Generate Daily Article From Plan** workflow.
+            - The article is created from the monthly content plan in `content-plans/` for today's date.
+            - Check the new file(s) under `src/content/articles/`:
+              - Confirm the title, tone, and technical accuracy.
+              - Tweak examples, code snippets, and wording to better match your voice if needed.
+            - Once reviewed, merge to publish.
+
+          token: ${{ secrets.GITHUB_TOKEN }}
