@@ -1,0 +1,110 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "./BaseLayout.astro";
+import { ArticleCategoryBadge } from "@/components/articles/ArticleCategoryBadge";
+import { Tag } from "@/components/ui/Tag";
+import { formatDate } from "@/utils";
+import { SITE_CONFIG } from "@/constants";
+
+interface Props {
+  article: CollectionEntry<"articles">;
+}
+
+const { article } = Astro.props;
+const { title, description, category, tags, publishDate, ogImage } =
+  article.data;
+
+const articleUrl = new URL(`/blog/${article.slug}`, Astro.site).href;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  ogType="article"
+  publishDate={publishDate}
+  canonicalUrl={articleUrl}
+>
+  <article class="mx-auto max-w-3xl">
+    <!-- Article Header -->
+    <header class="mb-10 space-y-4">
+      <div
+        class="flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400"
+      >
+        <ArticleCategoryBadge category={category} client:load />
+        <span class="text-zinc-400 dark:text-zinc-500">•</span>
+        <time datetime={publishDate.toISOString()} class="font-mono">
+          {formatDate(publishDate.toISOString())}
+        </time>
+      </div>
+
+      <h1
+        class="text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50"
+      >
+        {title}
+      </h1>
+
+      <p class="text-base text-zinc-600 dark:text-zinc-300">
+        {description}
+      </p>
+
+      <div class="flex flex-wrap gap-1.5">
+        {tags.map((tag) => <Tag label={tag} client:load />)}
+      </div>
+
+      <hr class="border-zinc-200 dark:border-zinc-800" />
+    </header>
+
+    <!-- Article Content -->
+    <div
+      class="prose prose-zinc max-w-none dark:prose-invert prose-headings:scroll-mt-24 prose-a:text-sky-600 prose-a:underline-offset-4 hover:prose-a:text-sky-500 prose-code:font-mono prose-pre:rounded-xl prose-pre:border prose-pre:border-zinc-200 dark:prose-pre:border-zinc-800 prose-img:rounded-xl"
+    >
+      <slot />
+    </div>
+
+    <!-- Share Section -->
+    <footer class="mt-12 border-t border-zinc-200 pt-6 dark:border-zinc-800">
+      <div
+        class="flex flex-wrap items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400"
+      >
+        <span class="font-medium text-zinc-700 dark:text-zinc-300">Share:</span>
+
+        href={
+          `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(articleUrl)}`
+        }
+        target="_blank" rel="noopener noreferrer" class="hover:text-sky-500" > Twitter
+      </div>
+
+      href={
+        `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(articleUrl)}`
+      }
+      target="_blank" rel="noopener noreferrer" class="hover:text-sky-500" > LinkedIn
+    </footer>
+  </article>
+</BaseLayout>
+
+<!-- Article JSON-LD -->
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description: description,
+    image: ogImage ? new URL(ogImage, Astro.site).href : undefined,
+    datePublished: publishDate.toISOString(),
+    author: {
+      "@type": "Person",
+      name: SITE_CONFIG.author,
+      url: "https://patriciomarroquin.dev",
+    },
+    publisher: {
+      "@type": "Person",
+      name: SITE_CONFIG.author,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": articleUrl,
+    },
+  })}
+/>
