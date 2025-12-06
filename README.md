@@ -345,9 +345,9 @@ Flow:
 - [x] AI-generated monthly plan + daily article script
 - [x] RSS feed generation
 - [ ] Full-text search (Pagefind / Algolia)
-- [ ] Comments (Giscus)
+- [x] Comments (Giscus)
 - [ ] View counter per article
-- [ ] Related articles recommendations
+- [x] Related articles recommendations
 
 ---
 
