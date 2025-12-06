@@ -1,0 +1,64 @@
+name: Generate Monthly Content Plan
+
+on:
+  workflow_dispatch:
+
+  # First day of every month at 08:00 UTC
+  schedule:
+    - cron: "0 8 1 * *"
+
+jobs:
+  generate-plan:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate content plan
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: pnpm generate:plan
+
+      - name: Compute month key
+        id: meta
+        run: |
+          MONTH_KEY=$(date -u +'%Y-%m')
+          echo "month_key=$MONTH_KEY" >> "$GITHUB_OUTPUT"
+
+      - name: Create Pull Request for content plan
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: "chore/content-plan/${{ steps.meta.outputs.month_key }}"
+          base: main
+          commit-message: "chore(content-plan): update content plan for ${{ steps.meta.outputs.month_key }}"
+          title: "chore(content-plan): update content plan for ${{ steps.meta.outputs.month_key }}"
+          body: |
+            This PR updates the content plan JSON for **${{ steps.meta.outputs.month_key }}** in `content-plans/`.
+
+            - Generated automatically by the **Generate Monthly Content Plan** workflow.
+            - Includes topics, angles, outlines, tags, and metadata for all scheduled posts.
+            - Please review the plan (topics, balance between tutorial/trending/deep-dive, and tags) before merging.
+
+          # Use the default GITHUB_TOKEN
+          token: ${{ secrets.GITHUB_TOKEN }}
