@@ -87,7 +87,8 @@ const ogImageUrl = new URL(ogImage, Astro.site).href;
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
 
     <!-- RSS Feed -->
     <link
@@ -107,7 +108,7 @@ const ogImageUrl = new URL(ogImage, Astro.site).href;
 
     <!-- Theme script (before render to prevent flash) -->
     <script is:inline>
-      (function () {
+      function applyTheme() {
         const stored = localStorage.getItem("theme");
         const prefersDark = window.matchMedia(
           "(prefers-color-scheme: dark)"
@@ -119,7 +120,14 @@ const ogImageUrl = new URL(ogImage, Astro.site).href;
               ? "dark"
               : "light";
         document.documentElement.setAttribute("data-theme", theme);
-      })();
+      }
+
+      // Apply immediately
+      applyTheme();
+
+      // Re-apply after View Transitions swap the DOM
+      document.addEventListener("astro:after-swap", applyTheme);
+      document.addEventListener("astro:page-load", applyTheme);
     </script>
 
     <!-- View Transitions -->
