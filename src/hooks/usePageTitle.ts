@@ -1,18 +1,20 @@
-import { useEffect } from "react";
-import { SITE_CONFIG } from "@/constants";
+import { useLayoutEffect } from "react";
+
+const BASE_TITLE = "patricio.dev";
 
 /**
  * Sets the document title with the site name suffix
  */
-export function usePageTitle(title?: string): void {
-  useEffect(() => {
+export function usePageTitle(title?: string) {
+  useLayoutEffect(() => {
     if (typeof document === "undefined") return;
 
-    if (!title || title.trim().length === 0) {
-      document.title = SITE_CONFIG.title;
-      return;
-    }
+    const trimmed = title?.trim();
 
-    document.title = `${title} · ${SITE_CONFIG.title}`;
+    if (!trimmed) {
+      document.title = BASE_TITLE;
+    } else {
+      document.title = `${trimmed} · ${BASE_TITLE}`;
+    }
   }, [title]);
 }
