@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <title>patricio.dev - Personal developer blog</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
@@ -15,7 +14,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.ico" />
 
-    <!-- Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -23,7 +22,7 @@
       rel="stylesheet"
     />
 
-    <!-- Theme pre-hydration: set data-theme before React/Tailwind run -->
+    <!-- Theme pre-hydration script -->
     <script>
       (function () {
         try {
@@ -31,17 +30,15 @@
           const prefersDark = window.matchMedia(
             "(prefers-color-scheme: dark)"
           ).matches;
-
           const theme =
             stored === "light" || stored === "dark"
               ? stored
               : prefersDark
               ? "dark"
               : "light";
-
           document.documentElement.setAttribute("data-theme", theme);
         } catch (e) {
-          // fallback to light handled in React
+          // Fallback handled in React
         }
       })();
     </script>
