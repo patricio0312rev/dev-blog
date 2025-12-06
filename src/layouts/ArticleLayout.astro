@@ -1,8 +1,11 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 import { SITE_CONFIG } from "@/constants";
 import { Flame, BookOpen, FlaskConical, Headphones } from "@lucide/astro";
+import RelatedArticles from "@/components/blog/RelatedArticles";
+import GiscusComments from "@/components/blog/GiscusComments";
 
 interface Props {
   article: CollectionEntry<"articles">;
@@ -55,6 +58,32 @@ const categoryStyles: Record<string, { bg: string; text: string; Icon: any }> =
 
 const catStyle = categoryStyles[category] ?? categoryStyles.tutorial;
 const CategoryIcon = catStyle.Icon;
+
+const allArticles = await getCollection("articles");
+
+const related = allArticles
+  .filter((entry) => entry.slug !== article.slug)
+  .map((entry) => {
+    const data = entry.data as CollectionEntry<"articles">["data"];
+    const overlap = (data.tags || []).filter((t: string) =>
+      tags.includes(t)
+    ).length;
+    const sameCategory = data.category === category ? 1 : 0;
+    const score = overlap * 2 + sameCategory;
+
+    return {
+      slug: entry.slug,
+      title: data.title,
+      description: data.description,
+      category: data.category,
+      tags: data.tags || [],
+      publishDate: data.publishDate,
+      score,
+    };
+  })
+  .filter((item) => item.score > 0)
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3);
 ---
 
 <BaseLayout
@@ -147,12 +176,43 @@ const CategoryIcon = catStyle.Icon;
     </header>
 
     <!-- Article body -->
-    <section data-article-body class="prose max-w-none pb-10">
+    <section
+      data-article-body
+      class="prose max-w-none pb-10 prose-zinc dark:prose-invert prose-pre:!bg-transparent prose-pre:!p-0"
+    >
       <slot />
     </section>
 
+    <!-- Related articles -->
+    {
+      related.length > 0 && (
+        <RelatedArticles
+          articles={related.map(
+            ({
+              slug,
+              title,
+              description,
+              category,
+              tags,
+              publishDate,
+              score,
+            }) => ({
+              slug,
+              title,
+              description,
+              category,
+              tags,
+              publishDate: publishDate.toISOString(),
+              score,
+            })
+          )}
+          client:load
+        />
+      )
+    }
+
     <!-- Share section -->
-    <footer class="border-t border-zinc-200 pt-6 dark:border-zinc-800">
+    <footer class="mt-8 border-t border-zinc-200 pt-6 dark:border-zinc-800">
       <div
         class="flex flex-wrap items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400"
       >
@@ -209,6 +269,9 @@ const CategoryIcon = catStyle.Icon;
         </a>
       </div>
     </footer>
+
+    <!-- Comments -->
+    <GiscusComments client:load term={`/blog/${article.slug}`} />
   </article>
 </BaseLayout>
 
