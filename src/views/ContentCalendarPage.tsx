@@ -10,6 +10,7 @@ import {
   cn,
 } from "@/utils";
 import type { CalendarArticle } from "@/types";
+import { BookOpen, FlaskConical, Flame } from "lucide-react";
 
 export interface ContentCalendarPageProps {
   articles: CalendarArticle[];
@@ -100,15 +101,15 @@ export const ContentCalendarPage: React.FC<ContentCalendarPageProps> = ({
         <div className="mb-4 flex flex-wrap gap-3 text-[11px] text-zinc-500 dark:text-zinc-400">
           <span className="flex items-center gap-1">
             <span className="inline-flex h-2 w-2 rounded-full bg-orange-500" />{" "}
-            🔥 Trending
+            <Flame className="h-2.5 w-2.5" /> Trending
           </span>
           <span className="flex items-center gap-1">
-            <span className="inline-flex h-2 w-2 rounded-full bg-sky-500" /> 📚
-            Tutorial
+            <span className="inline-flex h-2 w-2 rounded-full bg-sky-500" />{" "}
+            <BookOpen className="h-2.5 w-2.5" /> Tutorial
           </span>
           <span className="flex items-center gap-1">
             <span className="inline-flex h-2 w-2 rounded-full bg-purple-500" />{" "}
-            🔬 Deep Dive
+            <FlaskConical className="h-2.5 w-2.5" /> Deep Dive
           </span>
         </div>
 
@@ -185,7 +186,10 @@ export const ContentCalendarPage: React.FC<ContentCalendarPageProps> = ({
             {selectedArticles.map((article) => (
               <div key={article.title} className="space-y-2">
                 <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-                  <ArticleCategoryBadge category={article.category} />
+                  <ArticleCategoryBadge
+                    category={article.category}
+                    iconSize="sm"
+                  />
                   <span>•</span>
                   <time dateTime={article.date} className="font-mono">
                     {formatDate(article.date)}

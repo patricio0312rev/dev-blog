@@ -31,10 +31,12 @@ const categoryConfig: Record<ArticleCategory, CategoryConfig> = {
 
 interface ArticleCategoryBadgeProps {
   category: ArticleCategory;
+  iconSize?: "sm" | "md";
 }
 
 export const ArticleCategoryBadge: React.FC<ArticleCategoryBadgeProps> = ({
   category,
+  iconSize = "md",
 }) => {
   const { label, Icon, classes } = categoryConfig[category];
 
@@ -42,7 +44,10 @@ export const ArticleCategoryBadge: React.FC<ArticleCategoryBadgeProps> = ({
     <span
       className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${classes}`}
     >
-      <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+      <Icon
+        className={iconSize === "sm" ? "h-3 w-3" : "h-3.5 w-3.5"}
+        aria-hidden="true"
+      />
       <span>{label}</span>
     </span>
   );

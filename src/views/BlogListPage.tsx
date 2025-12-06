@@ -21,6 +21,7 @@ const filters: {
 
 export interface BlogListPageProps {
   articles: Article[];
+  iconSize?: "sm" | "md";
 }
 
 export const BlogListPage: React.FC<BlogListPageProps> = ({ articles }) => {
@@ -52,7 +53,7 @@ export const BlogListPage: React.FC<BlogListPageProps> = ({ articles }) => {
                 : "border-zinc-300 bg-zinc-50 text-zinc-700 hover:border-sky-400 hover:text-sky-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200"
             }`}
           >
-            {Icon && <Icon className="h-3.5 w-3.5" />}
+            {Icon && <Icon className="h-3 w-3" />}
             <span>{label}</span>
           </button>
         ))}
@@ -89,7 +90,10 @@ export const BlogListPage: React.FC<BlogListPageProps> = ({ articles }) => {
                     <span className="text-zinc-500">{month}</span>
                   </div>
                   <div className="flex-1 space-y-1 border-l border-transparent pl-4 group-hover:border-sky-400/70">
-                    <ArticleCategoryBadge category={article.category} />
+                    <ArticleCategoryBadge
+                      category={article.category}
+                      iconSize="sm"
+                    />
                     <h2 className="line-clamp-2 text-sm font-semibold text-zinc-900 group-hover:text-sky-500 dark:text-zinc-50">
                       {article.title}
                     </h2>

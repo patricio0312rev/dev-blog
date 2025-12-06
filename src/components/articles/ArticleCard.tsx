@@ -64,7 +64,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
       >
         <div>
           <div className="mb-3 flex items-center justify-between gap-2">
-            <ArticleCategoryBadge category={category} />
+            <ArticleCategoryBadge category={category} iconSize="sm" />
             <time
               dateTime={date}
               className="text-[11px] font-mono uppercase tracking-wide text-zinc-400 dark:text-zinc-500"
