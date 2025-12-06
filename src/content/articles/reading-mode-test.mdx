@@ -1,0 +1,149 @@
+---
+title: "Testing Reading Mode, Progress Bar, and TTS"
+description: "A deliberately long article to stress-test the reading progress bar, reading time estimation, and text-to-speech experience."
+category: "tutorial"
+publishDate: 2025-11-25
+tags:
+  - testing
+  - accessibility
+  - tts
+  - ux
+slug: "reading-mode-test"
+---
+
+## Why This Article Exists
+
+This is not a deep philosophical piece.  
+It exists purely so we can **test your blog UX**:
+
+- The reading progress bar at the top.
+- The estimated reading time.
+- The text-to-speech “Listen / Stop listening” button.
+- How typography and spacing feel over a longer scroll.
+
+If everything is working correctly, you should see the progress bar grow as you scroll, the reading time show something above a couple of minutes, and the audio reader should speak the **title, description, and the entire body** of this article.
+
+---
+
+## Section 1 · Long-Form Content in Developer Blogs
+
+Modern developer blogs are not just walls of text. They are **interactive reading experiences**:
+
+1. Responsive layout that works on mobile, tablet, and desktop.
+2. Dark mode that respects system preferences and manual toggles.
+3. Clear typography using a readable font for body text and a monospace font for code.
+4. Small but meaningful interaction details:
+   - Smooth transitions between pages.
+   - Progress indicators.
+   - Keyboard focus styles.
+   - ARIA attributes for assistive technologies.
+
+When you ship a blog that is going to be part of your personal brand, these details add up.  
+People may never explicitly tell you, *“hey, your reading progress bar is awesome”*, but it subtly affects how **polished** the site feels.
+
+---
+
+## Section 2 · Measuring Reading Time
+
+A common heuristic for reading time is **200 words per minute**. Some sites use 220, others 180. The exact number doesn’t matter as much as:
+
+- Being consistent across all articles.
+- Avoiding weird numbers like “0 min read”.
+- Making sure the copy looks intentional.
+
+In this blog, the reading time is computed on the client:
+
+1. Grab the text from the article body.
+2. Count the words by splitting on whitespace.
+3. Divide by 200.
+4. Round to the nearest integer.
+5. Clamp to a minimum of 1 minute.
+
+If this article is long enough, you should see something like:
+
+> 6 min read
+
+or higher, depending on how much filler text and subsections we add.
+
+---
+
+## Section 3 · The Role of Text-to-Speech (TTS)
+
+Text-to-speech is not just a gimmick; it is a **real accessibility boost**:
+
+- People with visual impairments can listen instead of reading.
+- People tired after a long day of work can let the browser read for them.
+- Users can multitask, listening to your article while doing something else.
+
+In this setup, the button:
+
+- Starts reading when in “Listen” mode.
+- Switches its label to **“Stop listening”** while playback is active.
+- Cancels the speech when you click again.
+- Resets the label to **“Listen”** when reading finishes or errors.
+
+The TTS now reads:
+
+1. The article title.
+2. The article description.
+3. The full content of the article body.
+
+This makes the audio feel more like a **podcast-style narration** of the page instead of just dumping the raw paragraphs.
+
+---
+
+## Section 4 · Simulated Deep-Dive Content
+
+Let’s pretend this is a deep technical explanation, so we can extend the length of the article in a way that still feels semi-real.
+
+### Subsection: Rendering Strategies
+
+Even though this article is static content, you might mix different rendering strategies in your site:
+
+- **Static Site Generation (SSG)** for articles, landing pages, and documentation.
+- **Server-Side Rendering (SSR)** for dashboards that need fresh data per request.
+- **Client-Side Rendering (CSR)** for small widgets that hydrate on top of static HTML.
+- **Incremental Static Regeneration (ISR)** for pages that can be regenerated in the background.
+
+From a user’s point of view, they just see content that loads quickly and feels snappy. From your point of view as the developer, you are balancing:
+
+- Performance
+- Freshness of data
+- Operational complexity
+- Cost
+
+### Subsection: Accessibility Considerations
+
+A genuinely accessible blog goes beyond `alt` text on images:
+
+- Headings should form a logical outline (`h1`, `h2`, `h3`).
+- Interactive controls like the **Listen** button should be reachable by keyboard.
+- Focus rings should be visible in both light and dark mode.
+- Color contrast should be high enough for text and UI elements.
+- Animations and transitions should be subtle, not distracting.
+
+Screen reader users may navigate by headings, landmarks, or links. A long article like this is a good test to make sure the structure makes sense.
+
+---
+
+## Section 5 · More Content to Scroll Through
+
+To properly test the progress bar and long scrolling behavior, let’s add more sections that simulate realistic content.
+
+### Subsection: Code Example
+
+Here’s a small, random example of TypeScript that might appear in one of your real articles:
+
+```ts data-filename="src/app/page.tsx"
+type Result<T> =
+  | { ok: true; value: T }
+  | { ok: false; error: string };
+
+export function safeParseJSON<T>(input: string): Result<T> {
+  try {
+    const value = JSON.parse(input) as T;
+    return { ok: true, value };
+  } catch (error) {
+    return { ok: false, error: "Invalid JSON" };
+  }
+}
