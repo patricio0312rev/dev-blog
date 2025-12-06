@@ -32,9 +32,9 @@ export const NAV_LINKS: NavLink[] = [
 
 /** Hero code block */
 export const HERO_CODE = `const patricio = {
-  role: "Full-Stack Dev",
-  location: "Lima 🇵🇪",
-  stack: ["TS", "React", "Node"],
+  role: "Senior Full-Stack Dev",
+  location: "Lima, Peru 🇵🇪",
+  stack: ["TypeScript", "React", "Node", "Next.js", "Python", "PHP", "AWS"],
   coffee: Infinity,
 };`;
 
