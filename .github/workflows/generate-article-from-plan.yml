@@ -64,8 +64,8 @@ jobs:
         with:
           branch: feat/article/${{ steps.meta.outputs.today }}
           base: main
-          commit-message: feat(blog): add article for ${{ steps.meta.outputs.today }}
-          title: feat(blog): add article for ${{ steps.meta.outputs.today }}
+          commit-message: "feat(blog): add article for ${{ steps.meta.outputs.today }}"
+          title: "feat(blog): add article for ${{ steps.meta.outputs.today }}"
           body: |
             This PR adds the generated article for **${{ steps.meta.outputs.today }}**.
             - Generated automatically by the **Generate Daily Article From Plan** workflow.
