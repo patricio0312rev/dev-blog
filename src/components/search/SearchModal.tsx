@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import { Search, X, Clock, FileText } from "lucide-react";
 import { cn } from "@/utils";
 import { ArticleCategoryBadge } from "@/components/articles";
@@ -35,11 +41,18 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   onClose,
 }) => {
   const [query, setQuery] = useState("");
+  const [allResults, setAllResults] = useState<SearchResult[]>([]);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [pagefindLoaded, setPagefindLoaded] = useState(false);
+
+  const [categoryFilter, setCategoryFilter] = useState<"all" | ArticleCategory>(
+    "all"
+  );
+  const [tagFilter, setTagFilter] = useState<string | null>(null);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const pagefindRef = useRef<any>(null);
@@ -107,11 +120,42 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     }
   }, []);
 
+  // Available tags (from allResults)
+  const availableTags = useMemo(() => {
+    const tags = new Set<string>();
+    for (const result of allResults) {
+      result.meta?.tags?.forEach((tag) => {
+        if (tag) tags.add(tag);
+      });
+    }
+    return Array.from(tags);
+  }, [allResults]);
+
+  // Apply category + tag filters
+  const applyFilters = useCallback(
+    (items: SearchResult[]): SearchResult[] => {
+      return items.filter((item) => {
+        const category = item.meta?.category as ArticleCategory | undefined;
+        const tags = item.meta?.tags ?? [];
+
+        const matchesCategory =
+          categoryFilter === "all" || category === categoryFilter;
+
+        const matchesTag = !tagFilter || (tags && tags.includes(tagFilter));
+
+        return matchesCategory && matchesTag;
+      });
+    },
+    [categoryFilter, tagFilter]
+  );
+
   // Perform search
   const performSearch = useCallback(
     async (searchQuery: string) => {
       if (!searchQuery.trim()) {
+        setAllResults([]);
         setResults([]);
+        setSelectedIndex(0);
         return;
       }
 
@@ -123,7 +167,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       try {
         const search = await pagefindRef.current.search(searchQuery);
 
-        const searchResults = await Promise.all(
+        const searchResults: SearchResult[] = await Promise.all(
           search.results.map(async (result: any) => {
             const data = await result.data();
 
@@ -144,17 +188,30 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           })
         );
 
-        setResults(searchResults);
+        setAllResults(searchResults);
+        setResults(applyFilters(searchResults));
         setSelectedIndex(0);
       } catch (error) {
         console.error("❌ Search error:", error);
+        setAllResults([]);
         setResults([]);
       } finally {
         setIsLoading(false);
       }
     },
-    [pagefindLoaded]
+    [applyFilters]
   );
+
+  // Re-apply filters when filters change
+  useEffect(() => {
+    if (allResults.length === 0) {
+      setResults([]);
+      return;
+    }
+    const filtered = applyFilters(allResults);
+    setResults(filtered);
+    setSelectedIndex(0);
+  }, [allResults, applyFilters]);
 
   // Debounced search
   useEffect(() => {
@@ -238,6 +295,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   if (!isOpen) return null;
 
+  const hasAnyResults = allResults.length > 0;
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-start justify-center bg-zinc-900/50 backdrop-blur-sm pt-[10vh] px-4 sm:px-6"
@@ -280,11 +339,83 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
         {/* Results / Recent Searches */}
         <div className="max-h-[60vh] overflow-y-auto">
+          {/* Filters */}
+          {pagefindLoaded && hasAnyResults && (
+            <div className="sticky top-0 z-10 border-b border-zinc-200 bg-zinc-50/95 px-4 py-2 text-xs backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/95">
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Category filter */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[11px] uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                    Category
+                  </span>
+                  {[
+                    { value: "all", label: "All" },
+                    { value: "trending", label: "Trending" },
+                    { value: "tutorial", label: "Tutorial" },
+                    { value: "deep-dive", label: "Deep Dive" },
+                  ].map((cat) => (
+                    <button
+                      key={cat.value}
+                      type="button"
+                      onClick={() =>
+                        setCategoryFilter(cat.value as "all" | ArticleCategory)
+                      }
+                      className={cn(
+                        "rounded-full border px-2.5 py-1 text-xs transition-colors",
+                        categoryFilter === cat.value
+                          ? "border-sky-500 bg-sky-50 text-sky-700 dark:border-sky-400 dark:bg-sky-900/30 dark:text-sky-200"
+                          : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                      )}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Tag filter */}
+                {availableTags.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-[11px] uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                      Tag
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setTagFilter(null)}
+                      className={cn(
+                        "rounded-full border px-2.5 py-1 text-xs transition-colors",
+                        !tagFilter
+                          ? "border-sky-500 bg-sky-50 text-sky-700 dark:border-sky-400 dark:bg-sky-900/30 dark:text-sky-200"
+                          : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                      )}
+                    >
+                      Any
+                    </button>
+                    {availableTags.map((tag) => (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => setTagFilter(tag)}
+                        className={cn(
+                          "rounded-full border px-2.5 py-1 text-xs transition-colors",
+                          tagFilter === tag
+                            ? "border-sky-500 bg-sky-50 text-sky-700 dark:border-sky-400 dark:bg-sky-900/30 dark:text-sky-200"
+                            : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                        )}
+                      >
+                        #{tag}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Pagefind not loaded warning */}
           {!pagefindLoaded && query && (
             <div className="flex items-center justify-center py-12">
               <div className="text-center">
-                <div className="mb-3 h-6 w-6 animate-spin rounded-full border-2 border-sky-500 border-t-transparent mx-auto" />
+                <div className="mx-auto mb-3 h-6 w-6 animate-spin rounded-full border-2 border-sky-500 border-t-transparent" />
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
                   Loading search...
                 </p>
@@ -339,7 +470,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 No articles found
               </p>
               <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                Try a different search term
+                Try a different search term or adjust your filters
               </p>
             </div>
           )}
