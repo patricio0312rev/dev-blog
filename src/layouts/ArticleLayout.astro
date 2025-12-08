@@ -222,191 +222,200 @@ const related = allArticles
 
         <!-- Twitter -->
 
-        href={twitterUrl}
-        target="_blank" rel="noopener noreferrer" class="inline-flex items-center
+        <a
+          href={twitterUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center
         gap-1.5 transition-colors duration-150 hover:text-sky-500 dark:hover:text-sky-400"
         >
-        <svg
-          class="h-4 w-4"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.2 2.2.1 4.4-.6 6-2C3 15.5 1.5 9.6 4 6c2.2 2.6 5.2 4.1 8.5 4.3-.9-3.7 4-5.4 6.1-3.1.9 0 3.4-1.2 3.4-1.2Z"
+            ></path>
+          </svg>
+          <span>Twitter</span>
+        </a>
+
+        <!-- LinkedIn -->
+        <a
+          href={linkedinUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 transition-colors duration-150 hover:text-sky-500 dark:hover:text-sky-400"
         >
-          <path
-            d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.2 2.2.1 4.4-.6 6-2C3 15.5 1.5 9.6 4 6c2.2 2.6 5.2 4.1 8.5 4.3-.9-3.7 4-5.4 6.1-3.1.9 0 3.4-1.2 3.4-1.2Z"
-          ></path>
-        </svg>
-        <span>Twitter</span>
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6Z"
+            ></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
       </div>
-
-      <!-- LinkedIn -->
-
-      href={linkedinUrl}
-      target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5
-      transition-colors duration-150 hover:text-sky-500 dark:hover:text-sky-400"
-      >
-      <svg
-        class="h-4 w-4"
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path
-          d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6Z"
-        ></path>
-        <rect x="2" y="9" width="4" height="12"></rect>
-        <circle cx="4" cy="4" r="2"></circle>
-      </svg>
-      <span>LinkedIn</span>
     </footer>
+
+    <!-- Comments -->
+    <GiscusComments client:load term={`/blog/${article.slug}`} />
+
+    <!-- Article JSON-LD -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: title,
+        description: description,
+        image: ogImage ? new URL(ogImage, Astro.site).href : undefined,
+        datePublished: toISODateTimeUTC(publishDate),
+        author: {
+          "@type": "Person",
+          name: SITE_CONFIG.author,
+          url: "https://patriciomarroquin.dev",
+        },
+        publisher: {
+          "@type": "Person",
+          name: SITE_CONFIG.author,
+        },
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": articleUrl,
+        },
+      })}
+    />
+
+    <!-- Scripts: reading progress, reading time, TTS -->
+    <script is:inline>
+      function initArticleFeatures() {
+        const progressEl = document.querySelector("[data-reading-progress]");
+        const listenButton = document.querySelector("[data-listen-button]");
+        const listenLabel = document.querySelector("[data-listen-label]");
+        const articleBody = document.querySelector("[data-article-body]");
+        const readingTimeEl = document.querySelector("[data-reading-time]");
+        const titleEl = document.querySelector("[data-article-title]");
+        const descriptionEl = document.querySelector(
+          "[data-article-description]"
+        );
+
+        // Reading progress
+        const updateProgress = () => {
+          if (!progressEl) return;
+          const doc = document.documentElement;
+          const scrollTop = window.scrollY || doc.scrollTop;
+          const scrollHeight = doc.scrollHeight - doc.clientHeight;
+          if (scrollHeight <= 0) {
+            progressEl.style.width = "0%";
+            return;
+          }
+          const value = (scrollTop / scrollHeight) * 100;
+          progressEl.style.width = value + "%";
+        };
+
+        updateProgress();
+        window.addEventListener("scroll", updateProgress, { passive: true });
+
+        // Reading time
+        if (articleBody && readingTimeEl) {
+          const text = articleBody.innerText || articleBody.textContent || "";
+          const words = text.trim().split(/\s+/).filter(Boolean).length;
+          const minutes = Math.max(1, Math.round(words / 200));
+          readingTimeEl.textContent = minutes + " min read";
+        }
+
+        // Text-to-speech
+        if (!listenButton || !listenLabel) {
+          return;
+        }
+
+        // Avoid attaching multiple times on page transitions
+        if (listenButton.dataset.initialized === "true") {
+          return;
+        }
+        listenButton.dataset.initialized = "true";
+
+        if (!("speechSynthesis" in window)) {
+          listenButton.disabled = true;
+          listenLabel.textContent = "Not supported";
+          return;
+        }
+
+        if (!articleBody) return;
+
+        let isSpeaking = false;
+
+        listenButton.addEventListener("click", () => {
+          const synth = window.speechSynthesis;
+
+          if (isSpeaking) {
+            synth.cancel();
+            isSpeaking = false;
+            listenLabel.textContent = "Listen";
+            return;
+          }
+
+          const titleText =
+            (titleEl && (titleEl.innerText || titleEl.textContent)) || "";
+          const descriptionText =
+            (descriptionEl &&
+              (descriptionEl.innerText || descriptionEl.textContent)) ||
+            "";
+          const bodyText =
+            articleBody.innerText || articleBody.textContent || "";
+
+          const parts = [titleText, descriptionText, bodyText]
+            .map((t) => t.trim())
+            .filter(Boolean);
+
+          const fullText = parts.join(". ");
+
+          if (!fullText.trim()) return;
+
+          const utterance = new SpeechSynthesisUtterance(fullText);
+
+          utterance.onend = () => {
+            isSpeaking = false;
+            listenLabel.textContent = "Listen";
+          };
+          utterance.onerror = () => {
+            isSpeaking = false;
+            listenLabel.textContent = "Listen";
+          };
+
+          synth.cancel();
+          synth.speak(utterance);
+          isSpeaking = true;
+          listenLabel.textContent = "Stop listening";
+        });
+
+        window.addEventListener("beforeunload", () => {
+          if ("speechSynthesis" in window) {
+            window.speechSynthesis.cancel();
+          }
+        });
+      }
+
+      // Run on initial load and after View Transitions
+      initArticleFeatures();
+      document.addEventListener("astro:page-load", initArticleFeatures);
+    </script>
   </article>
 </BaseLayout>
-
-<!-- Comments -->
-<GiscusComments client:load term={`/blog/${article.slug}`} />
-
-<!-- Article JSON-LD -->
-<script
-  type="application/ld+json"
-  set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: title,
-    description: description,
-    image: ogImage ? new URL(ogImage, Astro.site).href : undefined,
-    datePublished: toISODateTimeUTC(publishDate),
-    author: {
-      "@type": "Person",
-      name: SITE_CONFIG.author,
-      url: "https://patriciomarroquin.dev",
-    },
-    publisher: {
-      "@type": "Person",
-      name: SITE_CONFIG.author,
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": articleUrl,
-    },
-  })}
-/>
-
-<!-- Scripts: reading progress, reading time, TTS -->
-<script is:inline>
-  function initArticleFeatures() {
-    const progressEl = document.querySelector("[data-reading-progress]");
-    const listenButton = document.querySelector("[data-listen-button]");
-    const listenLabel = document.querySelector("[data-listen-label]");
-    const articleBody = document.querySelector("[data-article-body]");
-    const readingTimeEl = document.querySelector("[data-reading-time]");
-    const titleEl = document.querySelector("[data-article-title]");
-    const descriptionEl = document.querySelector("[data-article-description]");
-
-    // Reading progress
-    const updateProgress = () => {
-      if (!progressEl) return;
-      const doc = document.documentElement;
-      const scrollTop = window.scrollY || doc.scrollTop;
-      const scrollHeight = doc.scrollHeight - doc.clientHeight;
-      if (scrollHeight <= 0) {
-        progressEl.style.width = "0%";
-        return;
-      }
-      const value = (scrollTop / scrollHeight) * 100;
-      progressEl.style.width = value + "%";
-    };
-
-    updateProgress();
-    window.addEventListener("scroll", updateProgress, { passive: true });
-
-    // Reading time
-    if (articleBody && readingTimeEl) {
-      const text = articleBody.innerText || articleBody.textContent || "";
-      const words = text.trim().split(/\s+/).filter(Boolean).length;
-      const minutes = Math.max(1, Math.round(words / 200));
-      readingTimeEl.textContent = minutes + " min read";
-    }
-
-    // Text-to-speech
-    if (!listenButton || !listenLabel) {
-      return;
-    }
-
-    // Avoid attaching multiple times on page transitions
-    if (listenButton.dataset.initialized === "true") {
-      return;
-    }
-    listenButton.dataset.initialized = "true";
-
-    if (!("speechSynthesis" in window)) {
-      listenButton.disabled = true;
-      listenLabel.textContent = "Not supported";
-      return;
-    }
-
-    if (!articleBody) return;
-
-    let isSpeaking = false;
-
-    listenButton.addEventListener("click", () => {
-      const synth = window.speechSynthesis;
-
-      if (isSpeaking) {
-        synth.cancel();
-        isSpeaking = false;
-        listenLabel.textContent = "Listen";
-        return;
-      }
-
-      const titleText =
-        (titleEl && (titleEl.innerText || titleEl.textContent)) || "";
-      const descriptionText =
-        (descriptionEl &&
-          (descriptionEl.innerText || descriptionEl.textContent)) ||
-        "";
-      const bodyText = articleBody.innerText || articleBody.textContent || "";
-
-      const parts = [titleText, descriptionText, bodyText]
-        .map((t) => t.trim())
-        .filter(Boolean);
-
-      const fullText = parts.join(". ");
-
-      if (!fullText.trim()) return;
-
-      const utterance = new SpeechSynthesisUtterance(fullText);
-
-      utterance.onend = () => {
-        isSpeaking = false;
-        listenLabel.textContent = "Listen";
-      };
-      utterance.onerror = () => {
-        isSpeaking = false;
-        listenLabel.textContent = "Listen";
-      };
-
-      synth.cancel();
-      synth.speak(utterance);
-      isSpeaking = true;
-      listenLabel.textContent = "Stop listening";
-    });
-
-    window.addEventListener("beforeunload", () => {
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
-    });
-  }
-
-  // Run on initial load and after View Transitions
-  initArticleFeatures();
-  document.addEventListener("astro:page-load", initArticleFeatures);
-</script>
