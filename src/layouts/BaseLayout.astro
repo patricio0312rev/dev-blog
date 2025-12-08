@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { SITE_CONFIG } from "@/constants";
 import Analytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
 import { toISODateTimeUTC } from "@/utils";
 
 interface Props {
@@ -146,6 +147,7 @@ const publishDateISO = publishDate ? toISODateTimeUTC(publishDate) : undefined;
     <Footer />
 
     <Analytics />
+    <SpeedInsights />
 
     <!-- JSON-LD Structured Data -->
     <script
