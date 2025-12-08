@@ -1,0 +1,25 @@
+---
+interface Props {
+  category?: string;
+  tags?: string[];
+  publishDate?: string | Date;
+}
+
+const { category, tags, publishDate } = Astro.props;
+
+// Format date if needed
+const formattedDate = publishDate
+  ? typeof publishDate === "string"
+    ? publishDate
+    : publishDate.toISOString().split("T")[0]
+  : undefined;
+
+// Format tags as comma-separated string
+const tagsString = tags && tags.length > 0 ? tags.join(",") : undefined;
+---
+
+<!-- Pagefind metadata - will be injected in head -->{
+  category && <meta data-pagefind-meta={`category:${category}`} />
+}
+{tagsString && <meta data-pagefind-meta={`tags:${tagsString}`} />}
+{formattedDate && <meta data-pagefind-meta={`publish_date:${formattedDate}`} />}
