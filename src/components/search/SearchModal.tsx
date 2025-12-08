@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Search, X, Clock, FileText, Tag as TagIcon } from "lucide-react";
+import { Search, X, Clock, FileText } from "lucide-react";
 import { cn } from "@/utils";
+import { ArticleCategoryBadge } from "@/components/articles";
+import { TagList } from "@/components/ui";
+import type { ArticleCategory } from "@/types";
 
 interface SearchResult {
   id: string;
@@ -19,6 +22,14 @@ interface SearchModalProps {
   onClose: () => void;
 }
 
+// Helper function to strip HTML tags from text
+const stripHtml = (html: string): string => {
+  if (typeof window === "undefined") return html;
+  const tmp = document.createElement("DIV");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
+};
+
 export const SearchModal: React.FC<SearchModalProps> = ({
   isOpen,
   onClose,
@@ -28,36 +39,33 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [pagefindLoaded, setPagefindLoaded] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const pagefindRef = useRef<any>(null);
 
-  // Load Pagefind library - UPDATED TO FIX BUILD ERROR
+  // Load Pagefind library
   useEffect(() => {
     const loadPagefind = async () => {
-      if (typeof window !== "undefined" && !pagefindRef.current) {
-        try {
-          // Dynamically load Pagefind at runtime
-          const script = document.createElement("script");
-          script.src = "/pagefind/pagefind.js";
-          script.type = "module";
+      if (typeof window === "undefined" || pagefindRef.current) return;
 
-          script.onload = async () => {
-            // @ts-ignore - Pagefind is loaded via script tag
-            if (window.pagefind) {
-              // @ts-ignore
-              pagefindRef.current = window.pagefind;
-            }
-          };
+      try {
+        console.log("🔍 Loading Pagefind...");
 
-          document.head.appendChild(script);
-        } catch (error) {
-          console.error("Failed to load Pagefind:", error);
-        }
+        // Dynamically import pagefind as a module
+        const pagefind = await import(
+          /* @vite-ignore */ "/pagefind/pagefind.js"
+        );
+
+        pagefindRef.current = pagefind;
+        setPagefindLoaded(true);
+        console.log("✅ Pagefind loaded successfully");
+      } catch (error) {
+        console.error("❌ Error loading Pagefind:", error);
       }
     };
 
-    if (isOpen) {
+    if (isOpen && !pagefindRef.current) {
       loadPagefind();
     }
   }, [isOpen]);
@@ -103,42 +111,53 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   }, []);
 
   // Perform search
-  const performSearch = useCallback(async (searchQuery: string) => {
-    if (!searchQuery.trim() || !pagefindRef.current) {
-      setResults([]);
-      return;
-    }
+  const performSearch = useCallback(
+    async (searchQuery: string) => {
+      if (!searchQuery.trim()) {
+        setResults([]);
+        return;
+      }
 
-    setIsLoading(true);
-    try {
-      const search = await pagefindRef.current.search(searchQuery);
+      if (!pagefindRef.current) {
+        return;
+      }
 
-      const searchResults = await Promise.all(
-        search.results.map(async (result: any) => {
-          const data = await result.data();
-          return {
-            id: result.id,
-            url: data.url,
-            title: data.meta?.title || "Untitled",
-            excerpt: data.excerpt || "",
-            meta: {
-              category: data.meta?.category,
-              tags: data.meta?.tags ? data.meta.tags.split(",") : [],
-              publishDate: data.meta?.publish_date,
-            },
-          };
-        })
-      );
+      setIsLoading(true);
+      try {
+        const search = await pagefindRef.current.search(searchQuery);
 
-      setResults(searchResults);
-      setSelectedIndex(0);
-    } catch (error) {
-      console.error("Search error:", error);
-      setResults([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+        const searchResults = await Promise.all(
+          search.results.map(async (result: any) => {
+            const data = await result.data();
+
+            // Strip HTML tags from excerpt
+            const cleanExcerpt = stripHtml(data.excerpt || "");
+
+            return {
+              id: result.id,
+              url: data.url,
+              title: data.meta?.title || "Untitled",
+              excerpt: cleanExcerpt,
+              meta: {
+                category: data.meta?.category,
+                tags: data.meta?.tags ? data.meta.tags.split(",") : [],
+                publishDate: data.meta?.publish_date,
+              },
+            };
+          })
+        );
+
+        setResults(searchResults);
+        setSelectedIndex(0);
+      } catch (error) {
+        console.error("❌ Search error:", error);
+        setResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [pagefindLoaded]
+  );
 
   // Debounced search
   useEffect(() => {
@@ -218,7 +237,6 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   // Handle recent search click
   const handleRecentSearchClick = (searchQuery: string) => {
     setQuery(searchQuery);
-    performSearch(searchQuery);
   };
 
   if (!isOpen) return null;
@@ -265,8 +283,20 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
         {/* Results / Recent Searches */}
         <div className="max-h-[60vh] overflow-y-auto">
+          {/* Pagefind not loaded warning */}
+          {!pagefindLoaded && query && (
+            <div className="flex items-center justify-center py-12">
+              <div className="text-center">
+                <div className="mb-3 h-6 w-6 animate-spin rounded-full border-2 border-sky-500 border-t-transparent mx-auto" />
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                  Loading search...
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Loading state */}
-          {isLoading && (
+          {isLoading && pagefindLoaded && (
             <div className="flex items-center justify-center py-12">
               <div className="h-6 w-6 animate-spin rounded-full border-2 border-sky-500 border-t-transparent" />
             </div>
@@ -303,7 +333,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           )}
 
           {/* No results */}
-          {query && !isLoading && results.length === 0 && (
+          {query && !isLoading && pagefindLoaded && results.length === 0 && (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <div className="mb-3 rounded-full bg-zinc-100 p-3 dark:bg-zinc-800">
                 <Search className="h-6 w-6 text-zinc-400" />
@@ -318,7 +348,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
           )}
 
           {/* Search Results */}
-          {!isLoading && results.length > 0 && (
+          {!isLoading && pagefindLoaded && results.length > 0 && (
             <div ref={resultsRef} className="p-2" role="listbox">
               {results.map((result, idx) => (
                 <a
@@ -361,22 +391,21 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                     </p>
                   )}
 
-                  {(result.meta?.category || result.meta?.tags) && (
-                    <div className="flex flex-wrap items-center gap-2 text-[10px]">
+                  {(result.meta?.category ||
+                    (result.meta?.tags && result.meta.tags.length > 0)) && (
+                    <div className="flex flex-wrap items-center gap-2">
                       {result.meta.category && (
-                        <span className="rounded-full bg-sky-100 px-2 py-0.5 font-medium text-sky-700 dark:bg-sky-900/40 dark:text-sky-300">
-                          {result.meta.category}
-                        </span>
+                        <ArticleCategoryBadge
+                          category={result.meta.category as ArticleCategory}
+                          iconSize="sm"
+                        />
                       )}
                       {result.meta.tags && result.meta.tags.length > 0 && (
-                        <div className="flex items-center gap-1">
-                          <TagIcon className="h-3 w-3 text-zinc-400" />
-                          <span className="text-zinc-500 dark:text-zinc-400">
-                            {result.meta.tags.slice(0, 3).join(", ")}
-                            {result.meta.tags.length > 3 &&
-                              ` +${result.meta.tags.length - 3}`}
-                          </span>
-                        </div>
+                        <TagList
+                          tags={result.meta.tags}
+                          maxVisible={3}
+                          variant="search"
+                        />
                       )}
                     </div>
                   )}
