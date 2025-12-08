@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/build-search-index.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",
@@ -22,6 +22,7 @@
     "astro": "^5.0.0",
     "lucide-react": "^0.460.0",
     "openai": "^6.10.0",
+    "pagefind": "^1.4.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

@@ -3,7 +3,7 @@ import { cn } from "@/utils";
 
 interface TagProps {
   label: string;
-  variant?: "default" | "accent";
+  variant?: "default" | "accent" | "search";
   className?: string;
 }
 
@@ -15,8 +15,8 @@ export const Tag: React.FC<TagProps> = ({
   const variantStyles = {
     default:
       "border border-zinc-200 text-zinc-500 dark:border-zinc-700 dark:text-zinc-400",
-    accent:
-      "bg-sky-50 text-sky-700 dark:bg-sky-900/40 dark:text-sky-200",
+    accent: "bg-sky-50 text-sky-700 dark:bg-sky-900/40 dark:text-sky-200",
+    search: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
   };
 
   return (
@@ -35,7 +35,7 @@ export const Tag: React.FC<TagProps> = ({
 interface TagListProps {
   tags: string[];
   maxVisible?: number;
-  variant?: "default" | "accent";
+  variant?: "default" | "accent" | "search";
 }
 
 export const TagList: React.FC<TagListProps> = ({

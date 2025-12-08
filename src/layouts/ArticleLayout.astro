@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
+import PagefindMeta from "@/components/PagefindMeta.astro";
 import { SITE_CONFIG } from "@/constants";
 import { Flame, BookOpen, FlaskConical, Headphones } from "@lucide/astro";
 import RelatedArticles from "@/components/blog/RelatedArticles";
@@ -91,6 +92,10 @@ const related = allArticles
   publishDate={publishDate}
   canonicalUrl={articleUrl}
 >
+  <Fragment slot="head">
+    <PagefindMeta category={category} tags={tags} publishDate={publishDate} />
+  </Fragment>
+
   <article class="relative mx-auto max-w-3xl">
     <!-- Reading progress bar -->
     <div class="fixed inset-x-0 top-16 z-30 h-0.5 bg-transparent">
@@ -172,7 +177,7 @@ const related = allArticles
       <hr class="border-zinc-200 dark:border-zinc-800" />
     </header>
 
-    <!-- Article body -->
+    <!-- Article body - This will be wrapped with data-pagefind-body in [slug].astro -->
     <section
       data-article-body
       class="prose max-w-none pb-10 prose-zinc dark:prose-invert prose-pre:!bg-transparent prose-pre:!p-0"
@@ -216,11 +221,13 @@ const related = allArticles
         <span class="font-medium text-zinc-700 dark:text-zinc-300">Share:</span>
 
         <!-- Twitter -->
+
         <a
           href={twitterUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 transition-colors duration-150 hover:text-sky-500 dark:hover:text-sky-400"
+          class="inline-flex items-center
+        gap-1.5 transition-colors duration-150 hover:text-sky-500 dark:hover:text-sky-400"
         >
           <svg
             class="h-4 w-4"
@@ -269,143 +276,146 @@ const related = allArticles
 
     <!-- Comments -->
     <GiscusComments client:load term={`/blog/${article.slug}`} />
+
+    <!-- Article JSON-LD -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: title,
+        description: description,
+        image: ogImage ? new URL(ogImage, Astro.site).href : undefined,
+        datePublished: toISODateTimeUTC(publishDate),
+        author: {
+          "@type": "Person",
+          name: SITE_CONFIG.author,
+          url: "https://patriciomarroquin.dev",
+        },
+        publisher: {
+          "@type": "Person",
+          name: SITE_CONFIG.author,
+        },
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": articleUrl,
+        },
+      })}
+    />
+
+    <!-- Scripts: reading progress, reading time, TTS -->
+    <script is:inline>
+      function initArticleFeatures() {
+        const progressEl = document.querySelector("[data-reading-progress]");
+        const listenButton = document.querySelector("[data-listen-button]");
+        const listenLabel = document.querySelector("[data-listen-label]");
+        const articleBody = document.querySelector("[data-article-body]");
+        const readingTimeEl = document.querySelector("[data-reading-time]");
+        const titleEl = document.querySelector("[data-article-title]");
+        const descriptionEl = document.querySelector(
+          "[data-article-description]"
+        );
+
+        // Reading progress
+        const updateProgress = () => {
+          if (!progressEl) return;
+          const doc = document.documentElement;
+          const scrollTop = window.scrollY || doc.scrollTop;
+          const scrollHeight = doc.scrollHeight - doc.clientHeight;
+          if (scrollHeight <= 0) {
+            progressEl.style.width = "0%";
+            return;
+          }
+          const value = (scrollTop / scrollHeight) * 100;
+          progressEl.style.width = value + "%";
+        };
+
+        updateProgress();
+        window.addEventListener("scroll", updateProgress, { passive: true });
+
+        // Reading time
+        if (articleBody && readingTimeEl) {
+          const text = articleBody.innerText || articleBody.textContent || "";
+          const words = text.trim().split(/\s+/).filter(Boolean).length;
+          const minutes = Math.max(1, Math.round(words / 200));
+          readingTimeEl.textContent = minutes + " min read";
+        }
+
+        // Text-to-speech
+        if (!listenButton || !listenLabel) {
+          return;
+        }
+
+        // Avoid attaching multiple times on page transitions
+        if (listenButton.dataset.initialized === "true") {
+          return;
+        }
+        listenButton.dataset.initialized = "true";
+
+        if (!("speechSynthesis" in window)) {
+          listenButton.disabled = true;
+          listenLabel.textContent = "Not supported";
+          return;
+        }
+
+        if (!articleBody) return;
+
+        let isSpeaking = false;
+
+        listenButton.addEventListener("click", () => {
+          const synth = window.speechSynthesis;
+
+          if (isSpeaking) {
+            synth.cancel();
+            isSpeaking = false;
+            listenLabel.textContent = "Listen";
+            return;
+          }
+
+          const titleText =
+            (titleEl && (titleEl.innerText || titleEl.textContent)) || "";
+          const descriptionText =
+            (descriptionEl &&
+              (descriptionEl.innerText || descriptionEl.textContent)) ||
+            "";
+          const bodyText =
+            articleBody.innerText || articleBody.textContent || "";
+
+          const parts = [titleText, descriptionText, bodyText]
+            .map((t) => t.trim())
+            .filter(Boolean);
+
+          const fullText = parts.join(". ");
+
+          if (!fullText.trim()) return;
+
+          const utterance = new SpeechSynthesisUtterance(fullText);
+
+          utterance.onend = () => {
+            isSpeaking = false;
+            listenLabel.textContent = "Listen";
+          };
+          utterance.onerror = () => {
+            isSpeaking = false;
+            listenLabel.textContent = "Listen";
+          };
+
+          synth.cancel();
+          synth.speak(utterance);
+          isSpeaking = true;
+          listenLabel.textContent = "Stop listening";
+        });
+
+        window.addEventListener("beforeunload", () => {
+          if ("speechSynthesis" in window) {
+            window.speechSynthesis.cancel();
+          }
+        });
+      }
+
+      // Run on initial load and after View Transitions
+      initArticleFeatures();
+      document.addEventListener("astro:page-load", initArticleFeatures);
+    </script>
   </article>
 </BaseLayout>
-
-<!-- Article JSON-LD -->
-<script
-  type="application/ld+json"
-  set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: title,
-    description: description,
-    image: ogImage ? new URL(ogImage, Astro.site).href : undefined,
-    datePublished: toISODateTimeUTC(publishDate),
-    author: {
-      "@type": "Person",
-      name: SITE_CONFIG.author,
-      url: "https://patriciomarroquin.dev",
-    },
-    publisher: {
-      "@type": "Person",
-      name: SITE_CONFIG.author,
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": articleUrl,
-    },
-  })}
-/>
-
-<!-- Scripts: reading progress, reading time, TTS -->
-<script is:inline>
-  function initArticleFeatures() {
-    const progressEl = document.querySelector("[data-reading-progress]");
-    const listenButton = document.querySelector("[data-listen-button]");
-    const listenLabel = document.querySelector("[data-listen-label]");
-    const articleBody = document.querySelector("[data-article-body]");
-    const readingTimeEl = document.querySelector("[data-reading-time]");
-    const titleEl = document.querySelector("[data-article-title]");
-    const descriptionEl = document.querySelector("[data-article-description]");
-
-    // Reading progress
-    const updateProgress = () => {
-      if (!progressEl) return;
-      const doc = document.documentElement;
-      const scrollTop = window.scrollY || doc.scrollTop;
-      const scrollHeight = doc.scrollHeight - doc.clientHeight;
-      if (scrollHeight <= 0) {
-        progressEl.style.width = "0%";
-        return;
-      }
-      const value = (scrollTop / scrollHeight) * 100;
-      progressEl.style.width = value + "%";
-    };
-
-    updateProgress();
-    window.addEventListener("scroll", updateProgress, { passive: true });
-
-    // Reading time
-    if (articleBody && readingTimeEl) {
-      const text = articleBody.innerText || articleBody.textContent || "";
-      const words = text.trim().split(/\s+/).filter(Boolean).length;
-      const minutes = Math.max(1, Math.round(words / 200));
-      readingTimeEl.textContent = minutes + " min read";
-    }
-
-    // Text-to-speech
-    if (!listenButton || !listenLabel) {
-      return;
-    }
-
-    // Avoid attaching multiple times on page transitions
-    if (listenButton.dataset.initialized === "true") {
-      return;
-    }
-    listenButton.dataset.initialized = "true";
-
-    if (!("speechSynthesis" in window)) {
-      listenButton.disabled = true;
-      listenLabel.textContent = "Not supported";
-      return;
-    }
-
-    if (!articleBody) return;
-
-    let isSpeaking = false;
-
-    listenButton.addEventListener("click", () => {
-      const synth = window.speechSynthesis;
-
-      if (isSpeaking) {
-        synth.cancel();
-        isSpeaking = false;
-        listenLabel.textContent = "Listen";
-        return;
-      }
-
-      const titleText =
-        (titleEl && (titleEl.innerText || titleEl.textContent)) || "";
-      const descriptionText =
-        (descriptionEl &&
-          (descriptionEl.innerText || descriptionEl.textContent)) ||
-        "";
-      const bodyText = articleBody.innerText || articleBody.textContent || "";
-
-      const parts = [titleText, descriptionText, bodyText]
-        .map((t) => t.trim())
-        .filter(Boolean);
-
-      const fullText = parts.join(". ");
-
-      if (!fullText.trim()) return;
-
-      const utterance = new SpeechSynthesisUtterance(fullText);
-
-      utterance.onend = () => {
-        isSpeaking = false;
-        listenLabel.textContent = "Listen";
-      };
-      utterance.onerror = () => {
-        isSpeaking = false;
-        listenLabel.textContent = "Listen";
-      };
-
-      synth.cancel();
-      synth.speak(utterance);
-      isSpeaking = true;
-      listenLabel.textContent = "Stop listening";
-    });
-
-    window.addEventListener("beforeunload", () => {
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
-    });
-  }
-
-  // Run on initial load and after View Transitions
-  initArticleFeatures();
-  document.addEventListener("astro:page-load", initArticleFeatures);
-</script>
