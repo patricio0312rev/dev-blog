@@ -423,7 +423,7 @@ Flow:
 - [x] Comments (Giscus)
 - [x] Related articles recommendations
 - [ ] View counter per article
-- [ ] Search filters (by category / tag)
+- [x] Search filters (by category / tag)
 
 ---
 
