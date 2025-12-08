@@ -36,9 +36,18 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate article from plan
+        id: generate_article
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: pnpm generate:article
+        run: |
+          pnpm generate:article
+
+          # Check if the generator actually changed any tracked files
+          if git diff --quiet; then
+            echo "article_created=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "article_created=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Compute today key
         id: meta
@@ -47,6 +56,7 @@ jobs:
           echo "today=$TODAY" >> "$GITHUB_OUTPUT"
 
       - name: Create Pull Request for generated article
+        if: steps.generate_article.outputs.article_created == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           branch: "feat/article/${{ steps.meta.outputs.today }}"
