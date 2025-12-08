@@ -20,5 +20,7 @@ const { Content } = await article.render();
 ---
 
 <ArticleLayout article={article}>
-  <Content components={{ pre: CodeBlock }} />
+  <div data-pagefind-body>
+    <Content components={{ pre: CodeBlock }} />
+  </div>
 </ArticleLayout>
