@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/build-search-index.mjs",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",
@@ -22,7 +22,6 @@
     "astro": "^5.0.0",
     "lucide-react": "^0.460.0",
     "openai": "^6.10.0",
-    "pagefind": "^1.4.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -33,7 +32,9 @@
     "@types/node": "^24.10.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "astro-pagefind": "^1.8.5",
     "dotenv": "^17.2.3",
+    "pagefind": "^1.4.0",
     "tailwindcss": "^4.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"

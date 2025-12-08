@@ -54,7 +54,6 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
         // Dynamically import pagefind as a module
         const pagefind = await import(
-          /* @ts-ignore - Pagefind is not typed */
           /* @vite-ignore */ "/pagefind/pagefind.js"
         );
 
