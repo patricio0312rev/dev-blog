@@ -1,32 +1,65 @@
 import type { ArticleCategory } from "@/types";
 
 /**
- * Formats a date string to a readable format
+ * Normalize incoming date (string or Date) to a Date in UTC.
+ * - "YYYY-MM-DD" is treated as a pure UTC calendar date.
+ */
+export function normalizeDateInput(date: string | Date): Date {
+  if (date instanceof Date) return date;
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    const [year, month, day] = date.split("-").map(Number);
+    return new Date(Date.UTC(year, month - 1, day));
+  }
+
+  return new Date(date);
+}
+
+/**
+ * Returns an ISO timestamp string (for meta tags, JSON-LD) from a calendar date.
+ */
+export function toISODateTimeUTC(date: string | Date): string {
+  return normalizeDateInput(date).toISOString();
+}
+
+/**
+ * Formats a date to a readable string, always in UTC.
  */
 export function formatDate(
-  date: string,
+  date: string | Date,
   options: Intl.DateTimeFormatOptions = {
     month: "short",
     day: "2-digit",
     year: "numeric",
   }
 ): string {
-  return new Date(date).toLocaleDateString("en-US", options);
+  const d = normalizeDateInput(date);
+
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "UTC",
+    ...options,
+  }).format(d);
 }
 
 /**
- * Gets the day and month from a date string
+ * Gets the day and month from a date, always in UTC.
  */
-export function getDayMonth(date: string): { day: string; month: string } {
-  const d = new Date(date);
-  return {
-    day: d.getDate().toString().padStart(2, "0"),
-    month: d.toLocaleString("en-US", { month: "short" }),
-  };
+export function getDayMonth(
+  date: string | Date
+): { day: string; month: string } {
+  const d = normalizeDateInput(date);
+
+  const day = d.getUTCDate().toString().padStart(2, "0");
+  const month = new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    timeZone: "UTC",
+  }).format(d);
+
+  return { day, month };
 }
 
 /**
- * Checks if a date is today
+ * Checks if a date is today (still fine in local time)
  */
 export function isToday(date: Date): boolean {
   return date.toDateString() === new Date().toDateString();
@@ -54,14 +87,19 @@ export function getCategoryColor(category: ArticleCategory): string {
 /**
  * Combines class names, filtering out falsy values
  */
-export function cn(...classes: (string | boolean | undefined | null)[]): string {
+export function cn(
+  ...classes: (string | boolean | undefined | null)[]
+): string {
   return classes.filter(Boolean).join(" ");
 }
 
 /**
  * Generates a calendar month matrix
  */
-export function getMonthMatrix(year: number, month: number): (Date | null)[][] {
+export function getMonthMatrix(
+  year: number,
+  month: number
+): (Date | null)[][] {
   const firstDay = new Date(year, month, 1);
   const startDay = firstDay.getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();

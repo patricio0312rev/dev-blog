@@ -2,6 +2,7 @@ import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
 import { getCollection } from "astro:content";
 import { SITE_CONFIG } from "@/constants";
+import { normalizeDateInput } from "@/utils";
 
 export async function GET(context: APIContext) {
   // Load all non-draft articles from the content collection
@@ -9,13 +10,8 @@ export async function GET(context: APIContext) {
 
   // Sort newest → oldest by publishDate
   const sorted = articles.sort((a, b) => {
-    const da = a.data.publishDate instanceof Date
-      ? a.data.publishDate.getTime()
-      : new Date(a.data.publishDate).getTime();
-
-    const db = b.data.publishDate instanceof Date
-      ? b.data.publishDate.getTime()
-      : new Date(b.data.publishDate).getTime();
+    const da = normalizeDateInput(a.data.publishDate).getTime();
+    const db = normalizeDateInput(b.data.publishDate).getTime();
 
     return db - da;
   });
@@ -28,14 +24,13 @@ export async function GET(context: APIContext) {
     items: sorted.map((entry) => {
       const { title, description, publishDate, category, tags = [] } = entry.data;
       const slug = entry.slug; 
+      const pubDate = normalizeDateInput(publishDate);
+
       return {
         title,
         link: `/blog/${slug}`,
         description,
-        pubDate:
-          publishDate instanceof Date
-            ? publishDate
-            : new Date(publishDate),
+        pubDate,
         categories: [category, ...tags],
         customData: `
           <category>${category}</category>
