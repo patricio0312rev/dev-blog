@@ -50,7 +50,7 @@
         "tutorial",
         "architecture"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Every API tutorial glosses over structure or error handling. I’ll show how to nail these essentials so your API works and stays maintainable.",
       "outline": [
         "Setting up a Node.js project with TypeScript",
@@ -67,7 +67,8 @@
       "mediaIdeas": [
         "Folder structure visual diagram",
         "Flow diagram of request lifecycle"
-      ]
+      ],
+      "entrySlug": "2025-12-08-building-a-rocket-fuel-nodejs-api-with-typescript"
     },
     {
       "date": "2025-12-11",

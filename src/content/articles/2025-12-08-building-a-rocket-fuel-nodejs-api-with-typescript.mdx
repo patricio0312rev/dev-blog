@@ -1,0 +1,436 @@
+---
+title: "Building a Rocket-Fuel Node.js API with TypeScript - Step by Step"
+description: "A practical guide to crafting a scalable Node.js REST API using TypeScript, best architecture, and error handling that won’t make you cry."
+category: "tutorial"
+publishDate: "2025-12-08"
+tags:
+  - nodejs
+  - typescript
+  - api
+  - backend
+  - tutorial
+  - architecture
+slug: "building-a-rocket-fuel-nodejs-api-with-typescript"
+---
+
+Building a Node.js API with TypeScript feels like a no-brainer these days — better typings, more safety, better DX, right? But if you’ve ever gone down just half the road, you know how quickly your “simple” API can turn into an unmaintainable mess of spaghetti callbacks, unclear folder layouts, and error handling that makes your head spin.
+
+In this article, I’m going to walk you through building a **scalable, clean, and type-safe REST API in Node.js** using TypeScript, focusing on **the real-life essentials**: a rock-solid folder structure, fully typed routes, and smart error handling so your API *works*, *grows well*, and doesn’t make your team cry.
+
+If you've ever felt frustrated about how tutorials gloss over structure or how to consistently handle errors, this guide is for you.
+
+---
+
+## Setting up a Node.js Project with TypeScript
+
+Before we dive into coding, we need a solid foundation. Here's a minimal but effective starting point.
+
+1. **Initialize your project**:
+
+```bash
+mkdir rocket-api && cd rocket-api
+npm init -y
+```
+
+2. **Install dependencies**:
+
+We're using Express for the server because it's battle-tested and flexible. Add TypeScript and related dev tools:
+
+```bash
+npm install express
+npm install --save-dev typescript ts-node @types/node @types/express nodemon
+```
+
+3. **Create a basic `tsconfig.json`**:
+
+```ts filename="tsconfig.json"
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  }
+}
+```
+
+This config is strict enough to catch most errors, but not too strict to complicate daily dev.
+
+4. **Setup scripts for dev and build** in `package.json`:
+
+```json filename="package.json"
+{
+  // ...
+  "scripts": {
+    "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  }
+}
+```
+
+5. **Create a basic Express app** in `src/index.ts`:
+
+```ts filename="src/index.ts"
+// src/index.ts
+import express from 'express';
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+
+app.get('/health', (_req, res) => {
+  res.json({ status: 'OK' });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+```
+
+Run `npm run dev` and hit `http://localhost:3000/health` to verify your setup.
+
+> **Why care about these steps?** I see too many projects skip setting up TypeScript properly or over-configure it. A clean baseline saves hours of debugging later.
+
+---
+
+## Designing Folder Structure and Layering
+
+A good folder structure is like your API's backbone — get it right early and future-you will thank you.
+
+Here’s a pattern that strikes a balance between simple and scalable:
+
+```
+src/
+├── controllers/
+│   └── userController.ts
+├── services/
+│   └── userService.ts
+├── routes/
+│   └── userRoutes.ts
+├── middlewares/
+│   └── errorMiddleware.ts
+├── models/
+│   └── user.ts
+├── utils/
+│   └── validation.ts
+└── index.ts
+```
+
+### Quick breakdown:
+
+- **controllers/**: Receive requests, return responses. No business logic here.
+- **services/**: Business logic, data manipulation, calls to DB or external APIs.
+- **routes/**: Defines Express routes and connects them to controllers.
+- **middlewares/**: Express middlewares like error handlers and validators.
+- **models/**: TypeScript types or ORM models representing your domain entities.
+- **utils/**: Helpers, validators, anything that doesn’t fit above.
+
+---
+
+## Implementing Routes with Type Safety
+
+One key win with TypeScript is having **type-safe requests and responses**. Let’s define some models first:
+
+```ts filename="src/models/user.ts"
+// src/models/user.ts
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface CreateUserRequest {
+  name: string;
+  email: string;
+}
+
+export interface CreateUserResponse {
+  id: string;
+  name: string;
+  email: string;
+}
+```
+
+Now, let’s do routing with full types — no more `any`:
+
+```ts filename="src/controllers/userController.ts"
+// src/controllers/userController.ts
+import { Request, Response, NextFunction } from 'express';
+import { CreateUserRequest, CreateUserResponse, User } from '../models/user';
+import { nanoid } from 'nanoid';
+
+const users: User[] = [];
+
+export const createUser = (
+  req: Request<{}, {}, CreateUserRequest>,
+  res: Response<CreateUserResponse>,
+  next: NextFunction
+) => {
+  try {
+    const { name, email } = req.body;
+
+    // Simple validation example (we'll get better validation later)
+    if (!name || !email) {
+      throw new Error('Name and email are required');
+    }
+
+    const newUser: User = {
+      id: nanoid(),
+      name,
+      email,
+    };
+
+    users.push(newUser);
+
+    res.status(201).json(newUser);
+  } catch (error) {
+    next(error);
+  }
+};
+```
+
+And wire it up in routes:
+
+```ts filename="src/routes/userRoutes.ts"
+// src/routes/userRoutes.ts
+import { Router } from 'express';
+import { createUser } from '../controllers/userController';
+
+const router = Router();
+
+router.post('/users', createUser);
+
+export default router;
+```
+
+Finally, in `src/index.ts` register the route:
+
+```ts filename="src/index.ts"
+// src/index.ts (updated)
+import express from 'express';
+import userRoutes from './routes/userRoutes';
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+
+app.use(userRoutes);
+
+app.get('/health', (_req, res) => {
+  res.json({ status: 'OK' });
+});
+
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+```
+
+### Why bother with all these types?
+
+Types give you two key benefits:
+
+- **Better DX**: You catch bugs instantly, and IDEs autocomplete your request and response objects.
+- **Better API contracts**: Your routes clearly communicate what they expect and return, reducing errors from ambiguous data shapes.
+
+---
+
+## Smart Error Handling and Validation
+
+Error handling is often an afterthought, leaving your code littered with `try/catch` blocks or plain `res.status(500).send('error')`. Let’s make it better.
+
+1. **Centralized error middleware**
+
+```ts filename="src/middlewares/errorMiddleware.ts"
+// src/middlewares/errorMiddleware.ts
+import { Request, Response, NextFunction } from 'express';
+
+export class ApiError extends Error {
+  statusCode: number;
+  constructor(message: string, statusCode = 500) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
+export function errorHandler(
+  err: Error | ApiError,
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+) {
+  const statusCode = err instanceof ApiError ? err.statusCode : 500;
+  res.status(statusCode).json({
+    error: true,
+    message: err.message || 'Internal Server Error',
+  });
+}
+```
+
+Use `ApiError` in your controller to throw expected errors:
+
+```ts filename="src/controllers/userController.ts"
+// src/controllers/userController.ts (update)
+import { ApiError } from '../middlewares/errorMiddleware';
+
+// ...
+
+if (!name || !email) {
+  throw new ApiError('Name and email are required', 400);
+}
+```
+
+Then register `errorHandler` after routes:
+
+```ts filename="src/index.ts"
+// src/index.ts (update)
+import { errorHandler } from './middlewares/errorMiddleware';
+
+// ...
+
+app.use(userRoutes);
+
+// catch all unhandled routes
+app.use((_req, res) => res.status(404).json({ error: true, message: 'Not Found' }));
+app.use(errorHandler);
+```
+
+2. **Validation**
+
+Instead of only inline checks, you want reusable validation with strong typing.
+
+You could use libraries like [Zod](https://zod.dev) or [Yup]. Here’s an example with Zod to validate the request:
+
+```ts filename="src/utils/validation.ts"
+import { z } from 'zod';
+
+export const createUserSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email address'),
+});
+```
+
+Use it inside your controller:
+
+```ts filename="src/controllers/userController.ts"
+import { createUserSchema } from '../utils/validation';
+
+export const createUser = (
+  req: Request<{}, {}, CreateUserRequest>,
+  res: Response<CreateUserResponse>,
+  next: NextFunction
+) => {
+  try {
+    const parseResult = createUserSchema.safeParse(req.body);
+    if (!parseResult.success) {
+      const issues = parseResult.error.errors.map(e => e.message).join(', ');
+      throw new ApiError(`Validation failed: ${issues}`, 400);
+    }
+
+    const { name, email } = parseResult.data;
+    // ... rest unchanged
+```
+
+This approach keeps validation separate, reusable, and type-safe.
+
+> **Why not just validate in the controller?** Separating validation logic gives you reusability and clean controllers. Plus, validation libs generate great error messages and are test-friendly.
+
+---
+
+## Testing API Endpoints with Real Examples
+
+Testing your API isn’t optional if you want to catch regressions or proof correctness.
+
+I recommend **Jest** plus **supertest** for integration-like testing of your endpoints.
+
+1. **Install the testing tools:**
+
+```bash
+npm install --save-dev jest ts-jest @types/jest supertest @types/supertest
+```
+
+2. **Configure Jest for TypeScript:**
+
+Add `jest.config.js`:
+
+```js filename="jest.config.js"
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testMatch: ['**/__tests__/**/*.test.ts'],
+};
+```
+
+3. **Write a test for user creation:**
+
+```ts filename="src/__tests__/user.test.ts"
+import request from 'supertest';
+import express from 'express';
+import userRoutes from '../routes/userRoutes';
+import { errorHandler } from '../middlewares/errorMiddleware';
+
+const app = express();
+app.use(express.json());
+app.use(userRoutes);
+app.use(errorHandler);
+
+describe('POST /users', () => {
+  it('should create a user and return 201', async () => {
+    const response = await request(app)
+      .post('/users')
+      .send({ name: 'Patricio', email: 'patricio@example.com' });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('id');
+    expect(response.body.name).toBe('Patricio');
+    expect(response.body.email).toBe('patricio@example.com');
+  });
+
+  it('should return 400 for invalid user data', async () => {
+    const response = await request(app)
+      .post('/users')
+      .send({ name: '', email: 'not-an-email' });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('error', true);
+    expect(response.body.message).toMatch(/Validation failed/);
+  });
+});
+```
+
+Run your tests with:
+
+```bash
+npm test
+```
+
+This basic setup shows how you can build confidence in your API behavior.
+
+---
+
+## Conclusion
+
+Building a Node.js API with TypeScript is absolutely worth the upfront investment — but only if you focus on the core essentials like:
+
+- Clean, opinionated folder structure that scales
+- Type safe routes and models, catching bugs early
+- Centralized error handling and proper validation flows
+- Automated tests to safeguard your API contracts
+
+Each of these steps avoids the common pitfalls I see in many Node.js projects that grow unmaintainable fast.
+
+If you keep these principles in mind from day one, your API will not only be rocket-fuel fast but also clean and maintainable as it grows.
+
+---
+
+![Folder structure diagram](https://example.com/folder-structure-diagram.png)
+*Visual: Folder structure layout with layers and responsibilities*
+
+![Request lifecycle flowchart](https://example.com/request-lifecycle-flowchart.png)
+*Visual: Express request lifecycle showing routing, validation, controller, and error middleware*
+
+Until next time, happy coding 👨‍💻  
+– Patricio Marroquin 💜
