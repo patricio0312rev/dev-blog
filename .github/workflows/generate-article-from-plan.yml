@@ -1,8 +1,6 @@
 name: Generate Daily Article From Plan
-
 on:
   workflow_dispatch:
-
   # Every day at 17:00 UTC (12:00 Lima, UTC-5)
   schedule:
     - cron: "0 17 * * *"
@@ -10,11 +8,9 @@ on:
 jobs:
   generate-article:
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
       pull-requests: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -42,10 +38,13 @@ jobs:
         run: |
           pnpm generate:article
 
-          # Check if the generator actually changed any tracked files
-          if git diff --quiet; then
+          # Check for any changes (staged or unstaged)
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No changes detected"
             echo "article_created=false" >> "$GITHUB_OUTPUT"
           else
+            echo "Changes detected"
+            git status --porcelain
             echo "article_created=true" >> "$GITHUB_OUTPUT"
           fi
 
@@ -57,6 +56,7 @@ jobs:
 
       - name: Create Pull Request for generated article
         if: steps.generate_article.outputs.article_created == 'true'
+        id: create_pr
         uses: peter-evans/create-pull-request@v7
         with:
           branch: "feat/article/${{ steps.meta.outputs.today }}"
@@ -65,12 +65,17 @@ jobs:
           title: "feat(blog): add article for ${{ steps.meta.outputs.today }}"
           body: |
             This PR adds the generated article for **${{ steps.meta.outputs.today }}**.
-
             - Generated automatically by the **Generate Daily Article From Plan** workflow.
             - The article is created from the monthly content plan in `content-plans/` for today's date.
             - Check the new file(s) under `src/content/articles/`:
               - Confirm the title, tone, and technical accuracy.
               - Tweak examples, code snippets, and wording to better match your voice if needed.
             - Once reviewed, merge to publish.
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
 
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Output PR details
+        if: steps.generate_article.outputs.article_created == 'true'
+        run: |
+          echo "Pull Request Number: ${{ steps.create_pr.outputs.pull-request-number }}"
+          echo "Pull Request URL: ${{ steps.create_pr.outputs.pull-request-url }}"
+          echo "Pull Request Operation: ${{ steps.create_pr.outputs.pull-request-operation }}"
