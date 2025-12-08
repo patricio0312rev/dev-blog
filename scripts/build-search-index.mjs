@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * Post-build script to generate Pagefind search index
  * This runs after `astro build` to index all HTML files
