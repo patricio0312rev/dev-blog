@@ -6,6 +6,7 @@ import { SITE_CONFIG } from "@/constants";
 import { Flame, BookOpen, FlaskConical, Headphones } from "@lucide/astro";
 import RelatedArticles from "@/components/blog/RelatedArticles";
 import GiscusComments from "@/components/blog/GiscusComments";
+import { formatDate, toISODateTimeUTC } from "@/utils";
 
 interface Props {
   article: CollectionEntry<"articles">;
@@ -23,11 +24,7 @@ const {
 
 const articleUrl = new URL(`/blog/${article.slug}`, Astro.site).href;
 
-const formattedDate = publishDate.toLocaleDateString("en-US", {
-  year: "numeric",
-  month: "short",
-  day: "numeric",
-});
+const formattedDate = formatDate(publishDate);
 
 const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
   title
@@ -126,7 +123,7 @@ const related = allArticles
         ></span>
 
         <!-- Date -->
-        <time datetime={publishDate.toISOString()}>{formattedDate}</time>
+        <time datetime={toISODateTimeUTC(publishDate)}>{formattedDate}</time>
 
         <span class="h-1 w-1 rounded-full bg-zinc-400" aria-hidden="true"
         ></span>
@@ -202,7 +199,7 @@ const related = allArticles
               description,
               category,
               tags,
-              publishDate: publishDate.toISOString(),
+              publishDate: toISODateTimeUTC(publishDate),
               score,
             })
           )}
@@ -284,7 +281,7 @@ const related = allArticles
     headline: title,
     description: description,
     image: ogImage ? new URL(ogImage, Astro.site).href : undefined,
-    datePublished: publishDate.toISOString(),
+    datePublished: toISODateTimeUTC(publishDate),
     author: {
       "@type": "Person",
       name: SITE_CONFIG.author,

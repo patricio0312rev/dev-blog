@@ -1,4 +1,3 @@
-// scripts/generate-article-from-plan.mjs
 import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
@@ -200,7 +199,7 @@ async function main() {
       `title: "${frontmatterEscape(title)}"`,
       `description: "${frontmatterEscape(description)}"`,
       `category: "${category}"`,
-      `publishDate: ${date}`,
+      `publishDate: "${date}"`,
       "tags:",
       tags.length
         ? tags.map((t) => `  - ${t}`).join("\n")

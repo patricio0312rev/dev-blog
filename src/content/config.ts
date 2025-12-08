@@ -7,8 +7,8 @@ const articles = defineCollection({
     description: z.string(),
     category: z.enum(["trending", "tutorial", "deep-dive"]),
     tags: z.array(z.string()),
-    publishDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
+    publishDate: z.string(),
+    updatedDate: z.string().optional(),
     draft: z.boolean().default(false),
     // SEO
     ogImage: z.string().optional(),
