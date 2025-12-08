@@ -50,16 +50,13 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       if (typeof window === "undefined" || pagefindRef.current) return;
 
       try {
-        console.log("🔍 Loading Pagefind...");
-
-        // Dynamically import pagefind as a module
         const pagefind = await import(
+          /* @ts-ignore */
           /* @vite-ignore */ "/pagefind/pagefind.js"
         );
 
         pagefindRef.current = pagefind;
         setPagefindLoaded(true);
-        console.log("✅ Pagefind loaded successfully");
       } catch (error) {
         console.error("❌ Error loading Pagefind:", error);
       }
