@@ -12,7 +12,6 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      workflows: write # allow pushes that touch workflow files if needed
 
     steps:
       - name: Checkout repository
@@ -62,7 +61,7 @@ jobs:
         id: create_pr
         uses: peter-evans/create-pull-request@v7
         with:
-          branch: feat/article/${{ steps.meta.outputs.today }}
+          branch: "feat/article/${{ steps.meta.outputs.today }}"
           base: main
           commit-message: "feat(blog): add article for ${{ steps.meta.outputs.today }}"
           title: "feat(blog): add article for ${{ steps.meta.outputs.today }}"
@@ -74,6 +73,7 @@ jobs:
               - Confirm the title, tone, and technical accuracy.
               - Tweak examples, code snippets, and wording to better match your voice if needed.
             - Once reviewed, merge to publish.
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
 
       - name: Output PR details
         if: steps.generate_article.outputs.article_created == 'true'
