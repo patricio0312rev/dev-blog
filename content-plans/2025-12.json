@@ -83,7 +83,7 @@
         "bestpractices",
         "developer-experience"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "TypeScript’s strict mode often feels like a pain, but here’s the payoff when your project scales and your team collaborates effectively.",
       "outline": [
         "What does strict typing mean in React projects?",
@@ -100,7 +100,8 @@
       "mediaIdeas": [
         "Before/after type safety bug comparison",
         "Checklist for enabling strict TS features"
-      ]
+      ],
+      "entrySlug": "2025-12-11-why-i-swear-by-strict-typing-in-large-react-projects"
     },
     {
       "date": "2025-12-15",
