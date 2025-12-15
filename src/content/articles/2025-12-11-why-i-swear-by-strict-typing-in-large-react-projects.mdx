@@ -1,0 +1,204 @@
+---
+title: "Why I Swear By Strict Typing in Large React Projects (and Why You Should Too)"
+description: "An honest look at how strict TypeScript settings save tons of debugging time, improve collaboration, and boost confidence in complex React apps."
+category: "deep-dive"
+publishDate: "2025-12-11"
+tags:
+  - typescript
+  - react
+  - architecture
+  - bestpractices
+  - developer-experience
+slug: "why-i-swear-by-strict-typing-in-large-react-projects"
+---
+
+If you've ever worked on a mid-to-large React codebase, you’ve probably experienced the pain of mysterious bugs, confusing props, or teammates accidentally breaking components without warning. TypeScript’s strict mode isn’t just a checkbox — it’s a powerful tool that can transform your developer experience and project architecture by catching subtle errors early, improving collaboration, and giving you more confidence in your code.
+
+Today, I want to share **why strict typing is my go-to in large React projects**, how it saves me time and headaches, and practical tips to adopt it incrementally without burnout.
+
+---
+
+## What Does Strict Typing Mean in React Projects?
+
+Strict typing means enabling TypeScript’s strictest compiler settings, such as:
+
+- `strictNullChecks`: Prevents `null` or `undefined` sneakily creeping into values.
+- `noImplicitAny`: Forces you to declare types explicitly instead of falling back to `any`.
+- `strictFunctionTypes`: Makes function type assignments safer.
+- `strictBindCallApply`: Tightens safety on methods like `.bind`, `.call`, and `.apply`.
+- `alwaysStrict`: Ensures files are parsed in strict mode.
+
+Once these flags are on (usually in your `tsconfig.json`), your code stops guessing about types — and starts enforcing them rigorously.
+
+In React specifically, strong typings guard your components’ props and state, catching:
+
+- Wrong or missing props.
+- Unexpected `null` or `undefined` values at runtime.
+- Incorrect function signatures passed as callbacks.
+
+Strict typing pushes you to design more predictable API surfaces between components, which is golden as your app grows.
+
+---
+
+## Common Bugs Caught Early Thanks to Strict Types
+
+There are bugs I used to spend hours hunting that strict types now stop cold at compile-time.
+
+### Example: Hidden null references in props
+
+For example, consider this component:
+
+```tsx filename="src/components/UserProfile.tsx"
+type User = {
+  id: number;
+  name: string;
+  email?: string | null;
+};
+
+type Props = {
+  user: User;
+};
+
+export function UserProfile({ user }: Props) {
+  // Without strictNullChecks, user.email could be null and cause runtime crash:
+  return <p>Contact: {user.email.toLowerCase()}</p>;
+}
+```
+
+If `strictNullChecks` is disabled, TypeScript lets `user.email` be `null` or `undefined`, and you'd only find your bug when calling `.toLowerCase()` on `null` at runtime.
+
+With `strictNullChecks`, this instantly errors:
+
+```
+Object is possibly 'null'.
+```
+
+Now you handle the case explicitly:
+
+```tsx
+<p>Contact: {user.email ? user.email.toLowerCase() : "N/A"}</p>
+```
+
+---
+
+### Example: Prop union types prevent invalid inputs
+
+When components accept varied but specific props, union and intersection types let you encode that precisely:
+
+```tsx filename="src/components/StatusMessage.tsx"
+type SuccessProps = {
+  status: "success";
+  data: string;
+};
+
+type ErrorProps = {
+  status: "error";
+  error: Error;
+};
+
+type LoadingProps = {
+  status: "loading";
+};
+
+type Props = SuccessProps | ErrorProps | LoadingProps;
+
+export function StatusMessage(props: Props) {
+  switch (props.status) {
+    case "success":
+      return <p>Data: {props.data}</p>;
+    case "error":
+      return <p>Error: {props.error.message}</p>;
+    case "loading":
+      return <p>Loading...</p>;
+  }
+}
+```
+
+This pattern guarantees you can only provide relevant props for each state. No more risking `error` prop when status is `"success"`.
+
+Your editor’s autocomplete will also guide you perfectly here — another huge DX win.
+
+---
+
+## How Strict Typing Improves Developer DX
+
+Strict typing might feel like a burden upfront, but it directly enhances **developer experience** in several ways:
+
+- **Fast feedback loop:** Errors appear instantly in your editor and compile step — no need for manual test or runtime guesswork.
+- **Better autocomplete:** Editors fill in accurate props and method signatures, reducing mental overhead and lookup time.
+- **Safer refactors:** Rename or change a prop and the compiler shows all callsites that must change with zero runtime surprises.
+- **Team alignment:** Everyone shares a strict, formal contract for component APIs, making onboarding and collaboration smoother.
+
+For me, this means spending way less time in debugger or explaining bugs with teammates — and more time shipping features.
+
+---
+
+## Real-World Examples from My Projects
+
+In a recent React+TypeScript project with a 6-person team, here’s how strict typing saved big:
+
+- **Catch typos in API payload shapes:** Our backend data often changed shape, but strict types caught mismatches right when fetching — preventing UI crashes.
+- **Guard against `undefined` props:** A component expected a callback prop but sometimes received `undefined`. With `strictNullChecks`, compilation failed, forcing explicit defaults or handlers.
+- **Safer UI state machines:** We typed complex union states throughout reducers, stopping accidental state transitions at compile time.
+
+One tricky debugging session to highlight: A chat app had a rare race condition where a message arrived slightly incomplete. Types flagged the partial state shape mismatch immediately, saving us hours of painful log spelunking.
+
+---
+
+## Tips to Adopt Strictness Incrementally
+
+If you’re intimidated by strict mode turning your whole codebase red overnight, ease in gradually:
+
+1. **Enable strictNullChecks first:** This often yields most of the runtime safety benefits.
+2. **Fix errors step-by-step:** Tackle one directory or component at a time.
+3. **Use `// @ts-expect-error` sparingly:** Instead of turning off strict settings globally, annotate and fix ignored errors explicitly.
+4. **Add JSDoc and return types:** Annotate tricky functions to guide TypeScript without guessing.
+5. **Pair with ESLint rules:** Auto-fix some issues and maintain consistency.
+6. **Leverage IDE tooling:** Most modern editors will autofill and highlight strictness gains, making fixes more pleasant.
+
+---
+
+## Quick Checklist: Enabling Strict Typing in Your Project
+
+```json filename="tsconfig.json"
+{
+  "compilerOptions": {
+    "strict": true,                // Enables all strict flags
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "alwaysStrict": true,
+    "jsx": "react-jsx"
+  }
+}
+```
+
+Remember, you don’t have to flip all switches at once, but this is the gold standard for React apps with TypeScript.
+
+---
+
+## In Summary
+
+Strict typing in React projects pays off most when your codebase grows and you work with others — the upfront work is rewarded with:
+
+- Early, explicit bug detection
+- Easy-to-use, autocomplete-rich APIs
+- Safer refactors and better maintainable code
+- Improved team trust and onboarding speed
+
+It's not about perfection or never touching `any` — it’s about **using types as living documentation that guide your development** and save hours of debugging later.
+
+Start small, be patient, and watch the benefits grow.
+
+---
+
+![Diagram comparing bug-catching before and after enabling strict typing](https://example.com/strict-typing-bug-comparison.png)  
+*Before strict typing: bugs slip to runtime; after: caught at compile time and fixed early.*
+
+---
+
+Until next time, happy coding 👨‍💻  
+– Patricio Marroquin 💜
