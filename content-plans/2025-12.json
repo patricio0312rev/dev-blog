@@ -115,7 +115,7 @@
         "automation",
         "productivity"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Everyone talks about AI like it’s magic. I show real examples where it saves time, where it wastes time, and how to make it work for you.",
       "outline": [
         "Quick overview: AI coding assistants in 2025",
@@ -132,7 +132,8 @@
       "mediaIdeas": [
         "Screenshots of AI suggestions vs handwritten code",
         "Workflow diagram showing AI-assisted coding loop"
-      ]
+      ],
+      "entrySlug": "2025-12-15-how-ai-coding-assistants-are-changing-nodejs-devs-workflow"
     },
     {
       "date": "2025-12-18",
