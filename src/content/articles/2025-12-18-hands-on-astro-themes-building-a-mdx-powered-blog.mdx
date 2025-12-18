@@ -1,0 +1,353 @@
+---
+title: "Hands-On Astro Themes: Building Your MDX-Powered Blog from Scratch"
+description: "How to create a blazing-fast blog using Astro with MDX, from zero setup to deploying with themes, layouts, and custom components."
+category: "tutorial"
+publishDate: "2025-12-18"
+tags:
+  - astro
+  - mdx
+  - static-site-generator
+  - tutorial
+  - frontend
+slug: "hands-on-astro-themes-building-a-mdx-powered-blog"
+---
+
+If you've been juggling static site generators and wondering whether Astro is the real deal for your next blog, especially with MDX content, you're in the right place. Astro is blazing fast by default, supports multiple frameworks beautifully, and when combined with MDX, it provides an elegant way to embed React (or any UI components) right inside your markdown. But setting up a blog with themes, layouts, and custom components can quickly get complex—especially if you want a maintainable, scalable foundation.
+
+In this hands-on tutorial, I'll walk you through how to build a performant Astro blog from scratch, powered with MDX, theming, and deploying it ready for production. We'll talk about why Astro + MDX is a killer combo, how to structure your project, integrate React components in your MDX files, apply themes with reusable layouts, and finally, optimize and deploy your site. No fluff, just practical insights and tested code you can copy and adapt.
+
+---
+
+## Why Choose Astro and MDX for Blogging?
+
+First up — why should you bother with Astro *and* MDX? There are plenty of tools out there, so let’s be honest about trade-offs.
+
+- **Astro** shines because it generates *zero-JS* by default on the client; your content is pre-rendered to static HTML, resulting in lightning-fast page loads. But if you want interactivity, it lets you sprinkle React/Vue/Svelte components where you want.
+- **MDX** lets you write content in markdown but drop in React components seamlessly. That means your blog posts are more dynamic than “just markdown”: you can add interactive charts, previews, or custom widgets inline.
+- Compared to something like Next.js with MDX, Astro’s partial hydration means better performance and simpler deployment (no Node.js server needed).
+- **Themes & layouts** in Astro are straightforward and composable, letting you build a consistent design system without reinventing the wheel per project.
+
+**When to not use it:** If you want extremely complex client-driven apps or need serverless backend logic tightly coupled with your blog, another tool might fit better. But for content-first, performant blogs or docs, Astro + MDX is simply hard to beat.
+
+---
+
+## Setting Up an Astro Project with TypeScript
+
+Let’s get practical. Here’s how to bootstrap an Astro blog project with TypeScript support.
+
+1. **Create a new project:**
+
+```bash
+npm create astro@latest
+```
+
+You’ll be prompted with options; for this tutorial:
+
+- Choose `blog` starter (or an empty template if you prefer)
+- Enable TypeScript support
+- Choose your preferred UI framework (React for this tutorial)
+- Install dependencies
+
+OR, if you want barebones:
+
+```bash
+mkdir astro-mdx-blog
+cd astro-mdx-blog
+npm init astro@latest -- --template basics
+```
+
+2. **Add TypeScript if not included:**
+
+```bash
+npm install --save-dev typescript
+npx tsc --init
+```
+
+> Astro projects are happy with TypeScript; this keeps your components and config well-typed.
+
+3. **Project Structure Snapshot:**
+
+```
+astro-mdx-blog/
+├── public/
+├── src/
+│   ├── components/
+│   ├── layouts/
+│   ├── pages/
+│   └── content/
+├── astro.config.mjs
+├── package.json
+├── tsconfig.json
+└── ...
+```
+
+Astro places pages inside `/src/pages` (auto routes), components in `/src/components`, and we'll put MDX blog posts inside `/src/content`.
+
+4. **Basic `astro.config.mjs` with React support:**
+
+```js filename="astro.config.mjs"
+import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+
+export default defineConfig({
+  integrations: [react()],
+});
+```
+
+That’s enough for a TypeScript Astro project ready for React components.
+
+---
+
+## Adding MDX Support and Custom Components
+
+To write blog posts with MDX and embed React components, you need to add MDX support to Astro.
+
+### Installing MDX Integration
+
+```bash
+npm install @astrojs/mdx
+```
+
+Add it to your config:
+
+```js filename="astro.config.mjs"
+import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import mdx from '@astrojs/mdx';
+
+export default defineConfig({
+  integrations: [react(), mdx()],
+  markdown: {
+    syntaxHighlight: 'prism',
+  },
+});
+```
+
+This enables `.mdx` files anywhere in `src/pages` or as imported content.
+
+### Structuring Content with MDX
+
+Create a folder for blog posts:
+
+```
+src/content/posts/
+```
+
+Example MDX blog post (with React component):
+
+```mdx filename="src/content/posts/hello-world.mdx"
+---
+title: "Hello Astro + MDX"
+pubDate: "2025-12-18"
+description: "Embedding React components in MDX content"
+---
+
+import { Counter } from '../../components/Counter.tsx';
+
+# Welcome to my blog!
+
+This is a markdown post with an embedded React component.
+
+<Counter />
+```
+
+### React Counter Component Example
+
+```tsx filename="src/components/Counter.tsx"
+// Counter.tsx
+import React, { useState } from 'react';
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+  return (
+    <button onClick={() => setCount(c => c + 1)}>
+      Clicked {count} {count === 1 ? 'time' : 'times'}
+    </button>
+  );
+}
+```
+
+### Loading MDX in Pages
+
+Create `/src/pages/blog/[slug].astro` to load posts dynamically:
+
+```tsx filename="src/pages/blog/[slug].astro"
+---
+import { getCollection } from 'astro:content';
+import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
+
+const { slug } = Astro.params;
+const posts = await getCollection('posts');
+const post = posts.find((p) => p.slug === slug);
+
+if (!post) {
+  throw new Error(`Post not found: ${slug}`);
+}
+---
+
+<BlogPostLayout {post}>
+  <post.Content />
+</BlogPostLayout>
+```
+
+For `getCollection` to work, configure Astro Content collections in `src/content/config.ts`:
+
+```ts filename="src/content/config.ts"
+import { defineCollection, z } from 'astro:content';
+
+const blogCollection = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    pubDate: z.string(),
+    description: z.string().optional(),
+  }),
+});
+
+export const collections = {
+  posts: blogCollection,
+};
+```
+
+Then update `astro.config.mjs` to point to `src/content`.
+
+This approach provides type safety and content-driven routing.
+
+---
+
+## Working with Astro Themes and Layout Patterns
+
+Themes in Astro can feel less like black-box templates and more like composable layout systems that you can tweak.
+
+### Creating a Reusable BlogPostLayout
+
+Example layout wrapping blog posts with metadata and styles:
+
+```tsx filename="src/layouts/BlogPostLayout.astro"
+---
+const { title, pubDate, description } = Astro.props.post.data;
+---
+
+<html lang="en">
+  <head>
+    <title>{title}</title>
+    <meta name="description" content={description || ''} />
+  </head>
+  <body>
+    <article>
+      <header>
+        <h1>{title}</h1>
+        <time dateTime={pubDate}>{new Date(pubDate).toLocaleDateString()}</time>
+      </header>
+      <main>
+        {Astro.props.children}
+      </main>
+    </article>
+  </body>
+</html>
+```
+
+This keeps your post markup DRY and allows you to switch themes or tweak layout easily.
+
+### Adding Theme Support
+
+You might want multiple themes (light/dark mode or entirely different looks). Here’s a minimal approach:
+
+- Define CSS variables and classes for theme styles.
+- Use an Astro component to toggle themes or set per-request theme.
+  
+Example theme provider (classic CSS variables + toggle logic left as an exercise):
+
+```tsx filename="src/components/ThemeProvider.astro"
+---
+const { theme = 'light' } = Astro.props;
+---
+
+<body class={theme}>
+  <slot />
+</body>
+```
+
+You could wrap your entire site with this provider.
+
+### Using Astro Integrations for Themes
+
+There are community-powered Astro themes you can install and fork, but often starting with your custom theme (even minimal styles) reduces bloat and fits your needs better.
+
+---
+
+## Deploying Your Blog to Production
+
+Once your blog is ready, it’s time to deploy. Astro offers a great DX here.
+
+### Build Script with Optimizations
+
+Add this to your `package.json` scripts:
+
+```json
+{
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  }
+}
+```
+
+Run:
+
+```bash
+npm run build
+```
+
+Astro automatically does:
+
+- SSR or static site generation (we're using SSG here)
+- CSS and JS minification
+- Partial hydration only where needed (e.g., your Counter component)
+- Image optimization (if configured)
+
+### Choosing a Host
+
+Astro builds pure static files for blogs, making it perfect for:
+
+- Netlify
+- Vercel
+- Cloudflare Pages
+- GitHub Pages
+- Your own static file host (e.g., S3 + CloudFront)
+
+### Example: Deploying to Vercel
+
+1. Push your repo to GitHub.
+2. Connect your repo in the [Vercel dashboard](https://vercel.com).
+3. Let Vercel detect Astro; set the build command: `npm run build` and output directory: `dist`.
+4. Deploy.
+
+Your MDX blog will be blazing fast, SEO-friendly, and interactive where you embedded React components.
+
+---
+
+## Final Thoughts
+
+Astro + MDX is a compelling stack to build modern blogs that are fast without sacrificing interactivity. The key challenges are setting up content collections right, organizing your components and layouts for easy theming, and understanding Astro’s partial hydration model.
+
+If you’re starting fresh, focus first on:
+
+- Simple MDX blog posts with embedded React components
+- A single clean layout component
+- Minimal stateful UI sprinkled inside your posts
+
+Then iterate on themes and deployment. Avoid loading big JS bundles upfront—Astro helps with that by default, but it's easy to go back to bloated setups if you’re not careful.
+
+Enjoy building your next blog with Astro and MDX!
+
+---
+
+![Site architecture diagram showing Astro folder structure and MDX content flow](https://example.com/site-architecture-astro-mdx.png)
+
+![Live preview screenshot of Astro MDX blog post with React Counter component embedded](https://example.com/astro-mdx-counter-preview.png)
+
+---
+
+Until next time, happy coding 👨‍💻  
+– Patricio Marroquin 💜
