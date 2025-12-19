@@ -149,7 +149,7 @@
         "tutorial",
         "frontend"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Astro is gaining traction but setting up MDX-powered blogs isn’t trivial. I guide you through the real setup, themeing, and deployment steps.",
       "outline": [
         "Why choose Astro and MDX for blogging?",
@@ -166,7 +166,8 @@
       "mediaIdeas": [
         "Site architecture diagram",
         "Live preview screenshots of blog components"
-      ]
+      ],
+      "entrySlug": "2025-12-18-hands-on-astro-themes-building-a-mdx-powered-blog"
     },
     {
       "date": "2025-12-22",
