@@ -183,7 +183,7 @@
         "react",
         "nodejs"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "The testing pyramid guided us for years, but today’s ecosystems and tooling might require a fresh look. I share what I’m seeing in real projects.",
       "outline": [
         "Recap: what the testing pyramid is and why it was born",
@@ -200,7 +200,8 @@
       "mediaIdeas": [
         "Classic vs modern testing pyramid diagram",
         "Test coverage charts from example apps"
-      ]
+      ],
+      "entrySlug": "2025-12-22-the-testing-pyramid-in-2025-does-it-still-make-sense"
     },
     {
       "date": "2025-12-26",

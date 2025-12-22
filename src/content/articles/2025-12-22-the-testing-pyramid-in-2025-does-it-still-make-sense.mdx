@@ -1,0 +1,203 @@
+---
+title: "The Testing Pyramid in 2025: Does It Still Make Sense for Modern Apps?"
+description: "A skeptical take on the classic testing pyramid. Should we adapt or rethink our testing strategies with modern tools like E2E puppeteer & component testing?"
+category: "deep-dive"
+publishDate: "2025-12-22"
+tags:
+  - testing
+  - test-strategy
+  - e2e
+  - unit-testing
+  - react
+  - nodejs
+slug: "the-testing-pyramid-in-2025-does-it-still-make-sense"
+---
+
+If you've been around software testing for a while, you've probably heard of the **testing pyramid**. It’s this trusty mental model that tells us to write lots of unit tests at the bottom, fewer integration tests in the middle, and just a handful of end-to-end (E2E) tests at the top. But it's 2025 now, and the landscape has shifted dramatically. Are all these old rules still solid, or is it time to rethink how we test modern apps?
+
+In this post, I’ll walk you through why the testing pyramid was so helpful, then explain how today’s testing tools and app architectures are reshaping the balance. I'll share concrete trade-offs from React + Node projects I've worked on, with real code samples you can try out. Finally, I’ll offer my pragmatic take on how the pyramid concept should evolve for our current workflows.
+
+---
+
+## Recap: What Is the Testing Pyramid and Why Was It Born?
+
+The testing pyramid was popularized by Mike Cohn over a decade ago. It visualizes a hierarchy of tests, broadly:
+
+- **Unit tests** form the base—fast, isolated, and cheap to write and run.
+- **Integration tests** sit in the middle—checking how multiple parts of the system collaborate.
+- **E2E tests** cap the pyramid—simulating full user workflows but typically slow, brittle, and expensive.
+
+The idea was simple: write lots of small, fast unit tests since they’re easy to maintain; have fewer integration tests because they’re slower; and rely very little on E2E tests due to their fragility and runtime.
+
+This approach fit perfectly with traditional server apps and the tooling we had back then. But today’s apps—especially frontend-rich React or Node microservices—often need us to rethink.
+
+---
+
+![classic vs modern testing pyramid comparison diagram](https://example.com/testing-pyramid-2025-diagram.png)  
+*Classic vs Modern Testing Pyramid: comparing past conventional wisdom with today's trends*
+
+---
+
+## How Modern Testing Tools Shift the Balance
+
+Fast forward to 2025, and several trends challenge the classic pyramid assumptions:
+
+- **Component testing frameworks have exploded in power and reliability.** Libraries like React Testing Library and `vitest` now offer tests that closely mimic user interaction but run like unit tests—blurring the line between unit and integration.
+  
+- **End-to-end testing tools improved massively.** Playwright, Cypress, and others can now run tests faster, reliably isolate browser contexts, and parallelize workloads, making some E2E tests less brittle and less expensive than before.
+
+- **Dev environments encourage testing at the UI level by default.** Storybook-driven development and Component Story Format (CSF) patterns have made isolated component testing the new unit testing for UI code.
+
+- **Cloud CI/CD environments handle heavy test suites well, making runtime less of a bottleneck.**
+
+All these reduce the cost of tests higher up in the pyramid and challenge the need for heavy investments in pure unit testing across the board.
+
+---
+
+### What this means in practice
+
+- **Component tests can replace many traditional “unit tests” for UI code.** Instead of testing individual functions in isolation, you test the component as a black box with mocked dependencies and real DOM rendering.
+
+- **More frequent, reliable E2E tests are feasible**, but their scope should be carefully controlled (more on this below).
+
+---
+
+## Trade-offs with More E2E and Component Tests
+
+Before you run and rewrite your test suite, consider the trade-offs:
+
+### Benefits of heavier UI-level testing
+
+- **Closer to the user experience:** You catch UI glitches and integration bugs earlier.
+- **Less test code duplication:** You avoid mocking internal implementation details.
+- **More confidence on code refactors:** UI tests anchor the contract between components and consumers.
+
+### Downsides and risks
+
+- **Longer test runtimes:** Even with improvements, component and E2E tests take longer than pure function unit tests.
+- **Flakiness creep:** More reliance on UI and browser context can cause nondeterministic failures if setup isn’t rock-solid.
+- **Harder debugging:** Failing UI tests often need more complex root cause analysis.
+- **Setup and maintenance complexity:** E2E tests require environment orchestration, which can be time-consuming.
+
+---
+
+### Realistic Approach
+
+1. **Keep critical business logic in pure functions with unit tests.** For example, isolated utility functions or algorithms with Jest remain fast and essential.
+
+2. **For React, prefer component tests that simulate user interactions.** React Testing Library is my go-to here.
+
+3. **Reserve E2E tests for critical user flows that truly need full-stack validation.** Less is more; focus on high-value happy paths and critical edge cases.
+
+---
+
+## Case Studies from Big React + Node Apps
+
+Let me share snippets and insights from two big projects I’ve been involved in recently:
+
+### 1. React Admin Dashboard (Node API backend)
+
+- Around **60% of tests are component tests** using React Testing Library and Vitest.
+- **25% unit tests** for Node.js utilities, data transformations, and API contract validation.
+- **15% E2E tests** via Playwright focused on user workflows like login, data entry, and role-based access.
+
+Example unit test for a data validation function:
+
+```ts filename="tests/utils/validateData.test.ts"
+import { validateEmail } from "../../src/utils/validateData";
+
+describe("validateEmail", () => {
+  it("returns true for valid emails", () => {
+    expect(validateEmail("user@example.com")).toBe(true);
+  });
+
+  it("returns false for invalid emails", () => {
+    expect(validateEmail("invalid-email")).toBe(false);
+  });
+});
+```
+
+Component test with React Testing Library for a form:
+
+```tsx filename="tests/components/LoginForm.test.tsx"
+import { render, screen, fireEvent } from "@testing-library/react";
+import LoginForm from "../../src/components/LoginForm";
+
+test("submits user credentials", () => {
+  const handleSubmit = jest.fn();
+  render(<LoginForm onSubmit={handleSubmit} />);
+
+  fireEvent.change(screen.getByLabelText(/email/i), {
+    target: { value: "test@example.com" },
+  });
+  fireEvent.change(screen.getByLabelText(/password/i), {
+    target: { value: "securepass" },
+  });
+  
+  fireEvent.click(screen.getByRole("button", { name: /submit/i }));
+  expect(handleSubmit).toHaveBeenCalledWith({
+    email: "test@example.com",
+    password: "securepass",
+  });
+});
+```
+
+E2E test example with Playwright:
+
+```ts filename="tests/e2e/login.spec.ts"
+import { test, expect } from "@playwright/test";
+
+test("user can log in successfully", async ({ page }) => {
+  await page.goto("https://myapp.example.com/login");
+  await page.fill('input[name="email"]', "testuser@example.com");
+  await page.fill('input[name="password"]', "testpassword");
+  await page.click('button[type="submit"]');
+
+  await expect(page).toHaveURL("https://myapp.example.com/dashboard");
+  await expect(page.locator("h1")).toHaveText("Welcome, Test User");
+});
+```
+
+### 2. Node.js API Microservices Project
+
+Mostly pure unit tests due to limited UI, but component tests emerged for smaller React admin UIs. E2E tests mainly used for API contract verification via Postman/Newman with some Playwright in management UI.
+
+---
+
+## My Opinion: Evolving the Pyramid for 2025+
+
+The pyramid still works as a **conceptual** guide, encouraging us to avoid expensive tests where simpler ones suffice.
+
+However, my stance in 2025 is:
+
+- Replace the **unit test base** with a **“component testing base”** for UI-rich apps. These are fast enough and closer to user behavior than classic unit tests.
+- Keep pure unit testing around for **critical logic** and utility functions that truly benefit.
+- Treat a **slimmed-down E2E layer** as the quality gatekeeper, focused on key flows, not full UI coverage.
+
+I visualize something closer to a **testing diamond** now — wide at the unit/component level, narrower both at isolated logic and broad E2E flows.
+
+---
+
+### What I'd do for a fresh React+Node project today:
+
+1. Invest heavily in **component testing with React Testing Library & Vitest** from day one.
+2. Write unit tests for **pure business logic and helpers**.
+3. Configure E2E tests with **Playwright** or **Cypress**, but keep the suite small and fast.
+4. Use **Storybook** to help manual and visual testing alongside automated tests.
+5. Monitor test runtime via CI and optimize or remove flaky tests proactively.
+
+---
+
+![test coverage breakdown chart from a real React+Node app](https://example.com/react-node-test-coverage-2025.png)  
+*Test coverage breakdown showing heavier weight on component and targeted E2E tests*
+
+---
+
+## Wrapping Up
+
+The classic testing pyramid gave us a great mental framework, but modern development demands a more nuanced approach. By embracing powerful component testing tools and smarter E2E strategies, we can build more reliable test suites that still run fast and provide meaningful feedback.
+
+Don’t blindly follow the pyramid dogma—think critically about your project’s needs and adjust accordingly.
+
+Until next time, happy coding 👨‍💻  
+– Patricio Marroquin 💜
