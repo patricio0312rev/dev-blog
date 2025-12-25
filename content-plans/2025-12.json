@@ -9,7 +9,13 @@
       "slug": "react-19-biggest-features-i-am-excited-about",
       "title": "React 19: The 5 Big Features That’ll Actually Change How You Code",
       "description": "A deep look at React 19’s top new features and why they matter for your daily dev work — spoiler: it’s not just hype.",
-      "tags": ["react", "javascript", "front-end", "react19", "webdev"],
+      "tags": [
+        "react",
+        "javascript",
+        "front-end",
+        "react19",
+        "webdev"
+      ],
       "status": "published",
       "angle": "Many posts just skim React releases. I break down what features actually solve painful problems and how you can start using them now.",
       "outline": [
@@ -103,7 +109,13 @@
       "slug": "how-ai-coding-assistants-are-changing-nodejs-devs-workflow",
       "title": "How AI Coding Assistants Are Actually Changing Node.js Dev Workflows",
       "description": "Cutting through the hype: a practical look at how AI tools like GitHub Copilot & GPT helpers improve (and sometimes frustrate) Node.js development.",
-      "tags": ["nodejs", "ai", "devtools", "automation", "productivity"],
+      "tags": [
+        "nodejs",
+        "ai",
+        "devtools",
+        "automation",
+        "productivity"
+      ],
       "status": "published",
       "angle": "Everyone talks about AI like it’s magic. I show real examples where it saves time, where it wastes time, and how to make it work for you.",
       "outline": [
@@ -130,7 +142,13 @@
       "slug": "hands-on-astro-themes-building-a-mdx-powered-blog",
       "title": "Hands-On Astro Themes: Building Your MDX-Powered Blog from Scratch",
       "description": "How to create a blazing-fast blog using Astro with MDX, from zero setup to deploying with themes, layouts, and custom components.",
-      "tags": ["astro", "mdx", "static-site-generator", "tutorial", "frontend"],
+      "tags": [
+        "astro",
+        "mdx",
+        "static-site-generator",
+        "tutorial",
+        "frontend"
+      ],
       "status": "published",
       "angle": "Astro is gaining traction but setting up MDX-powered blogs isn’t trivial. I guide you through the real setup, themeing, and deployment steps.",
       "outline": [
