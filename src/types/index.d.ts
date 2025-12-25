@@ -14,7 +14,9 @@ export interface Article {
   description: string;
   category: ArticleCategory;
   tags: string[];
-  date: string; // ISO date string
+  date: string;
+  heroImage?: string;
+  heroImageAlt?: string;
 }
 
 /** Extended article for calendar */
