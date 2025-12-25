@@ -5,6 +5,7 @@ import HomePage from "@/views/HomePage";
 import { normalizeDateInput } from "@/utils";
 
 const articles = await getCollection("articles", ({ data }) => !data.draft);
+
 const recentArticles = articles
   .sort(
     (a, b) =>
@@ -19,6 +20,8 @@ const recentArticles = articles
     category: article.data.category,
     tags: article.data.tags,
     date: article.data.publishDate,
+    heroImage: article.data.heroImage,
+    heroImageAlt: article.data.heroImageAlt,
   }));
 ---
 
