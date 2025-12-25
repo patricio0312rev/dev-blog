@@ -9,13 +9,7 @@
       "slug": "react-19-biggest-features-i-am-excited-about",
       "title": "React 19: The 5 Big Features That’ll Actually Change How You Code",
       "description": "A deep look at React 19’s top new features and why they matter for your daily dev work — spoiler: it’s not just hype.",
-      "tags": [
-        "react",
-        "javascript",
-        "front-end",
-        "react19",
-        "webdev"
-      ],
+      "tags": ["react", "javascript", "front-end", "react19", "webdev"],
       "status": "published",
       "angle": "Many posts just skim React releases. I break down what features actually solve painful problems and how you can start using them now.",
       "outline": [
@@ -109,13 +103,7 @@
       "slug": "how-ai-coding-assistants-are-changing-nodejs-devs-workflow",
       "title": "How AI Coding Assistants Are Actually Changing Node.js Dev Workflows",
       "description": "Cutting through the hype: a practical look at how AI tools like GitHub Copilot & GPT helpers improve (and sometimes frustrate) Node.js development.",
-      "tags": [
-        "nodejs",
-        "ai",
-        "devtools",
-        "automation",
-        "productivity"
-      ],
+      "tags": ["nodejs", "ai", "devtools", "automation", "productivity"],
       "status": "published",
       "angle": "Everyone talks about AI like it’s magic. I show real examples where it saves time, where it wastes time, and how to make it work for you.",
       "outline": [
@@ -142,13 +130,7 @@
       "slug": "hands-on-astro-themes-building-a-mdx-powered-blog",
       "title": "Hands-On Astro Themes: Building Your MDX-Powered Blog from Scratch",
       "description": "How to create a blazing-fast blog using Astro with MDX, from zero setup to deploying with themes, layouts, and custom components.",
-      "tags": [
-        "astro",
-        "mdx",
-        "static-site-generator",
-        "tutorial",
-        "frontend"
-      ],
+      "tags": ["astro", "mdx", "static-site-generator", "tutorial", "frontend"],
       "status": "published",
       "angle": "Astro is gaining traction but setting up MDX-powered blogs isn’t trivial. I guide you through the real setup, themeing, and deployment steps.",
       "outline": [
@@ -266,6 +248,42 @@
         "Feature comparison tables",
         "Timeline graphic of TS version adoptions"
       ]
+    },
+    {
+      "date": "2025-12-25",
+      "category": "trending",
+      "slug": "ai-bubble-reality-check-software-developers",
+      "title": "The AI Bubble: A Reality Check for Software Developers in 2025",
+      "description": "Everyone's drinking the AI Kool-Aid, but is the hype justified? An honest look at what AI can and can't do for developers, and where the bubble might burst.",
+      "tags": [
+        "ai",
+        "software-development",
+        "industry-trends",
+        "career",
+        "reality-check"
+      ],
+      "status": "published",
+      "angle": "Cut through AI hype with real developer perspective. Show what's actually useful vs what's oversold, and how to position yourself smartly.",
+      "outline": [
+        "The current AI hype cycle: where we are",
+        "What AI tools actually deliver for developers today",
+        "Where AI falls short (and will for a while)",
+        "Signs the bubble might be inflating",
+        "How to stay valuable as a developer in the AI era",
+        "My take: pragmatic AI adoption without the FOMO"
+      ],
+      "codeIdeas": [
+        "Real AI-generated code that needed major fixes",
+        "Example where AI saves time (boilerplate generation)",
+        "Comparing AI vs human code quality and reasoning"
+      ],
+      "mediaIdeas": [
+        "Hype cycle diagram showing AI position",
+        "Skills comparison: AI-resistant vs AI-vulnerable"
+      ],
+      "entrySlug": "2025-12-25-ai-bubble-reality-check-software-developers",
+      "heroImage": "https://images.unsplash.com/photo-1651886312896-c7af63c0fc8a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjY2MjgxNDF8&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageCount": 2
     }
   ]
 }
