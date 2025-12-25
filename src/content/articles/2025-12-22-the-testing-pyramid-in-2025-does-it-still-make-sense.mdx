@@ -11,6 +11,9 @@ tags:
   - react
   - nodejs
 slug: "the-testing-pyramid-in-2025-does-it-still-make-sense"
+heroImage: "https://images.unsplash.com/photo-1625535163131-9d1fc30ea5f5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjY2MjY5OTd8&ixlib=rb-4.1.0&q=80&w=1080"
+heroImageAlt: "text"
+# Image by Trevor Vannoy on Unsplash (https://unsplash.com/@tvannoy)
 ---
 
 If you've been around software testing for a while, you've probably heard of the **testing pyramid**. It’s this trusty mental model that tells us to write lots of unit tests at the bottom, fewer integration tests in the middle, and just a handful of end-to-end (E2E) tests at the top. But it's 2025 now, and the landscape has shifted dramatically. Are all these old rules still solid, or is it time to rethink how we test modern apps?
@@ -30,11 +33,6 @@ The testing pyramid was popularized by Mike Cohn over a decade ago. It visualize
 The idea was simple: write lots of small, fast unit tests since they’re easy to maintain; have fewer integration tests because they’re slower; and rely very little on E2E tests due to their fragility and runtime.
 
 This approach fit perfectly with traditional server apps and the tooling we had back then. But today’s apps—especially frontend-rich React or Node microservices—often need us to rethink.
-
----
-
-![classic vs modern testing pyramid comparison diagram](https://example.com/testing-pyramid-2025-diagram.png)  
-*Classic vs Modern Testing Pyramid: comparing past conventional wisdom with today's trends*
 
 ---
 
@@ -185,11 +183,6 @@ I visualize something closer to a **testing diamond** now — wide at the unit/c
 3. Configure E2E tests with **Playwright** or **Cypress**, but keep the suite small and fast.
 4. Use **Storybook** to help manual and visual testing alongside automated tests.
 5. Monitor test runtime via CI and optimize or remove flaky tests proactively.
-
----
-
-![test coverage breakdown chart from a real React+Node app](https://example.com/react-node-test-coverage-2025.png)  
-*Test coverage breakdown showing heavier weight on component and targeted E2E tests*
 
 ---
 
