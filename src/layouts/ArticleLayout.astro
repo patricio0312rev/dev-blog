@@ -4,10 +4,11 @@ import { getCollection } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 import PagefindMeta from "@/components/PagefindMeta.astro";
 import { SITE_CONFIG } from "@/constants";
-import { Flame, BookOpen, FlaskConical, Headphones } from "@lucide/astro";
+import { Flame, BookOpen, FlaskConical, Headphones } from "lucide-react";
 import RelatedArticles from "@/components/blog/RelatedArticles";
 import GiscusComments from "@/components/blog/GiscusComments";
 import { formatDate, toISODateTimeUTC } from "@/utils";
+import { getOgImageUrl, getOptimizedImageUrl } from "@/utils/image-providers";
 
 interface Props {
   article: CollectionEntry<"articles">;
@@ -20,12 +21,19 @@ const {
   category,
   tags = [],
   publishDate,
-  ogImage,
+  heroImage,
+  heroImageAlt,
+  heroImageAuthor,
+  heroImageAuthorUrl,
+  heroImageUnsplashUrl,
+  heroImageDownloadLocation,
+  ogImage: customOgImage,
 } = article.data;
 
 const articleUrl = new URL(`/blog/${article.slug}`, Astro.site).href;
-
 const formattedDate = formatDate(publishDate);
+
+const ogImage = customOgImage || getOgImageUrl(heroImage, title);
 
 const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
   title
@@ -34,7 +42,6 @@ const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encod
   articleUrl
 )}`;
 
-// Category styles with real Lucide Astro components
 const categoryStyles: Record<string, { bg: string; text: string; Icon: any }> =
   {
     trending: {
@@ -82,6 +89,9 @@ const related = allArticles
   .filter((item) => item.score > 0)
   .sort((a, b) => b.score - a.score)
   .slice(0, 3);
+
+const isUnsplashImage =
+  heroImageAuthor && heroImageAuthorUrl && heroImageUnsplashUrl;
 ---
 
 <BaseLayout
@@ -107,6 +117,51 @@ const related = allArticles
       </div>
     </div>
 
+    <!-- Hero Image Section with Better Attribution -->
+    {
+      heroImage && (
+        <div class="mb-8 -mx-4 sm:mx-0 sm:-mt-8">
+          <div class="relative overflow-hidden rounded-none bg-zinc-100 sm:rounded-2xl dark:bg-zinc-800">
+            <img
+              src={getOptimizedImageUrl(heroImage, 1200, 85)}
+              alt={heroImageAlt || title}
+              width={1200}
+              height={630}
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+              data-unsplash-download={heroImageDownloadLocation}
+              class="aspect-video w-full object-cover transition-transform duration-700 hover:scale-105"
+            />
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-900/20 to-transparent" />
+          </div>
+
+          {/* Better styled attribution */}
+          {isUnsplashImage ? (
+            <p class="mt-2 text-center capitalize text-xs text-zinc-400 dark:text-zinc-500">
+              <a
+                href={`${heroImageAuthorUrl}?utm_source=patriciomarroquin_dev&utm_medium=referral`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-zinc-600 dark:hover:text-zinc-300"
+              >
+                {heroImageAuthor}
+              </a>
+              {" · "}
+              <a
+                href={`https://unsplash.com?utm_source=patriciomarroquin_dev&utm_medium=referral`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-zinc-600 dark:hover:text-zinc-300"
+              >
+                Unsplash
+              </a>
+            </p>
+          ) : null}
+        </div>
+      )
+    }
+
     <!-- Header -->
     <header class="mb-8">
       <div
@@ -117,7 +172,7 @@ const related = allArticles
           class={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium ${catStyle.bg} ${catStyle.text}`}
         >
           <span class="flex items-center justify-center">
-            <CategoryIcon class="h-3 w-3" />
+            <CategoryIcon className="h-3 w-3" />
           </span>
           <span class="capitalize">
             {category.replace("-", " ")}
@@ -127,22 +182,19 @@ const related = allArticles
         <span class="h-1 w-1 rounded-full bg-zinc-400" aria-hidden="true"
         ></span>
 
-        <!-- Date -->
         <time datetime={toISODateTimeUTC(publishDate)}>{formattedDate}</time>
 
         <span class="h-1 w-1 rounded-full bg-zinc-400" aria-hidden="true"
         ></span>
 
-        <!-- Reading time -->
         <span data-reading-time class="text-zinc-500 dark:text-zinc-400"></span>
 
-        <!-- Listen button -->
         <button
           type="button"
           data-listen-button
           class="inline-flex items-center gap-1 rounded-full border border-zinc-300 px-2.5 py-0.5 text-[11px] font-medium text-zinc-700 transition-colors duration-150 hover:border-sky-500 hover:text-sky-500 dark:border-zinc-700 dark:text-zinc-200 dark:hover:border-sky-400 dark:hover:text-sky-400"
         >
-          <Headphones class="h-3 w-3" />
+          <Headphones className="h-3 w-3" />
           <span data-listen-label>Listen</span>
         </button>
       </div>
@@ -161,7 +213,6 @@ const related = allArticles
         {description}
       </p>
 
-      <!-- Tags -->
       {
         tags.length > 0 && (
           <div class="mb-6 flex flex-wrap gap-2">
@@ -177,10 +228,25 @@ const related = allArticles
       <hr class="border-zinc-200 dark:border-zinc-800" />
     </header>
 
-    <!-- Article body - This will be wrapped with data-pagefind-body in [slug].astro -->
+    <!-- Article body -->
     <section
       data-article-body
-      class="prose max-w-none pb-10 prose-zinc dark:prose-invert prose-pre:!bg-transparent prose-pre:!p-0"
+      class="prose max-w-none pb-10 prose-zinc dark:prose-invert
+             prose-headings:scroll-mt-20
+             prose-a:text-sky-600 prose-a:no-underline hover:prose-a:underline dark:prose-a:text-sky-400
+             prose-code:text-sky-600 dark:prose-code:text-sky-400
+             prose-code:before:content-[''] prose-code:after:content-['']
+             prose-pre:!bg-transparent prose-pre:!p-0
+             prose-img:rounded-xl prose-img:shadow-lg prose-img:ring-1 prose-img:ring-zinc-200 dark:prose-img:ring-zinc-800
+             prose-table:border-collapse prose-table:w-full prose-table:text-sm
+             prose-thead:bg-zinc-100 dark:prose-thead:bg-zinc-800/50
+             prose-th:border prose-th:border-zinc-200 dark:prose-th:border-zinc-700
+             prose-th:px-4 prose-th:py-3 prose-th:text-left prose-th:font-semibold
+             prose-th:text-zinc-900 dark:prose-th:text-zinc-50
+             prose-td:border prose-td:border-zinc-200 dark:prose-td:border-zinc-700
+             prose-td:px-4 prose-td:py-3 prose-td:text-zinc-700 dark:prose-td:text-zinc-300
+             prose-tr:border-b prose-tr:border-zinc-200 dark:prose-tr:border-zinc-800
+             prose-tbody:divide-y prose-tbody:divide-zinc-200 dark:prose-tbody:divide-zinc-800"
     >
       <slot />
     </section>
@@ -220,14 +286,13 @@ const related = allArticles
       >
         <span class="font-medium text-zinc-700 dark:text-zinc-300">Share:</span>
 
-        <!-- Twitter -->
-
         <a
           href={twitterUrl}
           target="_blank"
           rel="noopener noreferrer"
           class="inline-flex items-center
         gap-1.5 transition-colors duration-150 hover:text-sky-500 dark:hover:text-sky-400"
+          aria-label="Share on Twitter"
         >
           <svg
             class="h-4 w-4"
@@ -245,13 +310,14 @@ const related = allArticles
           </svg>
           <span>Twitter</span>
         </a>
-
-        <!-- LinkedIn -->
         <a
           href={linkedinUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 transition-colors duration-150 hover:text-sky-500 dark:hover:text-sky-400"
+          class="inline-flex items-center gap-1.5
+      transition-colors duration-150 hover:text-sky-500 dark:hover:text-sky-400"
+          aria-label="Share
+      on LinkedIn"
         >
           <svg
             class="h-4 w-4"
@@ -271,6 +337,32 @@ const related = allArticles
           </svg>
           <span>LinkedIn</span>
         </a>
+
+        <button
+          type="button"
+          data-copy-link
+          class="inline-flex items-center gap-1.5 transition-colors duration-150 hover:text-sky-500 dark:hover:text-sky-400"
+          aria-label="Copy link to clipboard"
+        >
+          <svg
+            class="h-4 w-4"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+            ></path>
+            <path
+              d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+            ></path>
+          </svg>
+          <span data-copy-link-label>Copy link</span>
+        </button>
       </div>
     </footer>
 
@@ -285,7 +377,11 @@ const related = allArticles
         "@type": "BlogPosting",
         headline: title,
         description: description,
-        image: ogImage ? new URL(ogImage, Astro.site).href : undefined,
+        image: heroImage
+          ? getOptimizedImageUrl(heroImage, 1200, 85)
+          : ogImage
+            ? new URL(ogImage, Astro.site).href
+            : undefined,
         datePublished: toISODateTimeUTC(publishDate),
         author: {
           "@type": "Person",
@@ -303,7 +399,7 @@ const related = allArticles
       })}
     />
 
-    <!-- Scripts: reading progress, reading time, TTS -->
+    <!-- Scripts: reading progress, reading time, TTS, copy link, Unsplash tracking -->
     <script is:inline>
       function initArticleFeatures() {
         const progressEl = document.querySelector("[data-reading-progress]");
@@ -315,6 +411,24 @@ const related = allArticles
         const descriptionEl = document.querySelector(
           "[data-article-description]"
         );
+        const copyLinkButton = document.querySelector("[data-copy-link]");
+        const copyLinkLabel = document.querySelector("[data-copy-link-label]");
+
+        // Track Unsplash download for hero image
+        const heroImage = document.querySelector("[data-unsplash-download]");
+        if (heroImage) {
+          const downloadLocation = heroImage.getAttribute(
+            "data-unsplash-download"
+          );
+          if (downloadLocation) {
+            // Trigger download tracking (Unsplash requirement)
+            fetch(downloadLocation, {
+              method: "GET",
+            }).catch((err) =>
+              console.warn("Failed to track Unsplash download:", err)
+            );
+          }
+        }
 
         // Reading progress
         const updateProgress = () => {
@@ -341,12 +455,31 @@ const related = allArticles
           readingTimeEl.textContent = minutes + " min read";
         }
 
+        // Copy link functionality
+        if (copyLinkButton && copyLinkLabel) {
+          if (copyLinkButton.dataset.initialized !== "true") {
+            copyLinkButton.dataset.initialized = "true";
+
+            copyLinkButton.addEventListener("click", async () => {
+              try {
+                await navigator.clipboard.writeText(window.location.href);
+                const prevText = copyLinkLabel.textContent;
+                copyLinkLabel.textContent = "Copied!";
+                setTimeout(() => {
+                  copyLinkLabel.textContent = prevText || "Copy link";
+                }, 2000);
+              } catch (err) {
+                console.error("Failed to copy link:", err);
+              }
+            });
+          }
+        }
+
         // Text-to-speech
         if (!listenButton || !listenLabel) {
           return;
         }
 
-        // Avoid attaching multiple times on page transitions
         if (listenButton.dataset.initialized === "true") {
           return;
         }
@@ -413,9 +546,8 @@ const related = allArticles
         });
       }
 
-      // Run on initial load and after View Transitions
       initArticleFeatures();
       document.addEventListener("astro:page-load", initArticleFeatures);
     </script>
-  </article>
-</BaseLayout>
+  </article></BaseLayout
+>
