@@ -9,7 +9,9 @@
     "astro": "astro",
     "lint": "eslint .",
     "generate:plan": "node scripts/generate-content-plan.mjs",
-    "generate:article": "node scripts/generate-article-from-plan.mjs"
+    "generate:article": "node scripts/generate-article-from-plan.mjs",
+    "images:add": "node scripts/add-images-to-existing-article.mjs",
+    "images:interactive": "node scripts/insert-images-interactive.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.0",
@@ -21,6 +23,7 @@
     "@vercel/analytics": "^1.6.1",
     "@vercel/speed-insights": "^1.3.1",
     "astro": "^5.0.0",
+    "eslint": "^9.39.2",
     "lucide-react": "^0.460.0",
     "openai": "^6.10.0",
     "react": "^19.0.0",
