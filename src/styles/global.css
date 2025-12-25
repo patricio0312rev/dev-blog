@@ -202,3 +202,35 @@ button {
 pre code {
   @apply p-0!;
 }
+
+
+@layer base {
+  .prose table {
+    @apply w-full border-collapse text-sm;
+  }
+  
+  .prose thead {
+    @apply bg-zinc-100 dark:bg-zinc-800/50;
+  }
+  
+  .prose thead th {
+    @apply border border-zinc-200 px-4 py-3 text-left font-semibold text-zinc-900 dark:border-zinc-700 dark:text-zinc-50;
+  }
+  
+  .prose tbody tr {
+    @apply border-b border-zinc-200 transition-colors hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900/50;
+  }
+
+  .prose tbody td {
+    @apply border-x border-zinc-200 px-4 py-3 text-zinc-700 dark:border-zinc-700 dark:text-zinc-300;
+  }
+  
+  .prose tbody tr:nth-child(even) {
+    @apply bg-zinc-50/50 dark:bg-zinc-900/30;
+  }
+  
+
+  .prose table {
+    @apply my-6;
+  }
+}
