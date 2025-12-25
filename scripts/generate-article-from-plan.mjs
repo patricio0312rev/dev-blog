@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import OpenAI from "openai";
+import { analyzeArticleForImages } from "./suggest-article-images.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,12 +19,10 @@ if (!fs.existsSync(ARTICLES_DIR)) {
 // ---------- Date helpers ---------------------------------------------------
 
 function todayISO() {
-  // GitHub Actions runs in UTC; using UTC date keeps it consistent
-  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  return new Date().toISOString().slice(0, 10);
 }
 
 function monthKeyFromDate(dateStr) {
-  // dateStr: "YYYY-MM-DD" → "YYYY-MM"
   return dateStr.slice(0, 7);
 }
 
@@ -32,6 +31,106 @@ function monthKeyFromDate(dateStr) {
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+// ---------- Image fetching helpers -----------------------------------------
+
+async function fetchUnsplashImage(query) {
+  const accessKey = process.env.UNSPLASH_ACCESS_KEY;
+  
+  if (!accessKey) {
+    console.warn("⚠️  UNSPLASH_ACCESS_KEY not configured");
+    return null;
+  }
+
+  try {
+    const url = new URL("https://api.unsplash.com/photos/random");
+    url.searchParams.set("query", query);
+    url.searchParams.set("orientation", "landscape");
+    url.searchParams.set("content_filter", "high");
+    url.searchParams.set("client_id", accessKey);
+
+    const response = await fetch(url.toString());
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`  ❌ Unsplash API error (${response.status}): ${errorText}`);
+      return null;
+    }
+
+    const data = await response.json();
+
+    if (data.links?.download_location) {
+      try {
+        await fetch(data.links.download_location, {
+          headers: { Authorization: `Client-ID ${accessKey}` },
+        });
+      } catch (err) {
+        console.warn("  ⚠️  Failed to trigger download tracking");
+      }
+    }
+
+    return {
+      url: data.urls.regular,
+      alt: data.alt_description || data.description || query,
+      author: data.user.name,
+      authorUrl: data.user.links.html,
+    };
+  } catch (error) {
+    console.error(`  ❌ Failed to fetch from Unsplash:`, error.message);
+    return null;
+  }
+}
+
+function getPicsumImage(query) {
+  const seed = query
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .substring(0, 50);
+  
+  const url = `https://picsum.photos/seed/${seed}/1200/630`;
+  
+  return {
+    url,
+    alt: `Illustration for ${query}`,
+    author: null,
+    authorUrl: null,
+  };
+}
+
+async function fetchArticleImages(imageRequests) {
+  console.log(`🖼️  Fetching ${imageRequests.length} images...`);
+  
+  const images = [];
+  
+  for (const request of imageRequests) {
+    console.log(`  🔍 Searching for: "${request.query}" (${request.purpose})`);
+    
+    const imageData = await fetchUnsplashImage(request.query);
+    
+    if (imageData) {
+      console.log(`  ✅ Found image by ${imageData.author || "unknown"}`);
+      images.push({
+        ...imageData,
+        ...request,
+      });
+    } else {
+      console.log(`  📸 Using Picsum fallback`);
+      const fallback = getPicsumImage(request.query);
+      images.push({
+        ...fallback,
+        ...request,
+      });
+    }
+    
+    // Rate limiting
+    if (process.env.UNSPLASH_ACCESS_KEY) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  }
+  
+  return images;
+}
 
 // ---------- Helpers --------------------------------------------------------
 
@@ -64,6 +163,116 @@ function frontmatterEscape(str) {
   return String(str).replace(/"/g, '\\"');
 }
 
+function buildFrontmatter(planned, heroImage) {
+  const { date, category, baseSlug, title, description, tags = [] } = planned;
+  
+  const lines = [
+    "---",
+    `title: "${frontmatterEscape(title)}"`,
+    `description: "${frontmatterEscape(description)}"`,
+    `category: "${category}"`,
+    `publishDate: "${date}"`,
+    "tags:",
+  ];
+  
+  if (tags.length > 0) {
+    tags.forEach((t) => lines.push(`  - ${t}`));
+  } else {
+    lines.push("  - dev");
+    lines.push("  - blog");
+  }
+  
+  lines.push(`slug: "${baseSlug}"`);
+  
+  // Add hero image with full Unsplash metadata
+  if (heroImage) {
+    lines.push(`heroImage: "${heroImage.url}"`);
+    lines.push(`heroImageAlt: "${frontmatterEscape(heroImage.alt)}"`);
+    
+    // Unsplash compliance fields
+    if (heroImage.author) {
+      lines.push(`heroImageAuthor: "${frontmatterEscape(heroImage.author)}"`);
+    }
+    if (heroImage.authorUrl) {
+      lines.push(`heroImageAuthorUrl: "${heroImage.authorUrl}"`);
+    }
+    if (heroImage.unsplashUrl) {
+      lines.push(`heroImageUnsplashUrl: "${heroImage.unsplashUrl}"`);
+    }
+    if (heroImage.downloadLocation) {
+      lines.push(`heroImageDownloadLocation: "${heroImage.downloadLocation}"`);
+    }
+  }
+  
+  lines.push("---");
+  
+  return lines.join("\n");
+}
+
+function insertImagesIntoArticle(articleBody, inArticleImages) {
+  if (!inArticleImages || inArticleImages.length === 0) {
+    return articleBody;
+  }
+  
+  let updatedBody = articleBody;
+  
+  // Insert images at strategic points based on section headers
+  inArticleImages.forEach((image, idx) => {
+    let insertionPoint = "";
+    
+    // Try to find the section header
+    if (image.section) {
+      const sectionRegex = new RegExp(`(##\\s+${image.section.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'i');
+      const match = updatedBody.match(sectionRegex);
+      
+      if (match) {
+        // Insert after the section and its first paragraph
+        const afterSection = updatedBody.indexOf('\n\n', match.index + match[0].length);
+        if (afterSection !== -1) {
+          insertionPoint = afterSection;
+        }
+      }
+    }
+    
+    // Fallback: insert at specific positions
+    if (!insertionPoint) {
+      const sections = updatedBody.split(/##\s+/);
+      if (image.placement === "mid-article" && sections.length > 2) {
+        const midPoint = Math.floor(sections.length / 2);
+        insertionPoint = updatedBody.indexOf(`## ${sections[midPoint]}`);
+      } else if (image.placement === "before-conclusion") {
+        const conclusionIndex = updatedBody.toLowerCase().lastIndexOf('## conclusion') ||
+                               updatedBody.toLowerCase().lastIndexOf('## wrapping up') ||
+                               updatedBody.toLowerCase().lastIndexOf('## final thoughts');
+        if (conclusionIndex !== -1) {
+          insertionPoint = conclusionIndex;
+        }
+      }
+    }
+    
+    // Generate markdown for the image
+    const imageMarkdown = `\n\n![${image.alt}](${image.url})\n${image.author ? `*Image by ${image.author} on Unsplash*` : ''}\n\n`;
+    
+    if (insertionPoint && insertionPoint > 0) {
+      updatedBody = 
+        updatedBody.slice(0, insertionPoint) + 
+        imageMarkdown + 
+        updatedBody.slice(insertionPoint);
+    } else {
+      // Fallback: add before the signature
+      const signatureIndex = updatedBody.indexOf('Until next time, happy coding');
+      if (signatureIndex !== -1) {
+        updatedBody = 
+          updatedBody.slice(0, signatureIndex) + 
+          imageMarkdown + 
+          updatedBody.slice(signatureIndex);
+      }
+    }
+  });
+  
+  return updatedBody;
+}
+
 // ---------- Main -----------------------------------------------------------
 
 async function main() {
@@ -80,7 +289,7 @@ async function main() {
   const plan = loadPlanForMonth(monthKey);
   if (!plan) {
     console.log(
-      `ℹ️ No content plan file found for month ${monthKey} in content-plans/. Exiting.`
+      `ℹ️  No content plan file found for month ${monthKey} in content-plans/. Exiting.`
     );
     return;
   }
@@ -88,7 +297,7 @@ async function main() {
   const planned = getPlannedArticleForDate(plan, today);
   if (!planned) {
     console.log(
-      `ℹ️ No article scheduled for ${today} in content-plans/${monthKey}.json. Exiting.`
+      `ℹ️  No article scheduled for ${today} in content-plans/${monthKey}.json. Exiting.`
     );
     return;
   }
@@ -111,10 +320,9 @@ async function main() {
 
   if (fs.existsSync(outPath)) {
     console.log(
-      `ℹ️ Article already exists for ${today} at ${outPath}. Skipping generation.`
+      `ℹ️  Article already exists for ${today} at ${outPath}. Skipping generation.`
     );
   
-    // Make sure the content plan reflects that this article is published
     if (plan && Array.isArray(plan.articles)) {
       const idx = plan.articles.findIndex(
         (a) =>
@@ -130,7 +338,7 @@ async function main() {
         };
         savePlanForMonth(monthKey, plan);
         console.log(
-          `🗂 Updated content plan ${monthKey}.json: marked existing article as published (entrySlug: ${entrySlug}).`
+          `🗂  Updated content plan ${monthKey}.json: marked existing article as published (entrySlug: ${entrySlug}).`
         );
       }
     }
@@ -143,6 +351,30 @@ async function main() {
   console.log(`  Base slug: ${baseSlug}`);
   console.log(`  Entry slug: ${entrySlug}`);
   console.log(`  Output file: ${outPath}`);
+
+  // ---------- Analyze and fetch images ------------------------------------
+
+  const imageRequests = analyzeArticleForImages(planned);
+  console.log(`\n📊 Image analysis: ${imageRequests.length} images recommended`);
+  
+  const images = await fetchArticleImages(imageRequests);
+  
+  const heroImage = images.find(img => img.purpose === "hero");
+  const inArticleImages = images.filter(img => img.purpose !== "hero");
+  
+  if (heroImage) {
+    console.log(`\n✅ Hero image: ${heroImage.url}`);
+    if (heroImage.author) {
+      console.log(`   Credit: ${heroImage.author}`);
+    }
+  }
+  
+  if (inArticleImages.length > 0) {
+    console.log(`\n📷 In-article images: ${inArticleImages.length}`);
+    inArticleImages.forEach((img, idx) => {
+      console.log(`   ${idx + 1}. ${img.purpose}: ${img.section || 'General'}`);
+    });
+  }
 
   // ---------- Build prompt for the article --------------------------------
 
@@ -159,134 +391,145 @@ async function main() {
   ].join("\n");
 
   const tagsList = tags.join(", ");
-
-  const outlineText = outline
-    .map((item, idx) => `${idx + 1}. ${item}`)
-    .join("\n");
-
+  const outlineText = outline.map((item, idx) => `${idx + 1}. ${item}`).join("\n");
   const codeIdeasText = codeIdeas.map((c) => `- ${c}`).join("\n") || "- (none)";
-  const mediaIdeasText =
-    mediaIdeas.map((m) => `- ${m}`).join("\n") || "- (none)";
+  const mediaIdeasText = mediaIdeas.map((m) => `- ${m}`).join("\n") || "- (none)";
 
-    const articlePrompt = [
-      `Today is ${today}.`,
-      "",
-      `You must write a **complete MDX article** based on this planning info:`,
-      "",
-      `Title: ${title}`,
-      `Category: ${category}   (one of "tutorial" | "trending" | "deep-dive")`,
-      `Slug (base, without date): ${baseSlug}`,
-      `Planned publication date: ${date}`,
-      `Description (meta): ${description}`,
-      `Tags: ${tagsList}`,
-      "",
-      "Value angle (what makes this worth reading):",
-      angle || "(no angle provided, define a strong one yourself)",
-      "",
-      "Outline / section ideas (you can adapt slightly, but follow the spirit):",
-      outlineText || "(no outline provided, design a clear structure)",
-      "",
-      "Code ideas (snippets you MUST incorporate, adapted as needed):",
-      codeIdeasText,
-      "",
-      "Media ideas (use as MDX image/diagram placeholders where it helps):",
-      mediaIdeasText,
-      "",
-      "MDX and structure requirements:",
-      "1) Start with YAML frontmatter exactly like this shape:",
-      "",
-      "---",
-      `title: "${frontmatterEscape(title)}"`,
-      `description: "${frontmatterEscape(description)}"`,
-      `category: "${category}"`,
-      `publishDate: "${date}"`,
-      "tags:",
-      tags.length
-        ? tags.map((t) => `  - ${t}`).join("\n")
-        : "  - dev\n  - blog",
-      `slug: "${baseSlug}"`,
-      "---",
-      "",
-      "2) After frontmatter, write the article body:",
-      "- Start with a short intro that hooks the reader and restates the value in your own words.",
-      "- Use `##` headings that roughly align with the outline above.",
-      "- You can add `###` sub-sections where it makes sense.",
-      "- Use bullet lists and numbered lists for steps.",
-      "- Keep paragraphs fairly short and readable.",
-      "",
-      "3) Code blocks:",
-      "- Use fenced code blocks with language identifiers: ```ts, ```tsx, ```js, etc.",
-      "- For any non-trivial code snippet (more than ~5 lines), include a filename in the fence meta so my Astro code block can show it.",
-      "  Examples:",
-      "  ```ts filename=\"Profile.server.tsx\"",
-      "  // Profile.server.tsx",
-      "  import { fetchUserProfile } from \"../lib/api\";",
-      "",
-      "  export default async function Profile() {",
-      "    const user = await fetchUserProfile();",
-      "    return (",
-      "      <div>",
-      "        <h2>{user.name}</h2>",
-      "        <p>{user.bio}</p>",
-      "      </div>",
-      "    );",
-      "  }",
-      "  ```",
-      "",
-      "  ```tsx filename=\"src/app/page.tsx\"",
-      "  // ...",
-      "  ```",
-      "",
-      "- Short inline examples (1–3 lines) can be plain fenced code without a filename.",
-      "- At least 2–3 real code snippets that a dev could copy and run/adapt.",
-      "- Tie the code to the explanation: don't throw random snippets.",
-      "- At least one snippet should show some configuration or project setup (Astro, React, Node, TypeScript, tooling, etc.).",
-      "",
-      "4) Images / diagrams:",
-      "- Use markdown image syntax where it adds value, for example:",
-      '  ![diagram comparing CSR vs SSR](https://example.com/placeholder-ssr-csr.png)',
-      "- Alt text must describe the diagram/idea clearly.",
-      "- URLs can be placeholders; the important part is the description.",
-      "",
-      "5) Depth & originality:",
-      "- Do not just restate docs; focus on real-world problems and trade-offs.",
-      "- Include your own commentary: when something is overkill, what you’d do first in a new project, etc.",
-      "- Assume the reader is an intermediate dev: they know the basics but want sharper judgment.",
-      "",
-      "6) Ending signature:",
-      "- The article MUST end with exactly this two-line signature:",
-      "Until next time, happy coding 👨‍💻  ",
-      "– Patricio Marroquin 💜",
-      "",
-      "Return ONLY the MDX (frontmatter + body).",
-      "No extra explanations, no markdown fences around the whole output.",
-    ].join("\n");
-  
+  // Generate image placement hints for the AI
+  const imagePlacementHints = inArticleImages.map((img, idx) => 
+    `- After section "${img.section || 'mid-article'}": Add a placeholder for ${img.purpose} image`
+  ).join("\n");
 
-  const response = await client.responses.create({
-    model: "gpt-4.1-mini",
-    instructions,
-    input: articlePrompt,
-    max_output_tokens: 4000,
+  const articlePrompt = [
+    `Today is ${today}.`,
+    "",
+    `You must write a **complete MDX article** based on this planning info:`,
+    "",
+    `Title: ${title}`,
+    `Category: ${category}`,
+    `Slug (base, without date): ${baseSlug}`,
+    `Planned publication date: ${date}`,
+    `Description (meta): ${description}`,
+    `Tags: ${tagsList}`,
+    "",
+    "Value angle (what makes this worth reading):",
+    angle || "(no angle provided, define a strong one yourself)",
+    "",
+    "Outline / section ideas:",
+    outlineText || "(no outline provided, design a clear structure)",
+    "",
+    "Code ideas (snippets you MUST incorporate):",
+    codeIdeasText,
+    "",
+    "Media ideas:",
+    mediaIdeasText,
+    "",
+    "Image placeholders (will be inserted automatically):",
+    imagePlacementHints || "- No specific image placements needed",
+    "",
+    "CRITICAL INSTRUCTIONS:",
+    "DO NOT include the frontmatter - it will be added automatically.",
+    "DO NOT add image markdown - images will be inserted automatically.",
+    "DO NOT use placeholder diagram URLs like https://example.com/placeholder-*.png",
+    "",
+    "For diagrams and visual explanations:",
+    "- Use descriptive text blocks to explain what the diagram would show",
+    "- Use bullet points or numbered lists to break down complex concepts",
+    "- Use tables to compare certain concepts and trade-offs instead of diagrams",
+    "- Use text-based comparisons (tables, lists) instead of diagram placeholders",
+    "- Focus on clear written explanations that don't require diagrams",
+    "",
+    "Example (GOOD - clear text explanation):",
+    "The React 19 Suspense model improves on React 18 in three key ways:",
+    "1. Automatic fallback aggregation for nested boundaries",
+    "2. Simplified state management with useTransition",
+    "3. Better hydration coordination",
+    "",
+    "Example (BAD - do NOT do this):",
+    "![diagram showing the architecture](https://example.com/placeholder.png)",
+    "",
+    "MDX and structure requirements:",
+    "1) Start with a compelling intro paragraph",
+    "2) Use ## headings that align with the outline",
+    "3) Use ### sub-sections where needed",
+    "4) Use bullet lists and numbered lists for clarity",
+    "5) Keep paragraphs short and readable (3-5 sentences max)",
+    "",
+    "Code blocks:",
+    "- Use fenced code blocks: ```ts, ```tsx, ```js, etc.",
+    "- Include filename for non-trivial snippets: ```ts filename=\"example.ts\"",
+    "- At least 2-3 real, runnable code examples",
+    "- Tie code to explanations - no random snippets",
+    "",
+    "For comparisons:",
+    "- Use side-by-side code blocks (before/after)",
+    "- Use tables for feature comparisons",
+    "- Use descriptive bullet lists",
+    "",
+    "Example comparison (GOOD):",
+    "**Before (React 18):**",
+    "```tsx",
+    "// Complex manual handling",
+    "const [loading, setLoading] = useState(false);",
+    "```",
+    "",
+    "**After (React 19):**",
+    "```tsx",
+    "// Simplified with useTransition",
+    "const [isPending, startTransition] = useTransition();",
+    "```",
+    "",
+    "Depth & originality:",
+    "- Focus on real-world problems and trade-offs",
+    "- Include your commentary and judgment",
+    "- Assume intermediate developer audience",
+    "",
+    "Ending signature (REQUIRED):",
+    "Until next time, happy coding 👨‍💻  ",
+    "– Patricio Marroquin 💜",
+    "",
+    "Return ONLY the article body.",
+    "No frontmatter, no placeholder images, no extra explanations.",
+  ].join("\n");
+
+  console.log("\n🤖 Generating article content with AI...\n");
+
+  const response = await client.chat.completions.create({
+    model: "gpt-4-turbo-preview",
+    messages: [
+      { role: "system", content: instructions },
+      { role: "user", content: articlePrompt }
+    ],
+    max_tokens: 4000,
+    temperature: 0.7,
   });
 
-  const mdx =
-    response.output_text ??
-    response.output?.[0]?.content?.[0]?.text ??
-    null;
+  const articleBody = response.choices[0]?.message?.content;
 
-  if (!mdx) {
-    console.error("❌ No MDX text returned from model:");
+  if (!articleBody) {
+    console.error("❌ No article text returned from model:");
     console.dir(response, { depth: 4 });
     process.exit(1);
   }
 
-  fs.writeFileSync(outPath, mdx, "utf8");
+  // Insert images into article body
+  const articleWithImages = insertImagesIntoArticle(articleBody, inArticleImages);
 
-  console.log(`✅ Article generated at: ${outPath}`);
+  // Build complete MDX with frontmatter + body
+  const frontmatter = buildFrontmatter(
+    { date, category, baseSlug, title, description, tags },
+    heroImage
+  );
+  
+  const completeMdx = `${frontmatter}\n\n${articleWithImages.trim()}\n`;
+
+  fs.writeFileSync(outPath, completeMdx, "utf8");
+
+  console.log(`\n✅ Article generated at: ${outPath}`);
   console.log(`   Slug: ${entrySlug}`);
+  console.log(`   Images: ${images.length} (1 hero + ${inArticleImages.length} in-article)`);
 
-  // Update content plan to mark this article as published
+  // Update content plan
   if (plan && Array.isArray(plan.articles)) {
     const idx = plan.articles.findIndex(
       (a) =>
@@ -299,14 +542,12 @@ async function main() {
         ...plan.articles[idx],
         status: "published",
         entrySlug,
+        heroImage: heroImage?.url,
+        imageCount: images.length,
       };
       savePlanForMonth(monthKey, plan);
       console.log(
-        `🗂 Updated content plan ${monthKey}.json: marked article for ${date} as published (entrySlug: ${entrySlug}).`
-      );
-    } else {
-      console.warn(
-        `⚠️ Could not find matching article in plan for ${date} to update status.`
+        `\n🗂  Updated content plan ${monthKey}.json: marked article for ${date} as published.`
       );
     }
   }
