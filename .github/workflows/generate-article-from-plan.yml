@@ -12,7 +12,6 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,9 +36,10 @@ jobs:
         id: generate_article
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: |
           pnpm generate:article
-
           # Check for any changes (staged or unstaged)
           if [ -z "$(git status --porcelain)" ]; then
             echo "No changes detected"
@@ -67,6 +67,7 @@ jobs:
           title: "feat(blog): add article for ${{ steps.meta.outputs.today }}"
           body: |
             This PR adds the generated article for **${{ steps.meta.outputs.today }}**.
+
             - Generated automatically by the **Generate Daily Article From Plan** workflow.
             - The article is created from the monthly content plan in `content-plans/` for today's date.
             - Check the new file(s) under `src/content/articles/`:
