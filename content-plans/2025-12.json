@@ -216,7 +216,7 @@
         "performance",
         "tutorial"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Don’t wait until your server crashes. This guide helps you catch memory leaks early with proven steps and tools you already have.",
       "outline": [
         "How to spot signs of memory leaks",
@@ -233,7 +233,10 @@
       "mediaIdeas": [
         "Heap snapshot screenshot showing leak",
         "Timeline graphs of memory usage"
-      ]
+      ],
+      "entrySlug": "2025-12-26-debugging-nodejs-memory-leaks-step-by-step",
+      "heroImage": "https://images.unsplash.com/photo-1760670399462-f5e479452c27?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjY3NzQ3OTJ8&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageCount": 2
     },
     {
       "date": "2025-12-29",
