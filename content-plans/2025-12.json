@@ -251,7 +251,7 @@
         "frontend",
         "backend"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "I cut through the release notes noise to give you clear advice: which new features are ready for prime time, and which might cause headaches.",
       "outline": [
         "Overview of TypeScript 6 changes",
@@ -268,7 +268,10 @@
       "mediaIdeas": [
         "Feature comparison tables",
         "Timeline graphic of TS version adoptions"
-      ]
+      ],
+      "entrySlug": "2025-12-29-typescript-6-whats-new-and-should-you-adopt-it-now",
+      "heroImage": "https://images.unsplash.com/photo-1629741422325-fd7cb752495a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjcwMjg0MzV8&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageCount": 2
     },
     {
       "date": "2025-12-25",
