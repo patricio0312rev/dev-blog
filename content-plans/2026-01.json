@@ -30,6 +30,46 @@
       ]
     },
     {
+      "date": "2026-01-08",
+      "category": "deep-dive",
+      "slug": "claude-agents-vs-claude-skills-complete-comparison",
+      "title": "Claude Agents vs Claude Skills: A complete comparison with examples and use cases",
+      "description": "Deep dive into the differences between Claude agents and Claude skills, with practical examples, use cases, and how other AI platforms handle similar concepts.",
+      "tags": [
+        "AI",
+        "Claude",
+        "agents",
+        "skills",
+        "automation",
+        "developer-tools"
+      ],
+      "status": "planned",
+      "angle": "Give developers a comprehensive understanding of when to use agents vs skills in Claude, with real-world examples and cross-platform comparisons.",
+      "outline": [
+        "What are Claude agents and how they work",
+        "What are Claude skills and their purpose",
+        "Key differences: architecture, use cases, and implementation",
+        "Real-world examples of agents in action",
+        "Real-world examples of skills in action",
+        "When to choose agents vs skills for your project",
+        "Comparing with similar concepts in OpenAI, Gemini, and other AI platforms",
+        "Current state of support and future directions"
+      ],
+      "codeIdeas": [
+        "Basic Claude agent implementation example",
+        "Claude skill definition and usage example",
+        "Side-by-side comparison of agent vs skill solving same problem",
+        "Example of OpenAI function calling vs Claude agents",
+        "Sample workflow showing agent orchestration"
+      ],
+      "mediaIdeas": [
+        "Architecture diagram comparing agents and skills",
+        "Decision tree for choosing between agents and skills",
+        "Cross-platform comparison table",
+        "Agent workflow visualization"
+      ]
+    },
+    {
       "date": "2026-01-09",
       "category": "tutorial",
       "slug": "building-a-scalable-redis-cache-layer-for-nodejs",
