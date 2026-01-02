@@ -60,5 +60,5 @@ jobs:
             - Includes topics, angles, outlines, tags, and metadata for all scheduled posts.
             - Please review the plan (topics, balance between tutorial/trending/deep-dive, and tags) before merging.
 
-          # Use the default GITHUB_TOKEN
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # Use Personal Access Token to create PRs
+          token: ${{ secrets.GH_ACCESS_TOKEN }}

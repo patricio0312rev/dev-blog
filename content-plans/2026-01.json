@@ -6,268 +6,218 @@
     {
       "date": "2026-01-06",
       "category": "trending",
-      "slug": "nextjs-15-what-im-excited-about",
-      "title": "Next.js 15 dropped: Here’s what I’m actually excited about",
-      "description": "A no-fluff look at the features in Next.js 15 that will change how you build React apps today.",
-      "tags": [
-        "NextJS",
-        "React",
-        "webdev",
-        "trending",
-        "frontend",
-        "JavaScript"
-      ],
+      "slug": "nextjs-16-whats-new-and-who-should-upgrade-now",
+      "title": "NextJS 16: What’s actually new and who should upgrade now",
+      "description": "A straightforward look at NextJS 16’s new features and what they mean for your current projects. Skip hype and decide if it’s worth your time today.",
+      "tags": ["NextJS", "JavaScript", "webdev", "frameworks", "performance"],
       "status": "planned",
-      "angle": "Cuts through hype to objectively show which new features are shaping modern React architecture.",
+      "angle": "Cut through the marketing fog to give real advice about adopting NextJS 16 in existing projects.",
       "outline": [
-        "Quick intro to Next.js 15 release",
-        "New routing enhancements and what they enable",
-        "Built-in AI integration: use cases and gotchas",
-        "Performance improvements I tested and benchmarks",
-        "Migration tips and breaking changes to watch for",
-        "My personal take: should you upgrade now?"
+        "Quick overview of what’s new in NextJS 16",
+        "Breaking changes and migration gotchas",
+        "Performance improvements under the hood",
+        "Who benefits most from upgrading now",
+        "Simple upgrade strategy for large codebases"
       ],
       "codeIdeas": [
-        "Demo of new routing syntax with dynamic segments",
-        "Example of integrating the built-in AI assistant",
-        "Performance comparison of SSR with older versions"
+        "Example of new app routing and layouts in NextJS 16",
+        "Snippet showing new image optimization usage",
+        "Basic migration step from NextJS 15 syntax"
       ],
       "mediaIdeas": [
-        "Before/after performance graphs",
-        "Annotated screenshots of new dev tools features"
+        "Before vs after performance charts",
+        "Migration flow diagram"
       ]
     },
     {
-      "date": "2026-01-08",
+      "date": "2026-01-09",
       "category": "tutorial",
-      "slug": "building-a-scalable-api-with-nestjs-and-postgresql",
-      "title": "How to build a scalable REST API with NestJS and PostgreSQL",
-      "description": "Step-by-step walkthrough creating a clean, scalable backend with NestJS, showing how to organize modules, services, and use PostgreSQL efficiently.",
-      "tags": [
-        "NestJS",
-        "PostgreSQL",
-        "backend",
-        "REST API",
-        "tutorial",
-        "Node.js"
-      ],
+      "slug": "building-a-scalable-redis-cache-layer-for-nodejs",
+      "title": "Building a scalable Redis cache layer for Node.js",
+      "description": "Step-by-step guide to implement a Redis caching layer in Node.js apps that actually improves performance and avoids common pitfalls.",
+      "tags": ["Node.js", "Redis", "caching", "performance", "tutorial"],
       "status": "planned",
-      "angle": "Many tutorials stop at basics. This one goes deeper on architecture for real-world scale and maintainability.",
+      "angle": "Avoid wasting time with naive caching. This teaches you practical setup and patterns for real production caching with Node.js.",
       "outline": [
-        "Setting up a NestJS project with PostgreSQL integration",
-        "Designing a modular architecture for easy feature scaling",
-        "Using TypeORM best practices and query optimization",
-        "Implementing pagination, filtering, and error handling",
-        "Testing controllers and services effectively"
+        "Why and when Redis caching helps Node.js apps",
+        "Setting up Redis and connecting in Node.js with ioredis",
+        "Cache invalidation strategies demo",
+        "Using TTLs effectively",
+        "Testing cache hits and misses"
       ],
       "codeIdeas": [
-        "NestJS module and service setup with decorators",
-        "PostgreSQL query examples with parameter binding",
-        "Unit test for a service method with mocked repo"
+        "Basic Redis connection and get/set example",
+        "Example of memoizing DB queries with Redis",
+        "Cache invalidation helper function"
       ],
-      "mediaIdeas": [
-        "Diagram of module dependencies and flows",
-        "ER diagram of example database schema"
-      ]
+      "mediaIdeas": ["Diagram of caching flow in request lifecycle"]
     },
     {
       "date": "2026-01-13",
       "category": "deep-dive",
-      "slug": "refactoring-legacy-code-with-typescript",
-      "title": "Refactoring legacy JavaScript codebases to TypeScript without breaking everything",
-      "description": "A detailed guide on incrementally adopting TypeScript in old JS projects, weighing pros and cons, pitfalls, and practical tips to keep shipping code.",
+      "slug": "rethinking-monoliths-vs-microservices-in-2026",
+      "title": "Rethinking monoliths vs microservices in 2026: what really matters",
+      "description": "A no-BS look at when monoliths still shine, when microservices pay off, and how to decide your architecture in 2026’s ecosystem.",
       "tags": [
-        "TypeScript",
-        "JavaScript",
-        "refactoring",
-        "legacy-code",
-        "deep-dive",
-        "developer-experience"
+        "architecture",
+        "microservices",
+        "monolith",
+        "system design",
+        "bestpractices"
       ],
       "status": "planned",
-      "angle": "I address the real fears and blockers teams face and how to steadily gain TypeScript benefits without costly rewrites.",
+      "angle": "Help devs escape the hype cycle and pick architectures that match real team and product needs today.",
       "outline": [
-        "Why refactor legacy JS to TS? Real benefits and trade-offs",
-        "Step 1: Setting up TypeScript config in a messy codebase",
-        "Gradual typing strategies: from any to strict",
-        "Managing 3rd-party JS dependencies with TS",
-        "Tools and editor tricks to speed up refactors",
-        "Avoiding common pitfalls and maintaining CI stability"
+        "The state of monoliths and microservices in 2026",
+        "Pros and cons revisited with modern tools",
+        "Common traps in adopting microservices too early",
+        "When monoliths outperform distributed systems",
+        "Hybrid approaches and incremental migration ideas"
       ],
       "codeIdeas": [
-        "Example tsconfig.json settings for gradual adoption",
-        "Example JSDoc to TypeScript type conversion",
-        "Refactor of a small JS utility function to typed TS"
+        "Example modular code organization for monolith",
+        "Sample interface for service communication in microservices"
       ],
       "mediaIdeas": [
-        "Before and after code snippets",
-        "Flowchart showing gradual adoption process"
+        "Architecture comparison diagram",
+        "Flowchart for decision making between monolith & microservices"
       ]
     },
     {
       "date": "2026-01-15",
-      "category": "trending",
-      "slug": "ai-assistant-in-code-editors-the-must-haves",
-      "title": "AI assistants in code editors: What features really matter right now",
-      "description": "A candid review of AI coding assistants available in 2026 with concrete examples of how they help (or hurt) productivity and workflow.",
+      "category": "tutorial",
+      "slug": "typescript-advanced-types-patterns-you-probably-dont-use",
+      "title": "TypeScript advanced types: patterns you probably don’t use but should",
+      "description": "Unlock power in TypeScript beyond basic types with real patterns that improve code safety and developer experience.",
       "tags": [
-        "AI",
-        "developer-tools",
-        "productivity",
-        "trending",
-        "VSCode",
-        "OpenAI"
+        "TypeScript",
+        "typescript-tips",
+        "programming",
+        "static-typing",
+        "webdev"
       ],
       "status": "planned",
-      "angle": "Cuts hype and focuses on actionable feature sets rather than buzzwords, helping you pick the right tool for day-to-day coding.",
+      "angle": "Move beyond status quo with concrete examples improving your daily TypeScript workflow.",
       "outline": [
-        "Overview of popular AI coding assistants in 2026",
-        "Core features that improve coding speed and accuracy",
-        "Limitations and when AI suggestions can mislead",
-        "Integrations with testing, debugging, and CI pipelines",
-        "My personal picks and setup tips"
+        "Overview of rarely used advanced types",
+        "Conditional types for smarter APIs",
+        "Template literal types to enforce format constraints",
+        "Mapped types for reusable modification",
+        "Practical examples in React and backend contexts"
       ],
       "codeIdeas": [
-        "Code completions with and without AI suggestions",
-        "Example bug fixes accelerated by AI explanation",
-        "Custom prompt examples used in editor integrations"
+        "Conditional type example with discriminated unions",
+        "Use of template literal types in API response validation",
+        "Mapping existing types for partial updates"
       ],
-      "mediaIdeas": [
-        "Side-by-side screenshots of AI-powered vs native autocomplete",
-        "Gif demonstration of debugging help from AI"
-      ]
+      "mediaIdeas": ["Visual breakdown of complex type transformations"]
     },
     {
       "date": "2026-01-20",
-      "category": "tutorial",
-      "slug": "using-redis-for-session-management-in-nodejs",
-      "title": "Using Redis for blazing fast session management in Node.js apps",
-      "description": "Learn how to implement Redis-backed sessions with expiry, clustering support, and security best practices in your Node.js backend.",
+      "category": "trending",
+      "slug": "chatgpt-4-5-devs-perspective-whats-really-changed",
+      "title": "ChatGPT 4.5 from a dev’s perspective: what’s really changed and how it helps building software",
+      "description": "An honest appraisal of ChatGPT 4.5’s new features and how they concretely impact your day-to-day dev workflow.",
       "tags": [
-        "Redis",
-        "Node.js",
-        "session-management",
-        "tutorial",
-        "backend",
-        "scalability"
+        "AI",
+        "ChatGPT",
+        "software-development",
+        "productivity",
+        "OpenAI"
       ],
       "status": "planned",
-      "angle": "Many tutorials mention Redis but miss clustering, security, and expiry setups. This post covers those gaps with useful code and advice.",
+      "angle": "Cut hype, give insights into practical use of ChatGPT 4.5 for coding and debugging.",
       "outline": [
-        "Why use Redis for session storage compared to in-memory or DB",
-        "Setting up Redis with Node.js session libraries",
-        "Configuring expiry and refreshing session TTL",
-        "Handling Redis clusters for high availability",
-        "Securing session data and mitigating common risks"
+        "Summary of main ChatGPT 4.5 improvements",
+        "Improved code understanding and completion",
+        "Using ChatGPT for debugging and architecture suggestions",
+        "Limitations and realistic expectations",
+        "Tips for integrating AI into developer workflow"
       ],
       "codeIdeas": [
-        "Example Redis session store setup with express-session",
-        "Script demonstrating session TTL refresh logic",
-        "Cluster connection handling with retry strategies"
+        "Prompt engineering examples for better AI code help",
+        "Before and after ChatGPT 4.5 code generation samples"
       ],
-      "mediaIdeas": [
-        "Diagram showing session data flow between client, app, and Redis",
-        "Chart illustrating performance gains vs other stores"
-      ]
+      "mediaIdeas": ["Screenshots of ChatGPT interface with examples"]
     },
     {
       "date": "2026-01-22",
       "category": "deep-dive",
-      "slug": "testing-strategies-for-nestjs-enterprise-apps",
-      "title": "Testing strategies for NestJS apps built to last",
-      "description": "How to design a solid testing approach in NestJS that covers unit, integration, and end-to-end tests with practical examples and trade-offs.",
-      "tags": [
-        "NestJS",
-        "testing",
-        "TDD",
-        "enterprise",
-        "deep-dive",
-        "Node.js"
-      ],
+      "slug": "testing-strategy-for-modern-nodejs-apps",
+      "title": "Testing strategy for modern Node.js apps: beyond unit tests",
+      "description": "Explore a comprehensive testing approach that includes integration, end-to-end tests, and effective mocking in Node.js projects.",
+      "tags": ["Node.js", "testing", "jest", "integration-tests", "TDD"],
       "status": "planned",
-      "angle": "Goes beyond basic Jest examples to show how to craft balanced test suites that maximize confidence without slowing development.",
+      "angle": "Most articles stop at unit tests; this one guides you through a practical full testing strategy.",
       "outline": [
-        "Overview of testing layers: unit, integration, e2e in NestJS",
-        "Writing isolated unit tests for services and controllers",
-        "Best practices for database integration tests with mock/real DB",
-        "E2E testing with test setup and teardown strategies",
-        "CI pipeline setup to automate and speed up test runs"
+        "Why unit tests aren’t enough anymore",
+        "Setting up integration tests with real DB (PostgreSQL)",
+        "End-to-end testing strategies with Playwright",
+        "Mocking external APIs and Redis caches",
+        "Balancing speed and coverage"
       ],
       "codeIdeas": [
-        "Unit test mocking a service dependency",
-        "Integration test hitting real PostgreSQL with transactions",
-        "E2E test flow hitting REST APIs with supertest"
+        "Jest integration test example with real DB setup/teardown",
+        "Playwright simple end-to-end test",
+        "Mocking Redis in unit tests"
       ],
       "mediaIdeas": [
-        "Testing pyramid diagram",
-        "Example CI test report screenshot"
+        "Testing pyramid illustration",
+        "Example test coverage reports"
       ]
     },
     {
       "date": "2026-01-27",
       "category": "tutorial",
-      "slug": "astro-for-crazy-fast-multiframework-sites",
-      "title": "Using Astro to build multi-framework sites without the bloat",
-      "description": "Guide to leveraging Astro’s unique architecture for combining React, Svelte, and Vue components in one site — and keeping the JS bundle tiny.",
-      "tags": [
-        "Astro",
-        "React",
-        "Svelte",
-        "Vue",
-        "webdev",
-        "tutorial",
-        "performance"
-      ],
+      "slug": "deploying-astro-sites-with-serverless-functions-on-vercel",
+      "title": "Deploying Astro sites with serverless functions on Vercel, step-by-step",
+      "description": "Learn how to combine Astro’s static site generation with dynamic serverless functions hosted on Vercel for modern apps.",
+      "tags": ["Astro", "Vercel", "serverless", "deployment", "static-sites"],
       "status": "planned",
-      "angle": "Explains why Astro’s multi-framework support is a game-changer with practical code showing real integration and performance tips.",
+      "angle": "Shows how to keep your Astro site super fast but still add backend logic without a full server.",
       "outline": [
-        "What is Astro and how it differs from other meta-frameworks",
-        "Setting up a project with React, Svelte, and Vue coexisting",
-        "Managing styles and global assets across frameworks",
-        "Optimizing for minimal JS bundles and hydration control",
-        "Deploying multi-framework sites on Vercel or AWS"
+        "Why use Astro for static with serverless hybrid",
+        "Setting up Vercel project basics",
+        "Creating and deploying serverless functions",
+        "Integrating serverless APIs with Astro pages",
+        "Tips for debugging and optimizing cold starts"
       ],
       "codeIdeas": [
-        "Multi-framework component imports in Astro files",
-        "Scoped styles example applied to different frameworks",
-        "Build output analysis comparing bundle sizes"
+        "Sample Astro page fetching data from serverless function",
+        "Simple serverless function example (Node.js)",
+        "Vercel config for deployment"
       ],
-      "mediaIdeas": [
-        "Bundle size comparison graph",
-        "Screenshot showcasing multi-framework page in devtools"
-      ]
+      "mediaIdeas": ["Diagram of static site + serverless function interaction"]
     },
     {
       "date": "2026-01-29",
-      "category": "trending",
-      "slug": "aws-fargate-updates-what-it-means-for-nodejs",
-      "title": "New AWS Fargate updates in 2026: What Node.js devs need to know",
-      "description": "AWS announced key Fargate improvements that reduce cold starts and improve networking — here’s how they change your Node.js container deployments.",
+      "category": "deep-dive",
+      "slug": "building-high-throughput-event-driven-apis-with-nestjs",
+      "title": "Building high-throughput event-driven APIs with NestJS",
+      "description": "Architect scalable event-driven APIs using NestJS and message brokers—practical tips for throughput, reliability, and ease of maintenance.",
       "tags": [
-        "AWS",
-        "Fargate",
-        "Node.js",
-        "cloud",
-        "containers",
-        "trending"
+        "NestJS",
+        "API",
+        "event-driven",
+        "microservices",
+        "architecture"
       ],
       "status": "planned",
-      "angle": "I break down AWS Fargate 2026 updates into practical advice for Node.js backend devs to immediately benefit from.",
+      "angle": "Teaches you how to design and implement event-driven APIs that don’t bottleneck under load, with NestJS idioms.",
       "outline": [
-        "Overview of recent Fargate feature announcements",
-        "Impact on cold start times and cost optimizations",
-        "Networking improvements and VPC integration details",
-        "How to onboard existing Node.js Docker apps",
-        "My deployment tips and real-world testing results"
+        "Basics of event-driven architecture in backend APIs",
+        "Setting up NestJS with Kafka or RabbitMQ",
+        "Best practices for message handling and retries",
+        "Error handling and observability",
+        "Scaling tips and pitfalls to avoid"
       ],
       "codeIdeas": [
-        "Dockerfile optimizations for Fargate",
-        "Sample CloudFormation snippets for new networking",
-        "Benchmark script comparing cold starts pre/post update"
+        "NestJS Kafka consumer/producer example",
+        "Graceful error handling in async message processing"
       ],
       "mediaIdeas": [
-        "Cold start time charts",
-        "Fargate architecture diagram highlighting new features"
+        "Event-driven message flow diagram",
+        "Error retry lifecycle diagram"
       ]
     }
   ]
