@@ -1,0 +1,256 @@
+{
+  "month": "2026-01",
+  "startDate": "2026-01-01",
+  "endDate": "2026-01-31",
+  "articles": [
+    {
+      "date": "2026-01-06",
+      "category": "trending",
+      "slug": "nextjs-16-whats-new-and-who-should-upgrade-now",
+      "title": "NextJS 16: What’s actually new and who should upgrade now",
+      "description": "A straightforward look at NextJS 16’s new features and what they mean for your current projects. Skip hype and decide if it’s worth your time today.",
+      "tags": [
+        "NextJS",
+        "JavaScript",
+        "webdev",
+        "frameworks",
+        "performance"
+      ],
+      "status": "planned",
+      "angle": "Cut through the marketing fog to give real advice about adopting NextJS 16 in existing projects.",
+      "outline": [
+        "Quick overview of what’s new in NextJS 16",
+        "Breaking changes and migration gotchas",
+        "Performance improvements under the hood",
+        "Who benefits most from upgrading now",
+        "Simple upgrade strategy for large codebases"
+      ],
+      "codeIdeas": [
+        "Example of new app routing and layouts in NextJS 16",
+        "Snippet showing new image optimization usage",
+        "Basic migration step from NextJS 15 syntax"
+      ],
+      "mediaIdeas": [
+        "Before vs after performance charts",
+        "Migration flow diagram"
+      ]
+    },
+    {
+      "date": "2026-01-09",
+      "category": "tutorial",
+      "slug": "building-a-scalable-redis-cache-layer-for-nodejs",
+      "title": "Building a scalable Redis cache layer for Node.js",
+      "description": "Step-by-step guide to implement a Redis caching layer in Node.js apps that actually improves performance and avoids common pitfalls.",
+      "tags": [
+        "Node.js",
+        "Redis",
+        "caching",
+        "performance",
+        "tutorial"
+      ],
+      "status": "planned",
+      "angle": "Avoid wasting time with naive caching. This teaches you practical setup and patterns for real production caching with Node.js.",
+      "outline": [
+        "Why and when Redis caching helps Node.js apps",
+        "Setting up Redis and connecting in Node.js with ioredis",
+        "Cache invalidation strategies demo",
+        "Using TTLs effectively",
+        "Testing cache hits and misses"
+      ],
+      "codeIdeas": [
+        "Basic Redis connection and get/set example",
+        "Example of memoizing DB queries with Redis",
+        "Cache invalidation helper function"
+      ],
+      "mediaIdeas": [
+        "Diagram of caching flow in request lifecycle"
+      ]
+    },
+    {
+      "date": "2026-01-13",
+      "category": "deep-dive",
+      "slug": "rethinking-monoliths-vs-microservices-in-2026",
+      "title": "Rethinking monoliths vs microservices in 2026: what really matters",
+      "description": "A no-BS look at when monoliths still shine, when microservices pay off, and how to decide your architecture in 2026’s ecosystem.",
+      "tags": [
+        "architecture",
+        "microservices",
+        "monolith",
+        "system design",
+        "bestpractices"
+      ],
+      "status": "planned",
+      "angle": "Help devs escape the hype cycle and pick architectures that match real team and product needs today.",
+      "outline": [
+        "The state of monoliths and microservices in 2026",
+        "Pros and cons revisited with modern tools",
+        "Common traps in adopting microservices too early",
+        "When monoliths outperform distributed systems",
+        "Hybrid approaches and incremental migration ideas"
+      ],
+      "codeIdeas": [
+        "Example modular code organization for monolith",
+        "Sample interface for service communication in microservices"
+      ],
+      "mediaIdeas": [
+        "Architecture comparison diagram",
+        "Flowchart for decision making between monolith & microservices"
+      ]
+    },
+    {
+      "date": "2026-01-15",
+      "category": "tutorial",
+      "slug": "typescript-advanced-types-patterns-you-probably-dont-use",
+      "title": "TypeScript advanced types: patterns you probably don’t use but should",
+      "description": "Unlock power in TypeScript beyond basic types with real patterns that improve code safety and developer experience.",
+      "tags": [
+        "TypeScript",
+        "typescript-tips",
+        "programming",
+        "static-typing",
+        "webdev"
+      ],
+      "status": "planned",
+      "angle": "Move beyond status quo with concrete examples improving your daily TypeScript workflow.",
+      "outline": [
+        "Overview of rarely used advanced types",
+        "Conditional types for smarter APIs",
+        "Template literal types to enforce format constraints",
+        "Mapped types for reusable modification",
+        "Practical examples in React and backend contexts"
+      ],
+      "codeIdeas": [
+        "Conditional type example with discriminated unions",
+        "Use of template literal types in API response validation",
+        "Mapping existing types for partial updates"
+      ],
+      "mediaIdeas": [
+        "Visual breakdown of complex type transformations"
+      ]
+    },
+    {
+      "date": "2026-01-20",
+      "category": "trending",
+      "slug": "chatgpt-4-5-devs-perspective-whats-really-changed",
+      "title": "ChatGPT 4.5 from a dev’s perspective: what’s really changed and how it helps building software",
+      "description": "An honest appraisal of ChatGPT 4.5’s new features and how they concretely impact your day-to-day dev workflow.",
+      "tags": [
+        "AI",
+        "ChatGPT",
+        "software-development",
+        "productivity",
+        "OpenAI"
+      ],
+      "status": "planned",
+      "angle": "Cut hype, give insights into practical use of ChatGPT 4.5 for coding and debugging.",
+      "outline": [
+        "Summary of main ChatGPT 4.5 improvements",
+        "Improved code understanding and completion",
+        "Using ChatGPT for debugging and architecture suggestions",
+        "Limitations and realistic expectations",
+        "Tips for integrating AI into developer workflow"
+      ],
+      "codeIdeas": [
+        "Prompt engineering examples for better AI code help",
+        "Before and after ChatGPT 4.5 code generation samples"
+      ],
+      "mediaIdeas": [
+        "Screenshots of ChatGPT interface with examples"
+      ]
+    },
+    {
+      "date": "2026-01-22",
+      "category": "deep-dive",
+      "slug": "testing-strategy-for-modern-nodejs-apps",
+      "title": "Testing strategy for modern Node.js apps: beyond unit tests",
+      "description": "Explore a comprehensive testing approach that includes integration, end-to-end tests, and effective mocking in Node.js projects.",
+      "tags": [
+        "Node.js",
+        "testing",
+        "jest",
+        "integration-tests",
+        "TDD"
+      ],
+      "status": "planned",
+      "angle": "Most articles stop at unit tests; this one guides you through a practical full testing strategy.",
+      "outline": [
+        "Why unit tests aren’t enough anymore",
+        "Setting up integration tests with real DB (PostgreSQL)",
+        "End-to-end testing strategies with Playwright",
+        "Mocking external APIs and Redis caches",
+        "Balancing speed and coverage"
+      ],
+      "codeIdeas": [
+        "Jest integration test example with real DB setup/teardown",
+        "Playwright simple end-to-end test",
+        "Mocking Redis in unit tests"
+      ],
+      "mediaIdeas": [
+        "Testing pyramid illustration",
+        "Example test coverage reports"
+      ]
+    },
+    {
+      "date": "2026-01-27",
+      "category": "tutorial",
+      "slug": "deploying-astro-sites-with-serverless-functions-on-vercel",
+      "title": "Deploying Astro sites with serverless functions on Vercel, step-by-step",
+      "description": "Learn how to combine Astro’s static site generation with dynamic serverless functions hosted on Vercel for modern apps.",
+      "tags": [
+        "Astro",
+        "Vercel",
+        "serverless",
+        "deployment",
+        "static-sites"
+      ],
+      "status": "planned",
+      "angle": "Shows how to keep your Astro site super fast but still add backend logic without a full server.",
+      "outline": [
+        "Why use Astro for static with serverless hybrid",
+        "Setting up Vercel project basics",
+        "Creating and deploying serverless functions",
+        "Integrating serverless APIs with Astro pages",
+        "Tips for debugging and optimizing cold starts"
+      ],
+      "codeIdeas": [
+        "Sample Astro page fetching data from serverless function",
+        "Simple serverless function example (Node.js)",
+        "Vercel config for deployment"
+      ],
+      "mediaIdeas": [
+        "Diagram of static site + serverless function interaction"
+      ]
+    },
+    {
+      "date": "2026-01-29",
+      "category": "deep-dive",
+      "slug": "building-high-throughput-event-driven-apis-with-nestjs",
+      "title": "Building high-throughput event-driven APIs with NestJS",
+      "description": "Architect scalable event-driven APIs using NestJS and message brokers—practical tips for throughput, reliability, and ease of maintenance.",
+      "tags": [
+        "NestJS",
+        "API",
+        "event-driven",
+        "microservices",
+        "architecture"
+      ],
+      "status": "planned",
+      "angle": "Teaches you how to design and implement event-driven APIs that don’t bottleneck under load, with NestJS idioms.",
+      "outline": [
+        "Basics of event-driven architecture in backend APIs",
+        "Setting up NestJS with Kafka or RabbitMQ",
+        "Best practices for message handling and retries",
+        "Error handling and observability",
+        "Scaling tips and pitfalls to avoid"
+      ],
+      "codeIdeas": [
+        "NestJS Kafka consumer/producer example",
+        "Graceful error handling in async message processing"
+      ],
+      "mediaIdeas": [
+        "Event-driven message flow diagram",
+        "Error retry lifecycle diagram"
+      ]
+    }
+  ]
+}
