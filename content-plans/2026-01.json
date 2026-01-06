@@ -9,8 +9,14 @@
       "slug": "nextjs-16-whats-new-and-who-should-upgrade-now",
       "title": "NextJS 16: What’s actually new and who should upgrade now",
       "description": "A straightforward look at NextJS 16’s new features and what they mean for your current projects. Skip hype and decide if it’s worth your time today.",
-      "tags": ["NextJS", "JavaScript", "webdev", "frameworks", "performance"],
-      "status": "planned",
+      "tags": [
+        "NextJS",
+        "JavaScript",
+        "webdev",
+        "frameworks",
+        "performance"
+      ],
+      "status": "published",
       "angle": "Cut through the marketing fog to give real advice about adopting NextJS 16 in existing projects.",
       "outline": [
         "Quick overview of what’s new in NextJS 16",
@@ -27,7 +33,10 @@
       "mediaIdeas": [
         "Before vs after performance charts",
         "Migration flow diagram"
-      ]
+      ],
+      "entrySlug": "2026-01-06-nextjs-16-whats-new-and-who-should-upgrade-now",
+      "heroImage": "https://images.unsplash.com/photo-1717996563514-e3519f9ef9f7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njc3MTk5NTh8&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageCount": 2
     },
     {
       "date": "2026-01-08",
@@ -75,7 +84,13 @@
       "slug": "building-a-scalable-redis-cache-layer-for-nodejs",
       "title": "Building a scalable Redis cache layer for Node.js",
       "description": "Step-by-step guide to implement a Redis caching layer in Node.js apps that actually improves performance and avoids common pitfalls.",
-      "tags": ["Node.js", "Redis", "caching", "performance", "tutorial"],
+      "tags": [
+        "Node.js",
+        "Redis",
+        "caching",
+        "performance",
+        "tutorial"
+      ],
       "status": "planned",
       "angle": "Avoid wasting time with naive caching. This teaches you practical setup and patterns for real production caching with Node.js.",
       "outline": [
@@ -90,7 +105,9 @@
         "Example of memoizing DB queries with Redis",
         "Cache invalidation helper function"
       ],
-      "mediaIdeas": ["Diagram of caching flow in request lifecycle"]
+      "mediaIdeas": [
+        "Diagram of caching flow in request lifecycle"
+      ]
     },
     {
       "date": "2026-01-13",
@@ -150,7 +167,9 @@
         "Use of template literal types in API response validation",
         "Mapping existing types for partial updates"
       ],
-      "mediaIdeas": ["Visual breakdown of complex type transformations"]
+      "mediaIdeas": [
+        "Visual breakdown of complex type transformations"
+      ]
     },
     {
       "date": "2026-01-20",
@@ -178,7 +197,9 @@
         "Prompt engineering examples for better AI code help",
         "Before and after ChatGPT 4.5 code generation samples"
       ],
-      "mediaIdeas": ["Screenshots of ChatGPT interface with examples"]
+      "mediaIdeas": [
+        "Screenshots of ChatGPT interface with examples"
+      ]
     },
     {
       "date": "2026-01-22",
@@ -186,7 +207,13 @@
       "slug": "testing-strategy-for-modern-nodejs-apps",
       "title": "Testing strategy for modern Node.js apps: beyond unit tests",
       "description": "Explore a comprehensive testing approach that includes integration, end-to-end tests, and effective mocking in Node.js projects.",
-      "tags": ["Node.js", "testing", "jest", "integration-tests", "TDD"],
+      "tags": [
+        "Node.js",
+        "testing",
+        "jest",
+        "integration-tests",
+        "TDD"
+      ],
       "status": "planned",
       "angle": "Most articles stop at unit tests; this one guides you through a practical full testing strategy.",
       "outline": [
@@ -212,7 +239,13 @@
       "slug": "deploying-astro-sites-with-serverless-functions-on-vercel",
       "title": "Deploying Astro sites with serverless functions on Vercel, step-by-step",
       "description": "Learn how to combine Astro’s static site generation with dynamic serverless functions hosted on Vercel for modern apps.",
-      "tags": ["Astro", "Vercel", "serverless", "deployment", "static-sites"],
+      "tags": [
+        "Astro",
+        "Vercel",
+        "serverless",
+        "deployment",
+        "static-sites"
+      ],
       "status": "planned",
       "angle": "Shows how to keep your Astro site super fast but still add backend logic without a full server.",
       "outline": [
@@ -227,7 +260,9 @@
         "Simple serverless function example (Node.js)",
         "Vercel config for deployment"
       ],
-      "mediaIdeas": ["Diagram of static site + serverless function interaction"]
+      "mediaIdeas": [
+        "Diagram of static site + serverless function interaction"
+      ]
     },
     {
       "date": "2026-01-29",
