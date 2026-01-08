@@ -52,7 +52,7 @@
         "automation",
         "developer-tools"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Give developers a comprehensive understanding of when to use agents vs skills in Claude, with real-world examples and cross-platform comparisons.",
       "outline": [
         "What are Claude agents and how they work",
@@ -76,7 +76,10 @@
         "Decision tree for choosing between agents and skills",
         "Cross-platform comparison table",
         "Agent workflow visualization"
-      ]
+      ],
+      "entrySlug": "2026-01-08-claude-agents-vs-claude-skills-complete-comparison",
+      "heroImage": "https://images.unsplash.com/photo-1607431067517-fda93b3e0aee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njc4OTI5Njd8&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageCount": 4
     },
     {
       "date": "2026-01-09",
