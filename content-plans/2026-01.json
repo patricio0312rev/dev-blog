@@ -94,7 +94,7 @@
         "performance",
         "tutorial"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Avoid wasting time with naive caching. This teaches you practical setup and patterns for real production caching with Node.js.",
       "outline": [
         "Why and when Redis caching helps Node.js apps",
@@ -110,7 +110,10 @@
       ],
       "mediaIdeas": [
         "Diagram of caching flow in request lifecycle"
-      ]
+      ],
+      "entrySlug": "2026-01-09-building-a-scalable-redis-cache-layer-for-nodejs",
+      "heroImage": "https://images.unsplash.com/photo-1564798605859-a4ab4a561b2a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njc5NzkxNDh8&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageCount": 2
     },
     {
       "date": "2026-01-13",
