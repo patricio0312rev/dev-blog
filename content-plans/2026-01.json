@@ -156,7 +156,7 @@
         "static-typing",
         "webdev"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Move beyond status quo with concrete examples improving your daily TypeScript workflow.",
       "outline": [
         "Overview of rarely used advanced types",
@@ -172,7 +172,10 @@
       ],
       "mediaIdeas": [
         "Visual breakdown of complex type transformations"
-      ]
+      ],
+      "entrySlug": "2026-01-15-typescript-advanced-types-patterns-you-probably-dont-use",
+      "heroImage": "https://images.unsplash.com/photo-1607431067517-fda93b3e0aee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njg0OTgwMzl8&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageCount": 2
     },
     {
       "date": "2026-01-20",
