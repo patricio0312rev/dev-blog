@@ -1,6 +1,6 @@
 ---
-title: "Claude Agents vs Claude Skills: A complete comparison with examples and use cases"
-description: "Deep dive into the differences between Claude agents and Claude skills, with practical examples, use cases, and how other AI platforms handle similar concepts."
+title: "Claude Code Agents vs Skills: A complete comparison with examples"
+description: "Understand the difference between Claude Code agents and skills - when to use each, how they work under the hood, and practical examples for your development workflow."
 category: "deep-dive"
 publishDate: "2026-01-08"
 tags:
@@ -11,104 +11,286 @@ tags:
   - automation
   - developer-tools
 slug: "claude-agents-vs-claude-skills-complete-comparison"
-heroImage: "https://images.unsplash.com/photo-1607431067517-fda93b3e0aee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njc4OTI5Njd8&ixlib=rb-4.1.0&q=80&w=1080"
-heroImageAlt: "text"
-heroImageAuthor: "Markus Spiske"
-heroImageAuthorUrl: "https://unsplash.com/@markusspiske"
+heroImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMjA3fDB8MXxzZWFyY2h8Mnx8YXJ0aWZpY2lhbCUyMGludGVsbGlnZW5jZXxlbnwwfHx8fDE3MDQ2NzIwMDB8MA&ixlib=rb-4.0.3&q=80&w=1080"
+heroImageAlt: "Abstract visualization of AI neural networks and connections"
+heroImageAuthor: "Google DeepMind"
+heroImageAuthorUrl: "https://unsplash.com/@googledeepmind"
 ---
 
-In the ever-evolving landscape of artificial intelligence, understanding the tools at our disposal is not just an advantage—it's a necessity. As developers, making informed decisions on whether to use Claude agents or Claude skills can significantly impact the efficiency and effectiveness of our AI-driven projects. Both offer compelling features, but their best use cases can be quite different. Let's dive deep into each, compare them, and see how they stack up against similar concepts in other AI platforms. With practical examples and real-world use cases, I aim to give you a comprehensive understanding of when and why to choose one over the other.
+If you've been using Claude Code (Anthropic's CLI tool), you've probably encountered both "agents" and "skills" in the interface. At first glance, they might seem similar - both extend what Claude can do. But they serve fundamentally different purposes, and understanding when to use each will make you significantly more effective.
 
-## What are Claude agents and how they work
+Let me break down exactly what each one does, how they differ architecturally, and when you should reach for one over the other.
 
-Claude agents are AI constructs designed to perform complex tasks or series of tasks. They can understand and execute commands, process information from various sources, and provide detailed, context-aware responses. Agents are built with a focus on autonomy, learning from interactions to improve over time.
+## What are Claude Code Agents?
 
-```ts filename="agentExample.ts"
-// Basic Claude agent implementation
-import { Agent } from 'claude';
+Agents in Claude Code are **autonomous subprocesses** that handle complex, multi-step tasks. When you invoke an agent, Claude Code spawns a separate process with its own context and a specific set of tools tailored to that agent's purpose.
 
-const myAgent = new Agent({
-    knowledgeBase: 'general',
-    personality: 'professional',
-    learningRate: 'moderate',
-});
+You interact with agents through the **Task tool**, specifying which type of agent you need:
 
-myAgent.train([
-    { input: 'Hello, how are you?', output: 'I am fine, thank you!' },
-    // More training pairs
-]);
+```ts filename="task-tool-example.ts"
+// Conceptual example of how the Task tool works
+// (This is invoked internally by Claude Code, not directly by users)
+
+Task({
+  subagent_type: "Explore",
+  prompt: "Find all files related to user authentication",
+  description: "Search auth files"
+})
 ```
 
-## What are Claude skills and their purpose
+### Available Agent Types
 
-Contrastingly, Claude skills are more specialized AI functions designed for specific tasks. Think of them as plug-and-play components that you can integrate into your applications for tasks like language translation, sentiment analysis, or image recognition. Skills are predefined and do not learn or adapt post-deployment.
+Claude Code provides several specialized agents:
 
-```ts filename="skillExample.ts"
-// Claude skill definition and usage
-import { Skill } from 'claude';
+| Agent Type | Purpose | Tools Available |
+|------------|---------|-----------------|
+| **Explore** | Fast codebase exploration | Glob, Grep, Read (no editing) |
+| **Plan** | Design implementation strategies | All read tools, no write tools |
+| **Bash** | Command execution | Bash only |
+| **general-purpose** | Complex multi-step tasks | All tools |
 
-const sentimentAnalysis = new Skill('sentiment-analysis');
+Each agent runs autonomously - it receives a task, works through it using its available tools, and returns a result. The key insight is that agents are **stateless between invocations**. Each time you spawn an agent, it starts fresh.
 
-const result = sentimentAnalysis.run('I love coding with Claude!');
-console.log(result); // { sentiment: 'positive' }
+### When Agents Get Used
+
+Claude Code uses agents automatically when appropriate. For example:
+
+- When you ask "where is error handling done in this project?", Claude might spawn an **Explore agent** to search the codebase
+- When you say "plan out how to add authentication", Claude might use a **Plan agent** to design the approach
+- When you need multiple independent tasks done in parallel, Claude can spawn multiple agents simultaneously
+
+```mermaid
+graph TD
+    A[User Request] --> B[Claude Code]
+    B --> C{Task Complexity?}
+    C -->|Simple| D[Direct Response]
+    C -->|Complex| E[Spawn Agent]
+    E --> F[Agent Works Autonomously]
+    F --> G[Returns Result]
+    G --> B
+    B --> H[Response to User]
 ```
 
-## Key differences: architecture, use cases, and implementation
+## What are Claude Code Skills?
 
-![Architecture diagram for Key differences: architecture, use cases, and implementation](https://images.unsplash.com/photo-1664526936959-84bdea9f37fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njc4OTI5Njl8&ixlib=rb-4.1.0&q=80&w=1080)
-*Image by GuerrillaBuzz on Unsplash*
+Skills are something completely different. A skill is a **markdown file containing instructions** that Claude loads and follows. Think of skills as runbooks or playbooks - they define *how* Claude should approach a specific type of task.
 
+### Skill File Structure
 
+A skill is just a markdown file with frontmatter:
 
-When comparing Claude agents and skills, several key differences emerge:
+```md filename="my-custom-skill.md"
+---
+name: code-review
+description: Use when reviewing pull requests or code changes
+---
 
-- **Architecture**: Agents are designed for continuous learning and adaptation, making them suitable for complex, evolving tasks. Skills, however, are static and focused on performing a specific function efficiently.
-- **Use Cases**: Agents are ideal for applications requiring a high degree of interaction and personalization, such as chatbots or personal assistants. Skills are better suited for straightforward tasks like data processing or analysis.
-- **Implementation**: Implementing an agent requires a more involved setup, including training and ongoing management. Skills, by contrast, are easier to deploy and use immediately with minimal configuration.
+# Code Review Process
 
-After this section, imagine a diagram comparing the two: agents with multiple, interconnected nodes representing learning and decision-making paths, and skills as single-purpose, self-contained units.
+When reviewing code, follow these steps:
 
+1. First, understand the context - read the PR description
+2. Check for breaking changes
+3. Review test coverage
+4. Look for security issues
+5. Verify coding standards
 
+## Checklist
 
-![Code editor showing AI example](https://images.unsplash.com/photo-1650600538903-ec09f670c391?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njc4OTI5NzJ8&ixlib=rb-4.1.0&q=80&w=1080)
-*Image by Andrew on Unsplash*
+- [ ] Tests pass
+- [ ] No console.logs left behind
+- [ ] Error handling is appropriate
+- [ ] Types are correct
+```
 
-## Real-world examples of agents in action
+When you invoke this skill, Claude reads the file and follows those instructions in the current conversation. The skill content becomes part of Claude's context.
 
-Imagine an e-commerce chatbot that helps users find products, make recommendations based on browsing history, and answer customer service queries. This chatbot, powered by a Claude agent, learns from each interaction to provide more personalized and accurate responses over time.
+### How Skills are Invoked
 
-## Real-world examples of skills in action
+You invoke skills using the **Skill tool** or by typing a slash command:
 
-Consider a website that offers real-time language translation for its international visitors. A Claude skill specializing in language translation can instantly convert text from one language to another, enabling seamless communication without the need for continuous learning or adaptation.
+```bash
+# Using slash command
+/code-review
 
-## When to choose agents vs skills for your project
+# Claude then loads the skill and follows its instructions
+```
 
-![Comparison for When to choose agents vs skills for your project](https://images.unsplash.com/photo-1555066931-bf19f8fd1085?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njc4OTI5NzB8&ixlib=rb-4.1.0&q=80&w=1080)
-*Image by Arnold Francisca on Unsplash*
+Skills can be:
+- **Built-in** - Shipped with Claude Code
+- **Custom** - Created by you in your project or globally
 
+### Key Characteristics of Skills
 
+1. **They're instructions, not processes** - Skills don't spawn separate processes; they add context to the current conversation
+2. **They persist in the conversation** - Once loaded, the skill's instructions guide Claude's behavior
+3. **They're composable** - Multiple skills can be active at once
+4. **They're customizable** - You can write your own skills for your team's workflows
 
-Choosing between an agent and a skill boils down to your project's specific needs:
+## Key Differences: Architecture Comparison
 
-- **Choose an agent when** you need a solution that adapts and improves over time, handles a wide range of tasks, or requires a personalized touch.
-- **Choose a skill for** tasks that are well-defined, require immediate expertise, or do not benefit from ongoing learning.
+Here's where things get interesting. Let me break down the fundamental architectural differences:
 
-After this section, picture a decision tree helping you choose between agents and skills based on factors like complexity, adaptability, and task specificity.
+```mermaid
+graph LR
+    subgraph "Agents (Task Tool)"
+        A1[Separate Process] --> A2[Own Context]
+        A2 --> A3[Limited Tool Set]
+        A3 --> A4[Returns Result]
+    end
 
-## Comparing with similar concepts in OpenAI, Gemini, and other AI platforms
+    subgraph "Skills (Skill Tool)"
+        S1[Markdown File] --> S2[Loaded into Context]
+        S2 --> S3[All Tools Available]
+        S3 --> S4[Guides Behavior]
+    end
+```
 
-| Feature/Platform | Claude Agents | Claude Skills | OpenAI | Gemini |
-|------------------|---------------|---------------|--------|--------|
-| Adaptability     | High          | Low           | Medium | High   |
-| Specialization   | Medium        | High          | High   | Medium |
-| Implementation   | Complex       | Simple        | Medium | Complex|
-| Use Case         | Broad         | Narrow        | Broad  | Broad  |
+| Aspect | Agents | Skills |
+|--------|--------|--------|
+| **What it is** | Subprocess with own context | Instructions loaded into current context |
+| **Execution** | Runs autonomously | Guides Claude's behavior |
+| **State** | Stateless between calls | Persists in conversation |
+| **Tools** | Limited set per agent type | All tools available |
+| **Best for** | Parallel tasks, isolated work | Workflows, standards, processes |
+| **Customization** | Cannot create new agent types | Can create custom skills |
 
-This table illustrates how Claude's offerings compare with similar AI constructs in other platforms, highlighting the trade-offs between adaptability, specialization, and ease of implementation.
+## When to Use Agents
 
-## Current state of support and future directions
+Use agents (via the Task tool) when:
 
-The landscape of AI is constantly changing, with new developments and improvements being made regularly. Claude agents and skills are continuously evolving, with updates aimed at expanding their capabilities, improving ease of use, and enhancing integration options with other platforms and technologies.
+1. **You need parallel execution** - Multiple independent searches or tasks
+2. **The task is self-contained** - It can be fully described upfront and doesn't need back-and-forth
+3. **You want isolation** - The subtask shouldn't affect the main conversation context
+4. **Speed matters for exploration** - The Explore agent is optimized for fast codebase searches
 
-Until next time, happy coding 👨‍💻  
-– Patricio Marroquin 💜
+**Example scenario**: You need to find all usages of a deprecated API across a large codebase while simultaneously checking the git history for when it was introduced.
+
+```
+Claude spawns two agents in parallel:
+1. Explore agent → searches for API usages
+2. Bash agent → runs git log commands
+
+Both return results independently
+```
+
+## When to Use Skills
+
+Use skills when:
+
+1. **You have a repeatable workflow** - Code reviews, commit messages, testing procedures
+2. **You want to enforce standards** - Team coding guidelines, documentation requirements
+3. **The process needs interaction** - Skills can guide multi-turn conversations
+4. **You want to customize Claude's behavior** - Project-specific conventions
+
+**Example scenario**: Your team has specific code review criteria that should be checked every time.
+
+```md filename=".claude/skills/team-review.md"
+---
+name: team-review
+description: Our team's code review checklist
+---
+
+# Review Checklist
+
+Before approving, verify:
+- [ ] Follows our naming conventions (camelCase for functions)
+- [ ] Has integration tests for new endpoints
+- [ ] Updates the changelog
+- [ ] No TODO comments without issue links
+```
+
+Now whenever someone types `/team-review`, Claude follows your team's exact process.
+
+## Creating Your Own Skills
+
+One of the most powerful aspects of skills is that you can create your own. Here's a practical example:
+
+```md filename=".claude/skills/debug-workflow.md"
+---
+name: debug
+description: Systematic debugging approach for our Node.js services
+---
+
+# Debugging Workflow
+
+When debugging an issue:
+
+## 1. Reproduce First
+- Get exact steps to reproduce
+- Note the environment (dev/staging/prod)
+- Capture any error messages verbatim
+
+## 2. Check the Usual Suspects
+- Recent deployments (last 24h)
+- Database connection issues
+- Third-party API status
+
+## 3. Isolate
+- Add logging around the suspected area
+- Check if it's data-dependent
+- Verify it's not environment-specific
+
+## 4. Fix and Verify
+- Write a test that fails before the fix
+- Implement the minimal fix
+- Verify the test passes
+- Check for regressions
+```
+
+This skill encodes your team's debugging methodology. New team members can use it to follow best practices automatically.
+
+## Practical Examples
+
+### Example 1: Codebase Exploration (Agent)
+
+When you ask Claude Code something like:
+
+> "Find all the places where we handle authentication errors"
+
+Claude might spawn an Explore agent:
+
+```
+Task(
+  subagent_type: "Explore",
+  prompt: "Search for authentication error handling...",
+  thoroughness: "medium"
+)
+```
+
+The agent searches independently and returns results.
+
+### Example 2: Enforcing PR Standards (Skill)
+
+Create a skill for your PR process:
+
+```md filename=".claude/skills/pr-prep.md"
+---
+name: pr-prep
+description: Prepare changes for a pull request
+---
+
+Before creating a PR, ensure:
+
+1. Run the test suite: `npm test`
+2. Run the linter: `npm run lint`
+3. Update types if needed: `npm run typecheck`
+4. Write a clear commit message following conventional commits
+5. Update CHANGELOG.md if this is a user-facing change
+```
+
+Now `/pr-prep` guides you through your team's PR preparation process.
+
+## Summary
+
+The distinction is simple once you see it:
+
+- **Agents** = Autonomous workers that execute tasks and return results
+- **Skills** = Instructions that guide how Claude approaches tasks
+
+Use agents when you need parallel, isolated task execution. Use skills when you want to encode workflows, standards, or processes that Claude should follow.
+
+Both are powerful in their own way, and the best Claude Code users know when to reach for each one.
+
+Until next time, happy coding!
+– Patricio Marroquin
