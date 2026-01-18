@@ -1,0 +1,154 @@
+---
+title: "TypeScript advanced types: patterns you probably don’t use but should"
+description: "Unlock power in TypeScript beyond basic types with real patterns that improve code safety and developer experience."
+category: "tutorial"
+publishDate: "2026-01-15"
+tags:
+  - TypeScript
+  - typescript-tips
+  - programming
+  - static-typing
+  - webdev
+slug: "typescript-advanced-types-patterns-you-probably-dont-use"
+heroImage: "https://images.unsplash.com/photo-1607431067517-fda93b3e0aee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njg0OTgwMzl8&ixlib=rb-4.1.0&q=80&w=1080"
+heroImageAlt: "text"
+heroImageAuthor: "Markus Spiske"
+heroImageAuthorUrl: "https://unsplash.com/@markusspiske"
+---
+
+TypeScript has become a cornerstone in modern web development, offering a robust typing system that goes beyond the capabilities of JavaScript to ensure code quality and developer productivity. However, even experienced developers might not be fully leveraging the power of TypeScript's advanced types. In this article, we'll explore some of these advanced types, demonstrating patterns that can significantly enhance your code's safety and readability. We'll dive into conditional types, template literal types, and mapped types with practical examples, particularly focusing on their application in React and backend development contexts.
+
+## Overview of Rarely Used Advanced Types
+
+TypeScript's type system is incredibly rich, allowing developers to describe the shape and behavior of objects and functions in great detail. Beyond the commonly used `interface` and `type` aliases, TypeScript offers advanced types like conditional types, template literal types, and mapped types. These advanced types offer more flexibility and power, enabling you to write more precise type definitions and transformations.
+
+## Conditional Types for Smarter APIs
+
+Conditional types in TypeScript allow you to create types that depend on conditions. A common use case is discriminated unions, where the type depends on a key or value.
+
+### Discriminated Unions Example
+
+```ts filename="conditional-type-example.ts"
+type LoadingState = {
+  state: 'loading';
+};
+
+type SuccessState<T> = {
+  state: 'success';
+  data: T;
+};
+
+type ErrorState = {
+  state: 'error';
+  error: Error;
+};
+
+type ResponseState<T> = LoadingState | SuccessState<T> | ErrorState;
+
+function handleResponse<T>(response: ResponseState<T>) {
+  switch (response.state) {
+    case 'loading':
+      console.log('Loading...');
+      break;
+    case 'success':
+      console.log('Data:', response.data);
+      break;
+    case 'error':
+      console.error('Error:', response.error);
+      break;
+  }
+}
+```
+
+This snippet demonstrates how conditional types, combined with discriminated unions, can make function APIs smarter and safer. By inspecting the `state` property, TypeScript can narrow down the type of `response` in each case block, ensuring that you only access properties that exist on the respective type.
+
+## Template Literal Types to Enforce Format Constraints
+
+Template literal types allow you to define types using string template literals, enabling you to enforce specific format constraints in your types.
+
+#
+
+![Code editor showing TypeScript example](https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njg0OTgwNDF8&ixlib=rb-4.1.0&q=80&w=1080)
+*Image by Markus Spiske on Unsplash*
+
+## API Response Validation Example
+
+```ts filename="template-literal-types-example.ts"
+type UserID = `${string}-${number}`;
+
+function fetchUser(id: UserID) {
+  // Imagine we're fetching a user based on the ID
+  console.log(`Fetching user with ID: ${id}`);
+}
+
+// Valid usage
+fetchUser("user-123");
+
+// TypeScript error for invalid format
+fetchUser("123"); // This line would cause a TypeScript error
+```
+
+This example showcases how template literal types can be used to enforce specific string patterns, significantly reducing the risk of runtime errors by catching mismatches at compile time.
+
+## Mapped Types for Reusable Modification
+
+Mapped types allow you to take an existing type and transform each of its properties. This is particularly useful for creating types that are variations of existing ones, such as readonly versions or partials.
+
+### Mapping Existing Types for Partial Updates
+
+```ts filename="mapped-types-example.ts"
+type User = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+type PartialUser = {
+  [P in keyof User]?: User[P];
+};
+
+function updateUser(id: string, updates: PartialUser) {
+  // Imagine we're updating a user with partial information
+  console.log(`Updating user ${id} with`, updates);
+}
+
+updateUser("user-123", { name: "New Name" }); // This is now safely typed
+```
+
+This code snippet illustrates how mapped types can be employed to create a `PartialUser` type, enabling functions like `updateUser` to accept partial updates safely, improving the flexibility of your functions without sacrificing type safety.
+
+## Practical Examples in React and Backend Contexts
+
+Let's see how these advanced TypeScript types can be applied in real-world scenarios, enhancing both frontend and backend development.
+
+### React Example: Conditional Types for Component Props
+
+In a React application, conditional types can be used to ensure that a component's props match certain conditions, enhancing component reusability and safety.
+
+```tsx filename="conditional-props-example.tsx"
+type BaseProps = {
+  onClick: () => void;
+};
+
+type ConditionalProps = BaseProps & ( { variant: 'primary' } | { variant: 'secondary'; disabled: boolean } );
+
+function Button({ variant, onClick, disabled }: ConditionalProps) {
+  return <button onClick={onClick} disabled={variant === 'secondary' ? disabled : undefined}>{variant}</button>;
+}
+```
+
+### Backend Example: Template Literal Types for Route Parameters
+
+In Node.js or any backend framework that supports TypeScript, template literal types can be used to ensure route parameters follow a specific format.
+
+```ts filename="route-params-example.ts"
+type UserRoute = `/user/${string}`;
+
+const getUser: UserRoute = "/user/john_doe"; // Correctly typed
+const getAdmin: UserRoute = "/admin/jane_doe"; // TypeScript error
+```
+
+These examples demonstrate how advanced TypeScript types can be leveraged to write more precise and safer code, both in the frontend with React and in backend applications.
+
+Until next time, happy coding 👨‍💻  
+– Patricio Marroquin 💜
