@@ -6,6 +6,7 @@ import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import pagefind from "astro-pagefind";
 import remarkMermaidPre from "./src/utils/remark-mermaid-pre.mjs";
+import remarkImageFigure from "./src/utils/remark-image-figure.mjs";
 
 export default defineConfig({
   site: "https://patriciomarroquin.dev",
@@ -46,7 +47,7 @@ export default defineConfig({
     },
   },
   markdown: {
-    remarkPlugins: [remarkMermaidPre],
+    remarkPlugins: [remarkImageFigure, remarkMermaidPre],
     rehypePlugins: [],
     shikiConfig: {
       themes: {
