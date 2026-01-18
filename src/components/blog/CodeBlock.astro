@@ -17,6 +17,9 @@ const {
   ...rest
 } = Astro.props as Props;
 
+// Skip mermaid blocks - they have their own wrapper
+const isMermaid = typeof className === "string" && className.includes("mermaid");
+
 // 1) Determine language: prefer data-language, else parse from className
 let language = dataLang;
 
@@ -49,66 +52,71 @@ if (!fileName) {
 }
 ---
 
-<div
-  class="my-5 rounded-xl border border-zinc-200/80 bg-zinc-900 text-xs text-zinc-100 shadow-sm ring-1 ring-zinc-900/60 dark:border-zinc-800 dark:bg-zinc-950"
-  data-code-wrapper
->
-  <!-- Header -->
+{isMermaid ? (
+  <!-- Mermaid blocks: pass through without wrapper -->
+  <pre {...rest} class={className}><slot /></pre>
+) : (
   <div
-    class="flex items-center justify-between gap-2 border-b border-zinc-800 px-4 py-2"
+    class="my-5 rounded-xl border border-zinc-200/80 bg-zinc-900 text-xs text-zinc-100 shadow-sm ring-1 ring-zinc-900/60 dark:border-zinc-800 dark:bg-zinc-950"
+    data-code-wrapper
   >
-    <div class="flex items-center gap-1">
-      <span class="h-2 w-2 rounded-full bg-red-500"></span>
-      <span class="h-2 w-2 rounded-full bg-amber-400"></span>
-      <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-      <span class="ml-3 truncate text-[11px] text-zinc-500" data-code-filename>
-        {fileName}
-      </span>
-    </div>
+    <!-- Header -->
+    <div
+      class="flex items-center justify-between gap-2 border-b border-zinc-800 px-4 py-2"
+    >
+      <div class="flex items-center gap-1">
+        <span class="h-2 w-2 rounded-full bg-red-500"></span>
+        <span class="h-2 w-2 rounded-full bg-amber-400"></span>
+        <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+        <span class="ml-3 truncate text-[11px] text-zinc-500" data-code-filename>
+          {fileName}
+        </span>
+      </div>
 
-    <div class="flex items-center gap-2">
-      {
-        language && (
-          <span class="text-[11px] uppercase tracking-wide text-zinc-400">
-            {language}
-          </span>
-        )
-      }
+      <div class="flex items-center gap-2">
+        {
+          language && (
+            <span class="text-[11px] uppercase tracking-wide text-zinc-400">
+              {language}
+            </span>
+          )
+        }
 
-      <button
-        type="button"
-        class="inline-flex items-center gap-1 rounded-full border border-zinc-700 bg-zinc-900/80 px-2.5 py-0.5 text-[11px] font-medium text-zinc-300 transition-colors duration-150 hover:border-sky-500 hover:text-sky-300 dark:bg-zinc-950"
-        data-code-copy
-      >
-        <svg
-          class="h-3 w-3"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+        <button
+          type="button"
+          class="inline-flex items-center gap-1 rounded-full border border-zinc-700 bg-zinc-900/80 px-2.5 py-0.5 text-[11px] font-medium text-zinc-300 transition-colors duration-150 hover:border-sky-500 hover:text-sky-300 dark:bg-zinc-950"
+          data-code-copy
         >
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
-          ></path>
-        </svg>
-        <span data-code-copy-label>Copy</span>
-      </button>
+          <svg
+            class="h-3 w-3"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+            ></path>
+          </svg>
+          <span data-code-copy-label>Copy</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Code content -->
+    <div class="overflow-x-auto px-4 py-3">
+      <!-- NOTE: inline <slot /> inside <pre> to avoid extra newline -->
+      <pre
+        {...rest}
+        class={`astro-code-block ${className || ""}`}
+        tabindex="0"
+        data-code-block><slot /></pre>
     </div>
   </div>
-
-  <!-- Code content -->
-  <div class="overflow-x-auto px-4 py-3">
-    <!-- NOTE: inline <slot /> inside <pre> to avoid extra newline -->
-    <pre
-      {...rest}
-      class={`astro-code-block ${className || ""}`}
-      tabindex="0"
-      data-code-block><slot /></pre>
-  </div>
-</div>
+)}
 
 <script is:inline>
   if (!window.__patricioCodeCopySetup) {
