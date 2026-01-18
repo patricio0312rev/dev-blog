@@ -6,6 +6,7 @@ import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import pagefind from "astro-pagefind";
 import rehypeMermaid from "rehype-mermaid";
+import remarkMermaidPre from "./src/utils/remark-mermaid-pre.mjs";
 
 export default defineConfig({
   site: "https://patriciomarroquin.dev",
@@ -46,6 +47,7 @@ export default defineConfig({
     },
   },
   markdown: {
+    remarkPlugins: [remarkMermaidPre],
     rehypePlugins: [
       [rehypeMermaid, { strategy: "inline-svg" }],
     ],
