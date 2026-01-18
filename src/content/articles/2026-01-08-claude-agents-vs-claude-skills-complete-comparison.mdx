@@ -59,7 +59,7 @@ Claude Code uses agents automatically when appropriate. For example:
 - When you say "plan out how to add authentication", Claude might use a **Plan agent** to design the approach
 - When you need multiple independent tasks done in parallel, Claude can spawn multiple agents simultaneously
 
-```mermaid
+```mermaid title="Agent Task Flow"
 graph TD
     A[User Request] --> B[Claude Code]
     B --> C{Task Complexity?}
@@ -131,7 +131,7 @@ Skills can be:
 
 Here's where things get interesting. Let me break down the fundamental architectural differences:
 
-```mermaid
+```mermaid title="Agents vs Skills Architecture"
 graph LR
     subgraph "Agents (Task Tool)"
         A1[Separate Process] --> A2[Own Context]
