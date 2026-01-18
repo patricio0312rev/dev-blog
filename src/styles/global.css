@@ -274,22 +274,29 @@ pre code {
   color: #e4e4e7 !important;
 }
 
-/* Edge label backgrounds */
+/* Edge label backgrounds - remove all backgrounds for transparency */
 [data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel .label-container,
-[data-theme="dark"] .mermaid-wrapper-content svg .labelBkg {
-  background-color: #27272a !important; /* zinc-800 */
-  fill: #27272a !important;
+[data-theme="dark"] .mermaid-wrapper-content svg .labelBkg,
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel rect {
+  fill: transparent !important;
+  background-color: transparent !important;
 }
 
 [data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel foreignObject {
   overflow: visible;
 }
 
-[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel foreignObject div {
-  background-color: #27272a !important; /* zinc-800 */
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel foreignObject div,
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel foreignObject span,
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel foreignObject p {
+  background-color: transparent !important;
+  background: transparent !important;
   color: #e4e4e7 !important; /* zinc-200 */
-  border-radius: 4px;
-  padding: 2px 6px;
+}
+
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel text,
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel tspan {
+  fill: #e4e4e7 !important; /* zinc-200 */
 }
 
 [data-theme="dark"] .mermaid-wrapper-content svg .node rect,
