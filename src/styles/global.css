@@ -234,3 +234,54 @@ pre code {
     @apply my-6;
   }
 }
+
+/* Mermaid diagram styling */
+.prose pre.mermaid {
+  @apply my-6 flex items-center justify-center rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900;
+}
+
+.prose pre.mermaid svg {
+  @apply max-w-full h-auto;
+}
+
+/* Dark mode: invert colors for better visibility */
+[data-theme="dark"] .prose pre.mermaid svg {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+[data-theme="dark"] .prose pre.mermaid svg .node rect,
+[data-theme="dark"] .prose pre.mermaid svg .node circle,
+[data-theme="dark"] .prose pre.mermaid svg .node ellipse,
+[data-theme="dark"] .prose pre.mermaid svg .node polygon {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Alternative: Custom mermaid wrapper with header */
+.mermaid-wrapper {
+  @apply my-6 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900;
+}
+
+.mermaid-wrapper-header {
+  @apply flex items-center gap-2 border-b border-zinc-200 bg-zinc-50 px-4 py-2 dark:border-zinc-800 dark:bg-zinc-800/50;
+}
+
+.mermaid-wrapper-header svg {
+  @apply h-4 w-4 text-zinc-500 dark:text-zinc-400;
+}
+
+.mermaid-wrapper-header span {
+  @apply text-xs font-medium text-zinc-600 dark:text-zinc-300;
+}
+
+.mermaid-wrapper-content {
+  @apply flex items-center justify-center p-6;
+}
+
+.mermaid-wrapper-content svg {
+  @apply max-w-full h-auto;
+}
+
+/* Dark mode diagram inversion */
+[data-theme="dark"] .mermaid-wrapper-content svg {
+  filter: invert(1) hue-rotate(180deg);
+}
