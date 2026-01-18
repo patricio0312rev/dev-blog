@@ -128,7 +128,7 @@
         "system design",
         "bestpractices"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Help devs escape the hype cycle and pick architectures that match real team and product needs today.",
       "outline": [
         "The state of monoliths and microservices in 2026",
@@ -144,7 +144,10 @@
       "mediaIdeas": [
         "Architecture comparison diagram",
         "Flowchart for decision making between monolith & microservices"
-      ]
+      ],
+      "entrySlug": "2026-01-13-rethinking-monoliths-vs-microservices-in-2026",
+      "heroImage": "https://images.unsplash.com/photo-1564798605859-a4ab4a561b2a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjgzMjQ5MjN8&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageCount": 1
     },
     {
       "date": "2026-01-15",
