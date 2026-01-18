@@ -267,9 +267,29 @@ pre code {
 [data-theme="dark"] .mermaid-wrapper-content svg text,
 [data-theme="dark"] .mermaid-wrapper-content svg .nodeLabel,
 [data-theme="dark"] .mermaid-wrapper-content svg .label,
-[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel {
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel,
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel span,
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel p {
   fill: #e4e4e7 !important; /* zinc-200 */
   color: #e4e4e7 !important;
+}
+
+/* Edge label backgrounds */
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel .label-container,
+[data-theme="dark"] .mermaid-wrapper-content svg .labelBkg {
+  background-color: #27272a !important; /* zinc-800 */
+  fill: #27272a !important;
+}
+
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel foreignObject {
+  overflow: visible;
+}
+
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel foreignObject div {
+  background-color: #27272a !important; /* zinc-800 */
+  color: #e4e4e7 !important; /* zinc-200 */
+  border-radius: 4px;
+  padding: 2px 6px;
 }
 
 [data-theme="dark"] .mermaid-wrapper-content svg .node rect,
@@ -287,6 +307,7 @@ pre code {
 }
 
 [data-theme="dark"] .mermaid-wrapper-content svg .marker,
+[data-theme="dark"] .mermaid-wrapper-content svg marker path,
 [data-theme="dark"] .mermaid-wrapper-content svg .arrowheadPath {
   fill: #a1a1aa !important; /* zinc-400 */
   stroke: #a1a1aa !important;
@@ -297,14 +318,18 @@ pre code {
   stroke: #52525b !important; /* zinc-600 */
 }
 
-[data-theme="dark"] .mermaid-wrapper-content svg .cluster text {
+[data-theme="dark"] .mermaid-wrapper-content svg .cluster text,
+[data-theme="dark"] .mermaid-wrapper-content svg .cluster span {
   fill: #d4d4d8 !important; /* zinc-300 */
+  color: #d4d4d8 !important;
 }
 
 /* Subgraph/cluster labels */
 [data-theme="dark"] .mermaid-wrapper-content svg .cluster-label,
-[data-theme="dark"] .mermaid-wrapper-content svg .cluster-label text {
+[data-theme="dark"] .mermaid-wrapper-content svg .cluster-label text,
+[data-theme="dark"] .mermaid-wrapper-content svg .cluster-label span {
   fill: #d4d4d8 !important;
+  color: #d4d4d8 !important;
 }
 
 /* Decision diamond special styling */
