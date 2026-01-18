@@ -23,7 +23,22 @@ export default defineConfig({
     pagefind(),
   ],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      // Provide pagefind stub during dev (real files only exist after build)
+      {
+        name: "pagefind-dev-stub",
+        apply: "serve",
+        resolveId(id) {
+          if (id === "/pagefind/pagefind.js") {
+            return this.resolve("./src/utils/pagefind-stub.js");
+          }
+        },
+      },
+    ],
+    optimizeDeps: {
+      exclude: ["pagefind"],
+    },
     build: {
       rollupOptions: {
         external: [/^\/pagefind\//],
