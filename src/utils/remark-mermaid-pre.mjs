@@ -38,7 +38,7 @@ export default function remarkMermaidPre() {
         const meta = node.meta || "";
 
         // Extract title from meta or mermaid frontmatter
-        const title = extractTitle(meta, value) || "Diagram";
+        const title = extractTitle(meta, value);
 
         // Wrap in a styled container similar to code blocks
         parent.children[index] = {
@@ -49,7 +49,7 @@ export default function remarkMermaidPre() {
       <path d="M3 3v18h18"/>
       <path d="m19 9-5 5-4-4-3 3"/>
     </svg>
-    <span>${title}</span>
+    <span>${title ? `Diagram: ${title}` : "Diagram"}</span>
   </div>
   <div class="mermaid-wrapper-content">
     <pre class="mermaid">${value}</pre>
