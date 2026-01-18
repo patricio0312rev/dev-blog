@@ -236,36 +236,15 @@ pre code {
 }
 
 /* Mermaid diagram styling */
-.prose pre.mermaid {
-  @apply my-6 flex items-center justify-center rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900;
-}
-
-.prose pre.mermaid svg {
-  @apply max-w-full h-auto;
-}
-
-/* Dark mode: invert colors for better visibility */
-[data-theme="dark"] .prose pre.mermaid svg {
-  filter: invert(1) hue-rotate(180deg);
-}
-
-[data-theme="dark"] .prose pre.mermaid svg .node rect,
-[data-theme="dark"] .prose pre.mermaid svg .node circle,
-[data-theme="dark"] .prose pre.mermaid svg .node ellipse,
-[data-theme="dark"] .prose pre.mermaid svg .node polygon {
-  filter: invert(1) hue-rotate(180deg);
-}
-
-/* Alternative: Custom mermaid wrapper with header */
 .mermaid-wrapper {
-  @apply my-6 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900;
+  @apply my-6 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-950;
 }
 
 .mermaid-wrapper-header {
-  @apply flex items-center gap-2 border-b border-zinc-200 bg-zinc-50 px-4 py-2 dark:border-zinc-800 dark:bg-zinc-800/50;
+  @apply flex items-center gap-2 border-b border-zinc-200 bg-zinc-50 px-4 py-2 dark:border-zinc-800 dark:bg-zinc-900;
 }
 
-.mermaid-wrapper-header svg {
+.mermaid-wrapper-header > svg {
   @apply h-4 w-4 text-zinc-500 dark:text-zinc-400;
 }
 
@@ -274,14 +253,63 @@ pre code {
 }
 
 .mermaid-wrapper-content {
-  @apply flex items-center justify-center p-6;
+  @apply flex items-center justify-center overflow-x-auto p-6;
 }
 
-.mermaid-wrapper-content svg {
+.mermaid-wrapper-content svg.flowchart,
+.mermaid-wrapper-content svg.stateDiagram,
+.mermaid-wrapper-content svg.sequence,
+.mermaid-wrapper-content svg[id^="mermaid"] {
   @apply max-w-full h-auto;
 }
 
-/* Dark mode diagram inversion */
-[data-theme="dark"] .mermaid-wrapper-content svg {
-  filter: invert(1) hue-rotate(180deg);
+/* Dark mode: override Mermaid's inline styles */
+[data-theme="dark"] .mermaid-wrapper-content svg text,
+[data-theme="dark"] .mermaid-wrapper-content svg .nodeLabel,
+[data-theme="dark"] .mermaid-wrapper-content svg .label,
+[data-theme="dark"] .mermaid-wrapper-content svg .edgeLabel {
+  fill: #e4e4e7 !important; /* zinc-200 */
+  color: #e4e4e7 !important;
+}
+
+[data-theme="dark"] .mermaid-wrapper-content svg .node rect,
+[data-theme="dark"] .mermaid-wrapper-content svg .node circle,
+[data-theme="dark"] .mermaid-wrapper-content svg .node ellipse,
+[data-theme="dark"] .mermaid-wrapper-content svg .node polygon,
+[data-theme="dark"] .mermaid-wrapper-content svg .node path {
+  fill: #3f3f46 !important; /* zinc-700 */
+  stroke: #71717a !important; /* zinc-500 */
+}
+
+[data-theme="dark"] .mermaid-wrapper-content svg .edgePath path,
+[data-theme="dark"] .mermaid-wrapper-content svg .flowchart-link {
+  stroke: #a1a1aa !important; /* zinc-400 */
+}
+
+[data-theme="dark"] .mermaid-wrapper-content svg .marker,
+[data-theme="dark"] .mermaid-wrapper-content svg .arrowheadPath {
+  fill: #a1a1aa !important; /* zinc-400 */
+  stroke: #a1a1aa !important;
+}
+
+[data-theme="dark"] .mermaid-wrapper-content svg .cluster rect {
+  fill: #27272a !important; /* zinc-800 */
+  stroke: #52525b !important; /* zinc-600 */
+}
+
+[data-theme="dark"] .mermaid-wrapper-content svg .cluster text {
+  fill: #d4d4d8 !important; /* zinc-300 */
+}
+
+/* Subgraph/cluster labels */
+[data-theme="dark"] .mermaid-wrapper-content svg .cluster-label,
+[data-theme="dark"] .mermaid-wrapper-content svg .cluster-label text {
+  fill: #d4d4d8 !important;
+}
+
+/* Decision diamond special styling */
+[data-theme="dark"] .mermaid-wrapper-content svg .node.decision polygon,
+[data-theme="dark"] .mermaid-wrapper-content svg .node polygon[style*="diamond"] {
+  fill: #3f3f46 !important;
+  stroke: #a855f7 !important; /* purple accent for decisions */
 }
