@@ -256,6 +256,25 @@ pre code {
   @apply flex items-center justify-center overflow-x-auto p-6;
 }
 
+/* Hide raw mermaid code, show only rendered SVG */
+.mermaid-wrapper-content pre.mermaid {
+  @apply hidden;
+}
+
+.mermaid-wrapper-content pre.mermaid[data-processed="true"] {
+  @apply block;
+}
+
+/* Loading state */
+.mermaid-wrapper-content:not(:has(svg)):not(:has([data-processed])) {
+  @apply min-h-[100px];
+}
+
+.mermaid-wrapper-content:not(:has(svg)):not(:has([data-processed]))::before {
+  content: "Loading diagram...";
+  @apply text-sm text-zinc-400 dark:text-zinc-500;
+}
+
 .mermaid-wrapper-content svg.flowchart,
 .mermaid-wrapper-content svg.stateDiagram,
 .mermaid-wrapper-content svg.sequence,
