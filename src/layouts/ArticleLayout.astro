@@ -551,6 +551,14 @@ const isUnsplashImage =
     </script>
 
     <!-- Mermaid client-side rendering -->
+    <style>
+      /* Hide raw mermaid code until rendered */
+      pre.mermaid:not([data-processed="true"]) {
+        visibility: hidden;
+        height: 0;
+        overflow: hidden;
+      }
+    </style>
     <script is:inline>
       async function initMermaid() {
         const mermaidElements = document.querySelectorAll("pre.mermaid");
