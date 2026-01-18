@@ -5,6 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import pagefind from "astro-pagefind";
+import rehypeMermaid from "rehype-mermaid";
 
 export default defineConfig({
   site: "https://patriciomarroquin.dev",
@@ -30,6 +31,9 @@ export default defineConfig({
     },
   },
   markdown: {
+    rehypePlugins: [
+      [rehypeMermaid, { strategy: "inline-svg" }],
+    ],
     shikiConfig: {
       themes: {
         light: "github-dark",
