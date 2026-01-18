@@ -556,6 +556,16 @@ const isUnsplashImage =
         const mermaidElements = document.querySelectorAll("pre.mermaid");
         if (mermaidElements.length === 0) return;
 
+        // Decode HTML entities in mermaid content before rendering
+        mermaidElements.forEach((el) => {
+          if (!el.dataset.decoded) {
+            const textarea = document.createElement("textarea");
+            textarea.innerHTML = el.innerHTML;
+            el.textContent = textarea.value;
+            el.dataset.decoded = "true";
+          }
+        });
+
         // Load Mermaid.js from CDN if not already loaded
         if (!window.mermaid) {
           const script = document.createElement("script");
