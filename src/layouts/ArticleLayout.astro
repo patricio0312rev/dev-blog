@@ -561,15 +561,15 @@ const isUnsplashImage =
     </style>
     <script is:inline>
       async function initMermaid() {
-        const mermaidElements = document.querySelectorAll("pre.mermaid");
+        const mermaidElements = document.querySelectorAll("pre.mermaid[data-mermaid-src]");
         if (mermaidElements.length === 0) return;
 
-        // Decode HTML entities in mermaid content before rendering
+        // Decode base64 mermaid content
         mermaidElements.forEach((el) => {
           if (!el.dataset.decoded) {
-            const textarea = document.createElement("textarea");
-            textarea.innerHTML = el.innerHTML;
-            el.textContent = textarea.value;
+            const encoded = el.dataset.mermaidSrc;
+            const decoded = atob(encoded);
+            el.textContent = decoded;
             el.dataset.decoded = "true";
           }
         });

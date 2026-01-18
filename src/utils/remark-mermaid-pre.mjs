@@ -40,6 +40,9 @@ export default function remarkMermaidPre() {
         // Extract title from meta or mermaid frontmatter
         const title = extractTitle(meta, value);
 
+        // Base64 encode the mermaid code to prevent HTML escaping
+        const encoded = Buffer.from(value).toString("base64");
+
         // Wrap in a styled container similar to code blocks
         parent.children[index] = {
           type: "html",
@@ -52,7 +55,7 @@ export default function remarkMermaidPre() {
     <span>${title ? `Diagram: ${title}` : "Diagram"}</span>
   </div>
   <div class="mermaid-wrapper-content">
-    <pre class="mermaid">${value}</pre>
+    <pre class="mermaid" data-mermaid-src="${encoded}"></pre>
   </div>
 </div>`,
         };
