@@ -18,10 +18,12 @@ async function fetchUnsplashImage(query) {
   }
 
   try {
-    const url = new URL("https://api.unsplash.com/photos/random");
+    // Use search endpoint for more relevant results
+    const url = new URL("https://api.unsplash.com/search/photos");
     url.searchParams.set("query", query);
     url.searchParams.set("orientation", "landscape");
     url.searchParams.set("content_filter", "high");
+    url.searchParams.set("per_page", "10");
     url.searchParams.set("client_id", accessKey);
 
     const response = await fetch(url.toString());
@@ -33,10 +35,19 @@ async function fetchUnsplashImage(query) {
 
     const data = await response.json();
 
+    if (!data.results || data.results.length === 0) {
+      console.error(`   No images found for query: ${query}`);
+      return null;
+    }
+
+    // Pick a random image from top 5 results for variety
+    const topResults = data.results.slice(0, 5);
+    const photo = topResults[Math.floor(Math.random() * topResults.length)];
+
     // Trigger download tracking (required by Unsplash API guidelines)
-    if (data.links?.download_location) {
+    if (photo.links?.download_location) {
       try {
-        await fetch(data.links.download_location, {
+        await fetch(photo.links.download_location, {
           headers: { Authorization: `Client-ID ${accessKey}` },
         });
       } catch (err) {
@@ -45,10 +56,10 @@ async function fetchUnsplashImage(query) {
     }
 
     return {
-      url: data.urls.regular,
-      alt: data.alt_description || data.description || query,
-      author: data.user.name,
-      authorUrl: data.user.links.html,
+      url: photo.urls.regular,
+      alt: photo.alt_description || photo.description || query,
+      author: photo.user.name,
+      authorUrl: photo.user.links.html,
     };
   } catch (error) {
     console.error("   Failed to fetch from Unsplash:", error.message);

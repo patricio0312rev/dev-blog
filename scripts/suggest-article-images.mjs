@@ -93,81 +93,59 @@ export function analyzeArticleForImages(articleData) {
 }
 
 function generateImprovedHeroQuery(title, category, tags) {
-  // Extract meaningful keywords from title (remove stop words and common phrases)
-  const stopWords = [
-    "a", "an", "the", "is", "are", "was", "were", "be", "been", "being",
-    "have", "has", "had", "do", "does", "did", "will", "would", "could",
-    "should", "may", "might", "must", "shall", "can", "need", "dare",
-    "ought", "used", "to", "of", "in", "for", "on", "with", "at", "by",
-    "from", "as", "into", "through", "during", "before", "after", "above",
-    "below", "between", "under", "again", "further", "then", "once", "here",
-    "there", "when", "where", "why", "how", "all", "each", "few", "more",
-    "most", "other", "some", "such", "no", "nor", "not", "only", "own",
-    "same", "so", "than", "too", "very", "just", "and", "but", "if", "or",
-    "because", "until", "while", "although", "though", "after", "before",
-    "what", "which", "who", "whom", "this", "that", "these", "those", "am",
-    "your", "you", "i", "my", "we", "our", "they", "their", "it", "its",
-    "whats", "what's", "dont", "don't", "wont", "won't", "cant", "can't",
-    "vs", "versus", "complete", "comparison", "guide", "tutorial", "now",
-    "actually", "really", "new", "biggest", "best", "worst", "top"
-  ];
-
-  // Extract keywords from title
-  const titleWords = title.toLowerCase()
-    .replace(/[^a-z0-9\s.-]/g, " ")
-    .split(/\s+/)
-    .filter(word => word.length > 2 && !stopWords.includes(word));
-
-  // Identify the core subject (first 2-3 meaningful words)
-  const coreSubject = titleWords.slice(0, 3).join(" ");
-
-  // Category-specific visual styles (focused on abstract/relevant imagery)
-  const categoryVisuals = {
-    trending: "abstract technology digital innovation",
-    tutorial: "workspace developer tools hands-on",
-    "deep-dive": "abstract architecture patterns technical",
-  };
-
-  // Topic-specific visual mappings for better relevance
-  const topicVisuals = {
-    "ai": "artificial intelligence neural network abstract",
-    "claude": "artificial intelligence chat assistant technology",
-    "machine learning": "neural network data visualization abstract",
-    "react": "component interface user experience design",
-    "nodejs": "server backend infrastructure network",
-    "node.js": "server backend infrastructure network",
-    "typescript": "code syntax structured programming",
-    "testing": "quality assurance checklist verification",
-    "api": "connection integration network endpoints",
-    "database": "data storage structured information",
-    "redis": "cache memory data speed performance",
-    "docker": "container deployment infrastructure",
-    "kubernetes": "orchestration cloud infrastructure",
-    "nextjs": "web application framework interface",
-    "next.js": "web application framework interface",
-    "astro": "web static site performance",
-    "microservices": "distributed architecture network services",
-    "monolith": "unified architecture system design",
-    "performance": "speed optimization metrics dashboard",
-    "security": "protection shield encryption safety",
-    "debugging": "problem solving investigation analysis",
-    "memory": "optimization performance system resources",
-  };
-
-  // Find matching topic visual
-  let topicVisual = "";
   const lowerTitle = title.toLowerCase();
-  for (const [topic, visual] of Object.entries(topicVisuals)) {
+
+  // Simple, focused queries that work well with Unsplash
+  // Priority: specific tech topic > primary tag > category fallback
+  const topicQueries = {
+    "react": "react javascript code",
+    "next.js": "web development code",
+    "nextjs": "web development code",
+    "node.js": "nodejs server code",
+    "nodejs": "nodejs server code",
+    "typescript": "typescript code programming",
+    "javascript": "javascript code programming",
+    "ai": "artificial intelligence technology",
+    "claude": "artificial intelligence robot",
+    "machine learning": "machine learning data",
+    "testing": "software testing quality",
+    "api": "api programming code",
+    "database": "database technology",
+    "redis": "database server technology",
+    "docker": "containers cloud technology",
+    "kubernetes": "cloud infrastructure",
+    "microservices": "cloud architecture",
+    "monolith": "software architecture",
+    "performance": "performance optimization",
+    "security": "cybersecurity technology",
+    "debugging": "debugging code programming",
+    "memory": "computer memory technology",
+    "astro": "web development code",
+    "front-end": "frontend development ui",
+    "backend": "backend server code",
+  };
+
+  // Check title and tags for matching topics
+  for (const [topic, query] of Object.entries(topicQueries)) {
     if (lowerTitle.includes(topic) || tags.some(t => t.toLowerCase().includes(topic))) {
-      topicVisual = visual;
-      break;
+      return query;
     }
   }
 
-  // Build query: core subject + topic visual OR category visual
-  const visual = topicVisual || categoryVisuals[category] || "software development abstract";
+  // Fallback based on primary tag
+  const primaryTag = tags[0]?.toLowerCase();
+  if (primaryTag && topicQueries[primaryTag]) {
+    return topicQueries[primaryTag];
+  }
 
-  return `${coreSubject} ${visual}`.trim();
+  // Category fallbacks
+  const categoryQueries = {
+    trending: "technology innovation",
+    tutorial: "coding programming laptop",
+    "deep-dive": "technology abstract",
+  };
+
+  return categoryQueries[category] || "software development code";
 }
 
 function generateTechQuery(tags, section, fallback) {
