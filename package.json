@@ -40,6 +40,7 @@
     "astro-pagefind": "^1.8.5",
     "dotenv": "^17.2.3",
     "pagefind": "^1.4.0",
+    "playwright": "^1.57.0",
     "tailwindcss": "^4.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
