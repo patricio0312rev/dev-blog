@@ -196,7 +196,7 @@
         "productivity",
         "OpenAI"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Cut hype, give insights into practical use of ChatGPT 4.5 for coding and debugging.",
       "outline": [
         "Summary of main ChatGPT 4.5 improvements",
@@ -211,7 +211,10 @@
       ],
       "mediaIdeas": [
         "Screenshots of ChatGPT interface with examples"
-      ]
+      ],
+      "entrySlug": "2026-01-20-chatgpt-4-5-devs-perspective-whats-really-changed",
+      "heroImage": "https://images.unsplash.com/photo-1696258688634-281b377c97c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njg5Mjk4NzN8&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageCount": 3
     },
     {
       "date": "2026-01-22",
