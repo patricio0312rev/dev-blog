@@ -229,7 +229,7 @@
         "integration-tests",
         "TDD"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Most articles stop at unit tests; this one guides you through a practical full testing strategy.",
       "outline": [
         "Why unit tests aren’t enough anymore",
@@ -246,7 +246,10 @@
       "mediaIdeas": [
         "Testing pyramid illustration",
         "Example test coverage reports"
-      ]
+      ],
+      "entrySlug": "2026-01-22-testing-strategy-for-modern-nodejs-apps",
+      "heroImage": "https://images.unsplash.com/photo-1704556197883-11345de0c745?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkxMDI2NDd8&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageCount": 2
     },
     {
       "date": "2026-01-27",
