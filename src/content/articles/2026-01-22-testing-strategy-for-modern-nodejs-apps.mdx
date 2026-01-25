@@ -1,0 +1,113 @@
+---
+title: "Testing strategy for modern Node.js apps: beyond unit tests"
+description: "Explore a comprehensive testing approach that includes integration, end-to-end tests, and effective mocking in Node.js projects."
+category: "deep-dive"
+publishDate: "2026-01-22"
+tags:
+  - Node.js
+  - testing
+  - jest
+  - integration-tests
+  - TDD
+slug: "testing-strategy-for-modern-nodejs-apps"
+heroImage: "https://images.unsplash.com/photo-1704556197883-11345de0c745?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkxMDI2NDd8&ixlib=rb-4.1.0&q=80&w=1080"
+heroImageAlt: "Hero image for article about Testing strategy for modern Node.js apps: beyond unit tests"
+heroImageAuthor: "Bodega"
+heroImageAuthorUrl: "https://unsplash.com/@bodegasupply"
+---
+
+In the ever-evolving landscape of software development, the way we approach testing our applications needs to evolve too. Gone are the days when unit tests alone were sufficient to ensure the quality and reliability of our Node.js applications. As our applications grow in complexity, integrating with databases, external services, and caching layers, our testing strategies must grow too. In this article, we'll explore why unit tests aren't enough anymore and delve into a more comprehensive testing approach that includes integration tests, end-to-end tests, and effective mocking strategies.
+
+## Why Unit Tests Aren’t Enough Anymore
+
+Unit tests have been the cornerstone of software testing for a long time. They are quick to run, easy to isolate, and provide immediate feedback. However, they have their limitations. Unit tests only cover individual units of code in isolation, not how those units work together or with external systems like databases and third-party APIs. This is where integration and end-to-end tests come into play, providing a more holistic view of the application's health.
+
+## Setting up Integration Tests with Real DB (PostgreSQL)
+
+Integration tests allow us to verify the interactions between different parts of our application, such as the connection with a real database. Let's look at how to set up an integration test with Jest and a PostgreSQL database.
+
+```js filename="integration-test-setup.js"
+const { Pool } = require('pg');
+const { setupDB, teardownDB } = require('./db-utils');
+
+beforeAll(async () => {
+  await setupDB(); // Create test DB schema
+});
+
+afterAll(async () => {
+  await teardownDB(); // Clean up DB schema
+});
+
+test('User creation and retrieval', async () => {
+  const pool = new Pool({
+    connectionString: 'postgresql://test_user:test_pass@localhost/test_db',
+  });
+
+  // Example test code to insert and retrieve a user from the DB
+  const result = await pool.query('INSERT INTO users(name) VALUES($1) RETURNING *', ['John Doe']);
+  const user = result.rows[0];
+  expect(user.name).toBe('John Doe');
+
+  await pool.end();
+});
+```
+
+This example demonstrates a basic setup for running an integration test against a real PostgreSQL database. The `setupDB` and `teardownDB` functions (not shown) would handle the creation and cleanup of the test database schema, ensuring each test runs against a clean state.
+
+
+
+![Code editor showing Node.js example](https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NjkxMDI2NDh8&ixlib=rb-4.1.0&q=80&w=1080)
+*Image by Jefferson Santos on Unsplash*
+
+## End-to-End Testing Strategies with Playwright
+
+End-to-end (E2E) testing simulates real user scenarios from start to finish, ensuring the application behaves as expected in a production-like environment. Playwright is a powerful tool for E2E testing, allowing us to automate browser interactions with our application. Here's a simple example:
+
+```js filename="e2e-test-playwright.js"
+const { chromium } = require('playwright');
+
+(async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto('http://localhost:3000/');
+  await page.fill('#username', 'testUser');
+  await page.fill('#password', 'testPass');
+  await page.click('#login-button');
+  await page.waitForSelector('#welcome-message');
+  const message = await page.innerText('#welcome-message');
+  expect(message).toContain('Welcome, testUser');
+  await browser.close();
+})();
+```
+
+This test automates a browser to visit our application, perform a login action, and verify that a welcome message is displayed, mimicking a real user's actions.
+
+## Mocking External APIs and Redis Caches
+
+When dealing with external APIs or Redis caches in unit tests, it's essential to mock these services to isolate our test environment and speed up test execution. Here's how you might mock a Redis cache using Jest:
+
+```js filename="mock-redis.js"
+jest.mock('redis', () => ({
+  createClient: jest.fn().mockReturnValue({
+    on: jest.fn(),
+    get: jest.fn((key, callback) => callback(null, 'cached-value')),
+    set: jest.fn(),
+  }),
+}));
+
+// Example usage in a test
+test('should use cached value', async () => {
+  const { getCachedData } = require('./data-fetcher'); // This module uses Redis
+  const data = await getCachedData('key');
+  expect(data).toBe('cached-value');
+});
+```
+
+This code snippet demonstrates how to mock the Redis `createClient` method to return a client object with mocked `get` and `set` methods, allowing us to control the behavior of these methods in our tests.
+
+## Balancing Speed and Coverage
+
+The key to a successful testing strategy is finding the right balance between test execution speed and coverage. Unit tests are fast but limited in scope; integration and end-to-end tests provide broader coverage but are slower and more complex to maintain. A good rule of thumb is to follow the testing pyramid: many unit tests, fewer integration tests, and even fewer end-to-end tests. This approach ensures a solid and efficient testing base for your Node.js applications.
+
+Until next time, happy coding 👨‍💻  
+– Patricio Marroquin 💜
