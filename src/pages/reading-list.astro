@@ -1,0 +1,11 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ReadingListPage from "@/views/ReadingListPage";
+---
+
+<BaseLayout
+  title="Reading List"
+  description="Your saved articles to read later."
+>
+  <ReadingListPage client:load />
+</BaseLayout>
