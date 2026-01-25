@@ -1,4 +1,4 @@
-import { FileText, CalendarDays, Github, Globe } from "lucide-react";
+import { FileText, CalendarDays, Github, Globe, Hash } from "lucide-react";
 import type { NavLink, Article } from "@/types";
 
 /** Site metadata - Used for SEO */
@@ -25,6 +25,7 @@ export const SOCIAL_LINKS = {
 /** Navigation links */
 export const NAV_LINKS: NavLink[] = [
   { href: "/blog", label: "Articles", icon: FileText },
+  { href: "/tags", label: "Tags", icon: Hash },
   { href: "/calendar", label: "Calendar", icon: CalendarDays },
   { href: SOCIAL_LINKS.github, label: "GitHub", icon: Github, external: true },
   { href: SOCIAL_LINKS.portfolio, label: "Portfolio", icon: Globe, external: true },
