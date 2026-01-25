@@ -15,6 +15,9 @@ export default defineConfig({
     webAnalytics: { enabled: true },
     imageService: true,
   }),
+  image: {
+    domains: ["images.unsplash.com", "images.pexels.com", "picsum.photos"],
+  },
   integrations: [
     react(),
     mdx(),
