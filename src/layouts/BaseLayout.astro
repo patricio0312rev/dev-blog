@@ -162,6 +162,26 @@ const updatedDateISO = updatedDate ? toISODateTimeUTC(updatedDate) : undefined;
 
     <Footer />
 
+    <!-- Scroll to top button -->
+    <button
+      type="button"
+      data-scroll-top
+      class="fixed bottom-6 right-6 z-50 hidden rounded-full border border-zinc-200 bg-white/90 p-3 text-zinc-600 shadow-lg backdrop-blur-sm transition-all duration-300 hover:border-sky-400 hover:text-sky-500 dark:border-zinc-700 dark:bg-zinc-900/90 dark:text-zinc-400 dark:hover:border-sky-400 dark:hover:text-sky-400 print:hidden"
+      aria-label="Scroll to top"
+    >
+      <svg
+        class="h-5 w-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="m18 15-6-6-6 6" />
+      </svg>
+    </button>
+
     <Analytics />
     <SpeedInsights />
 
@@ -260,6 +280,32 @@ const updatedDateISO = updatedDate ? toISODateTimeUTC(updatedDate) : undefined;
 
       initKeyboardShortcuts();
       document.addEventListener("astro:page-load", initKeyboardShortcuts);
+    </script>
+
+    <!-- Scroll to top -->
+    <script is:inline>
+      function initScrollToTop() {
+        const btn = document.querySelector("[data-scroll-top]");
+        if (!btn) return;
+
+        const toggleVisibility = () => {
+          if (window.scrollY > 400) {
+            btn.classList.remove("hidden");
+          } else {
+            btn.classList.add("hidden");
+          }
+        };
+
+        toggleVisibility();
+        window.addEventListener("scroll", toggleVisibility, { passive: true });
+
+        btn.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+
+      initScrollToTop();
+      document.addEventListener("astro:page-load", initScrollToTop);
     </script>
   </body>
 </html>
