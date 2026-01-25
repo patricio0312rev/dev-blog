@@ -180,5 +180,86 @@ const updatedDateISO = updatedDate ? toISODateTimeUTC(updatedDate) : undefined;
         },
       })}
     />
+
+    <!-- Keyboard shortcuts -->
+    <script is:inline>
+      function initKeyboardShortcuts() {
+        let currentArticleIndex = -1;
+
+        document.addEventListener("keydown", (e) => {
+          // Ignore if typing in an input or textarea
+          if (
+            e.target instanceof HTMLInputElement ||
+            e.target instanceof HTMLTextAreaElement ||
+            e.target.isContentEditable
+          ) {
+            return;
+          }
+
+          // Ignore if modifier keys are pressed (except for search)
+          if (e.altKey || e.ctrlKey || e.metaKey) {
+            return;
+          }
+
+          switch (e.key.toLowerCase()) {
+            case "t": {
+              // Toggle theme
+              const html = document.documentElement;
+              const currentTheme = html.getAttribute("data-theme");
+              const newTheme = currentTheme === "dark" ? "light" : "dark";
+              html.setAttribute("data-theme", newTheme);
+              localStorage.setItem("theme", newTheme);
+              break;
+            }
+
+            case "j":
+            case "k": {
+              // Navigate articles (j = next, k = previous)
+              const articles = Array.from(
+                document.querySelectorAll('a[href^="/blog/"]')
+              ).filter((a) => {
+                // Filter to only article links in lists, not nav or other areas
+                const href = a.getAttribute("href");
+                return href && href !== "/blog" && !a.closest("nav") && !a.closest("footer");
+              });
+
+              if (articles.length === 0) return;
+
+              if (e.key.toLowerCase() === "j") {
+                currentArticleIndex = Math.min(currentArticleIndex + 1, articles.length - 1);
+              } else {
+                currentArticleIndex = Math.max(currentArticleIndex - 1, 0);
+              }
+
+              const target = articles[currentArticleIndex];
+              if (target) {
+                target.focus();
+                target.scrollIntoView({ behavior: "smooth", block: "center" });
+              }
+              break;
+            }
+
+            case "g": {
+              // Go to articles page
+              if (window.location.pathname !== "/blog") {
+                window.location.href = "/blog";
+              }
+              break;
+            }
+
+            case "h": {
+              // Go home
+              if (window.location.pathname !== "/") {
+                window.location.href = "/";
+              }
+              break;
+            }
+          }
+        });
+      }
+
+      initKeyboardShortcuts();
+      document.addEventListener("astro:page-load", initKeyboardShortcuts);
+    </script>
   </body>
 </html>
