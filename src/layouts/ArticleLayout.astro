@@ -8,6 +8,7 @@ import { SITE_CONFIG } from "@/constants";
 import { Flame, BookOpen, FlaskConical, Headphones, ArrowLeft, List, ChevronLeft, ChevronRight, Layers } from "lucide-react";
 import RelatedArticles from "@/components/blog/RelatedArticles";
 import GiscusComments from "@/components/blog/GiscusComments";
+import BookmarkButton from "@/components/blog/BookmarkButton";
 import { formatDate, toISODateTimeUTC } from "@/utils";
 import { getOgImageUrl, getOptimizedImageUrl } from "@/utils/image-providers";
 
@@ -227,6 +228,11 @@ const seriesName = series ? series.split("-").map(w => w.charAt(0).toUpperCase()
           <Headphones className="h-3 w-3" />
           <span data-listen-label>Listen</span>
         </button>
+
+        <BookmarkButton
+          article={{ slug: article.slug, title, description, category }}
+          client:load
+        />
       </div>
 
       <h1
