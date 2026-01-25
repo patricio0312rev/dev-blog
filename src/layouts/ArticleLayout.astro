@@ -5,7 +5,7 @@ import { Image } from "astro:assets";
 import BaseLayout from "./BaseLayout.astro";
 import PagefindMeta from "@/components/PagefindMeta.astro";
 import { SITE_CONFIG } from "@/constants";
-import { Flame, BookOpen, FlaskConical, Headphones, ArrowLeft, List } from "lucide-react";
+import { Flame, BookOpen, FlaskConical, Headphones, ArrowLeft, List, ChevronLeft, ChevronRight, Layers } from "lucide-react";
 import RelatedArticles from "@/components/blog/RelatedArticles";
 import GiscusComments from "@/components/blog/GiscusComments";
 import { formatDate, toISODateTimeUTC } from "@/utils";
@@ -30,6 +30,8 @@ const {
   heroImageUnsplashUrl,
   heroImageDownloadLocation,
   ogImage: customOgImage,
+  series,
+  seriesOrder,
 } = article.data;
 
 const articleUrl = new URL(`/blog/${article.slug}`, Astro.site).href;
@@ -94,6 +96,18 @@ const related = allArticles
 
 const isUnsplashImage =
   heroImageAuthor && heroImageAuthorUrl && heroImageUnsplashUrl;
+
+// Series navigation
+const seriesArticles = series
+  ? allArticles
+      .filter((a) => a.data.series === series && !a.data.draft)
+      .sort((a, b) => (a.data.seriesOrder || 0) - (b.data.seriesOrder || 0))
+  : [];
+
+const currentSeriesIndex = seriesArticles.findIndex((a) => a.slug === article.slug);
+const prevArticle = currentSeriesIndex > 0 ? seriesArticles[currentSeriesIndex - 1] : null;
+const nextArticle = currentSeriesIndex < seriesArticles.length - 1 ? seriesArticles[currentSeriesIndex + 1] : null;
+const seriesName = series ? series.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") : "";
 ---
 
 <BaseLayout
@@ -326,6 +340,61 @@ const isUnsplashImage =
           )}
           client:load
         />
+      )
+    }
+
+    <!-- Series navigation -->
+    {
+      series && seriesArticles.length > 1 && (
+        <nav class="mt-8 rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50">
+          <div class="mb-3 flex items-center gap-2 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+            <Layers className="h-4 w-4" />
+            <span>
+              Part {seriesOrder} of {seriesArticles.length} in{" "}
+              <span class="text-zinc-900 dark:text-zinc-50">{seriesName}</span>
+            </span>
+          </div>
+
+          <div class="grid gap-3 sm:grid-cols-2">
+            {prevArticle ? (
+              <a
+                href={`/blog/${prevArticle.slug}`}
+                class="group flex items-center gap-3 rounded-lg border border-zinc-200 bg-white p-3 transition-all duration-200 hover:border-sky-400 hover:shadow-sm dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-sky-400"
+              >
+                <ChevronLeft className="h-5 w-5 flex-shrink-0 text-zinc-400 transition-transform duration-200 group-hover:-translate-x-0.5 group-hover:text-sky-500" />
+                <div class="min-w-0 flex-1">
+                  <div class="text-[10px] font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+                    Previous
+                  </div>
+                  <div class="truncate text-sm font-medium text-zinc-900 group-hover:text-sky-500 dark:text-zinc-50 dark:group-hover:text-sky-400">
+                    {prevArticle.data.title}
+                  </div>
+                </div>
+              </a>
+            ) : (
+              <div />
+            )}
+
+            {nextArticle ? (
+              <a
+                href={`/blog/${nextArticle.slug}`}
+                class="group flex items-center gap-3 rounded-lg border border-zinc-200 bg-white p-3 text-right transition-all duration-200 hover:border-sky-400 hover:shadow-sm dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-sky-400"
+              >
+                <div class="min-w-0 flex-1">
+                  <div class="text-[10px] font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+                    Next
+                  </div>
+                  <div class="truncate text-sm font-medium text-zinc-900 group-hover:text-sky-500 dark:text-zinc-50 dark:group-hover:text-sky-400">
+                    {nextArticle.data.title}
+                  </div>
+                </div>
+                <ChevronRight className="h-5 w-5 flex-shrink-0 text-zinc-400 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-sky-500" />
+              </a>
+            ) : (
+              <div />
+            )}
+          </div>
+        </nav>
       )
     }
 
