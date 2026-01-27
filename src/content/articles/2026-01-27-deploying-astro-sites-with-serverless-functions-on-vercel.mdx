@@ -1,0 +1,106 @@
+---
+title: "Deploying Astro sites with serverless functions on Vercel, step-by-step"
+description: "Learn how to combine Astro’s static site generation with dynamic serverless functions hosted on Vercel for modern apps."
+category: "tutorial"
+publishDate: "2026-01-27"
+tags:
+  - Astro
+  - Vercel
+  - serverless
+  - deployment
+  - static-sites
+slug: "deploying-astro-sites-with-serverless-functions-on-vercel"
+heroImage: "https://images.unsplash.com/photo-1538579201167-2f2e98bdde1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk1MzQ2Mjl8&ixlib=rb-4.1.0&q=80&w=1080"
+heroImageAlt: "Hero image for article about Deploying Astro sites with serverless functions on Vercel, step-by-step"
+heroImageAuthor: "Dan LeFebvre"
+heroImageAuthorUrl: "https://unsplash.com/@danlefeb"
+---
+
+In the ever-evolving web development landscape, the blend of static sites and serverless functions has emerged as a compelling architecture for building fast, scalable, and dynamic applications. Astro, a modern front-end framework, excels at generating static sites, while serverless functions on platforms like Vercel offer a powerful way to add backend logic without the overhead of managing servers. This guide will walk you through combining Astro's static generation capabilities with the dynamic nature of serverless functions on Vercel, showcasing how to deploy a robust web application that leverages the best of both worlds.
+
+## Why Use Astro for Static with Serverless Hybrid
+
+Astro stands out for its ability to generate static sites that are incredibly fast and SEO-friendly. By default, Astro serves your UI as static HTML and hydrates these static pages with JavaScript only when necessary. This approach ensures that your site loads quickly and remains interactive, without sacrificing the dynamic capabilities that modern applications require.
+
+Integrating serverless functions into your Astro project allows you to add backend logic—such as accessing a database, processing forms, or handling authentication—without complicating your frontend codebase. Vercel, a platform optimized for deploying modern web projects, offers seamless support for serverless functions, making it an ideal choice for deploying Astro sites with dynamic backend needs.
+
+## Setting Up Vercel Project Basics
+
+To get started, you'll need to set up a new project on Vercel. If you haven't already, sign up for a Vercel account and install the Vercel CLI. Then, follow these steps:
+
+1. Initialize a new Astro project if you haven't already:
+
+```bash
+npm init astro
+```
+
+2. After setting up your Astro project, navigate to the project directory and link it to Vercel:
+
+```bash
+cd your-astro-project
+vercel link
+```
+
+3. Next, configure your project settings in Vercel to make sure it recognizes your Astro setup. Typically, Vercel automatically detects Astro and configures the build settings accordingly. However, you might want to check the build settings under your project dashboard to ensure they match your project's requirements.
+
+
+
+![Code editor showing Astro example](https://images.unsplash.com/photo-1763568258208-a5af30d5a31b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk1MzQ2MzB8&ixlib=rb-4.1.0&q=80&w=1080)
+*Image by Daniil Komov on Unsplash*
+
+## Creating and Deploying Serverless Functions
+
+Serverless functions in Vercel are simply files in the `/api` directory of your project. Let's create a simple serverless function that returns a greeting:
+
+```js filename="api/hello.js"
+module.exports = (req, res) => {
+  res.status(200).send('Hello from the serverless function!');
+};
+```
+
+Deploying your project with this serverless function is straightforward. Simply run:
+
+```bash
+vercel
+```
+
+Vercel automatically detects changes, including the addition of serverless functions, and deploys them.
+
+## Integrating Serverless APIs with Astro Pages
+
+To leverage your serverless function within an Astro page, you can use the `fetch` API to call the function and display its response. Here's how to fetch data from our `hello` function in an Astro component:
+
+```jsx filename="src/pages/index.astro"
+---
+// Import the `fetch` API
+const fetchData = async () => {
+  const response = await fetch('/api/hello');
+  return response.text();
+};
+const data = await fetchData();
+---
+<html>
+  <head>
+    <title>Astro + Serverless</title>
+  </head>
+  <body>
+    <h1>Serverless Greeting:</h1>
+    <p>{data}</p>
+  </body>
+</html>
+```
+
+This example demonstrates how to call a serverless API from an Astro page, showcasing the seamless integration between Astro's static pages and Vercel's dynamic serverless functions.
+
+## Tips for Debugging and Optimizing Cold Starts
+
+Serverless functions are incredibly powerful, but they can suffer from "cold starts," which occur when a function is invoked after sitting idle. This can lead to slight delays in response times. Here are a few tips for mitigating cold starts:
+
+- **Keep your functions lean:** The more dependencies your function has, the longer it will take to start. Try to keep your functions focused and minimize external dependencies.
+- **Use warm-up strategies:** Some developers use scheduled events to invoke their functions periodically, keeping them "warm" and ready to execute quickly. However, this approach may lead to additional costs.
+- **Leverage edge functions:** Vercel offers Edge Functions, which run closer to your users and can start faster than traditional serverless functions. Consider using Edge Functions for performance-critical paths.
+
+By understanding the characteristics of serverless functions and adopting best practices, you can ensure that your Astro site remains both fast and dynamic, offering an optimal experience to your users.
+
+Until next time, happy coding 👨‍💻  
+– Patricio Marroquin 💜
