@@ -298,7 +298,7 @@
         "microservices",
         "architecture"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Teaches you how to design and implement event-driven APIs that don’t bottleneck under load, with NestJS idioms.",
       "outline": [
         "Basics of event-driven architecture in backend APIs",
@@ -314,7 +314,10 @@
       "mediaIdeas": [
         "Event-driven message flow diagram",
         "Error retry lifecycle diagram"
-      ]
+      ],
+      "entrySlug": "2026-01-29-building-high-throughput-event-driven-apis-with-nestjs",
+      "heroImage": "https://images.unsplash.com/photo-1665211097563-163d6be45d67?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Njk3MDc5NzB8&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageCount": 2
     }
   ]
 }
