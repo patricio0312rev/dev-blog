@@ -1,0 +1,325 @@
+{
+  "month": "2026-02",
+  "startDate": "2026-02-01",
+  "endDate": "2026-02-28",
+  "articles": [
+    {
+      "date": "2026-02-03",
+      "category": "trending",
+      "slug": "nextjs-15-whats-really-new",
+      "title": "Next.js 15 dropped — Here's what actually changes under the hood",
+      "description": "Discover the key features and breaking changes in Next.js 15 and how they impact your existing and future apps.",
+      "tags": [
+        "NextJS",
+        "React",
+        "web development",
+        "trending",
+        "JavaScript"
+      ],
+      "status": "planned",
+      "angle": "Cut through the hype to understand which Next.js 15 changes matter most to real projects and how to adopt them painlessly.",
+      "outline": [
+        "Overview of Next.js 15 main release notes",
+        "Improved routing and middleware updates",
+        "Changes in server components and streaming",
+        "Migration tips and gotchas",
+        "Performance gains and benchmarks",
+        "How this shifts your app architecture"
+      ],
+      "codeIdeas": [
+        "Before/after examples of routing changes",
+        "Middleware usage demo",
+        "Implementing streaming server components"
+      ],
+      "mediaIdeas": [
+        "Diagram comparing old vs new routing flow",
+        "Timeline of Next.js releases"
+      ]
+    },
+    {
+      "date": "2026-02-05",
+      "category": "tutorial",
+      "slug": "serverless-python-with-aws-lambda-in-2026",
+      "title": "How to build and deploy serverless Python APIs with AWS Lambda in 2026",
+      "description": "Step-by-step guide on using the latest AWS Lambda features to build fast, scalable Python APIs without managing any servers.",
+      "tags": [
+        "Python",
+        "AWS",
+        "serverless",
+        "API",
+        "tutorial"
+      ],
+      "status": "planned",
+      "angle": "Answer the common pain point of getting started with AWS Lambda + Python using up-to-date tools and deployment practices to avoid buried config hell.",
+      "outline": [
+        "Why serverless in 2026 still makes sense with Python",
+        "Setting up AWS Lambda with the newest AWS CDK",
+        "Writing a simple Python API handler",
+        "Deploying and testing the function",
+        "Monitoring and cold start improvements",
+        "Cost and scaling considerations"
+      ],
+      "codeIdeas": [
+        "Basic Lambda Python handler with API Gateway integration",
+        "CDK deployment script snippet",
+        "Sample unit test for Lambda function"
+      ],
+      "mediaIdeas": [
+        "Architecture diagram of AWS Lambda + API Gateway setup"
+      ]
+    },
+    {
+      "date": "2026-02-08",
+      "category": "tutorial",
+      "slug": "building-your-first-mcp-server",
+      "title": "Building your first MCP server — Connect AI assistants to your own tools",
+      "description": "Step-by-step tutorial on creating a Model Context Protocol (MCP) server that lets Claude, ChatGPT, and other AI assistants interact with your custom tools and data sources.",
+      "tags": [
+        "MCP",
+        "AI",
+        "TypeScript",
+        "tutorial",
+        "Claude",
+        "ChatGPT",
+        "Anthropic"
+      ],
+      "status": "planned",
+      "angle": "MCP has become the de-facto standard for connecting AI agents to external tools (97M+ monthly SDK downloads). This practical guide gets you from zero to a working MCP server that any major AI assistant can use.",
+      "outline": [
+        "What is MCP and why it matters in 2026 (adopted by Anthropic, OpenAI, Google)",
+        "MCP architecture: hosts, clients, servers, and the protocol flow",
+        "Setting up your TypeScript MCP server project with the official SDK",
+        "Implementing your first tool: a simple calculator example",
+        "Adding resources: exposing data to AI assistants",
+        "Testing your server with Claude Desktop and VS Code",
+        "Registering your server in the MCP Registry",
+        "Security considerations and best practices"
+      ],
+      "codeIdeas": [
+        "Basic MCP server setup with @modelcontextprotocol/sdk",
+        "Tool definition with input schema validation",
+        "Resource provider implementation",
+        "Error handling patterns for MCP tools",
+        "Configuration for Claude Desktop (claude_desktop_config.json)"
+      ],
+      "mediaIdeas": [
+        "MCP architecture diagram showing host/client/server relationship",
+        "Flowchart of a tool invocation request/response cycle",
+        "Screenshot of MCP server running in Claude Desktop"
+      ],
+      "contextForGeneration": "MCP (Model Context Protocol) was open-sourced by Anthropic in November 2024 and has been adopted by OpenAI, Google, and the broader AI ecosystem. In December 2025, it was donated to the Linux Foundation's Agentic AI Foundation (AAIF). As of early 2026, MCP has 97M+ monthly SDK downloads and is supported in Claude, ChatGPT, VS Code, Cursor, and many other platforms. The latest spec (2025-11-25) includes async operations, statelessness, and server identity features. Official SDKs exist for TypeScript, Python, C#, and Java. Reference: https://modelcontextprotocol.io and https://github.com/modelcontextprotocol/modelcontextprotocol"
+    },
+    {
+      "date": "2026-02-10",
+      "category": "deep-dive",
+      "slug": "refactoring-a-monolith-to-nestjs-microservices",
+      "title": "Refactoring legacy Node.js monoliths into NestJS microservices the right way",
+      "description": "Deep dive into strategies and pitfalls when breaking down large Node.js apps into clean, maintainable NestJS microservices.",
+      "tags": [
+        "NestJS",
+        "Node.js",
+        "microservices",
+        "architecture",
+        "refactoring"
+      ],
+      "status": "planned",
+      "angle": "Most guides skip the messy parts of refactoring — I'll show you the practical trade-offs, incremental moves, and testing needed for real world success.",
+      "outline": [
+        "Identifying service boundaries in legacy code",
+        "Incremental refactoring vs rewrite debates",
+        "Setting up communication with NestJS microservices",
+        "State management and database per service",
+        "Testing strategy for distributed services",
+        "Managing deployment and observability"
+      ],
+      "codeIdeas": [
+        "Example of NestJS microservice communication with message brokers",
+        "Refactoring a monolithic function to a service handler",
+        "Test mocks for inter-service calls"
+      ],
+      "mediaIdeas": [
+        "Service boundary visualization",
+        "Before/after architectural diagrams"
+      ]
+    },
+    {
+      "date": "2026-02-13",
+      "category": "tutorial",
+      "slug": "building-agentic-ai-nodejs-tool-use",
+      "title": "Building agentic AI applications with Node.js — From chatbots to autonomous agents",
+      "description": "Learn how to build AI agents that can use tools, make decisions, and complete multi-step tasks autonomously using Node.js and the OpenAI/Anthropic APIs.",
+      "tags": [
+        "AI",
+        "Node.js",
+        "OpenAI",
+        "Anthropic",
+        "agentic AI",
+        "tool use",
+        "tutorial"
+      ],
+      "status": "planned",
+      "angle": "2026 is the year of 'agents plus guardrails'. Move beyond simple chatbots to build AI that can actually do things — call APIs, query databases, and complete workflows — while maintaining safety and control.",
+      "outline": [
+        "What makes an AI agent different from a chatbot",
+        "The agent loop: observe, think, act, repeat",
+        "Implementing tool use with OpenAI's function calling",
+        "Implementing tool use with Anthropic's tool_use feature",
+        "Building guardrails: limiting scope and requiring confirmation",
+        "Handling multi-step tasks with memory and state",
+        "Error recovery and graceful degradation",
+        "Production deployment: logging, monitoring, and cost control"
+      ],
+      "codeIdeas": [
+        "Basic agent loop implementation in TypeScript",
+        "Tool definitions for common operations (API calls, file operations)",
+        "Confirmation middleware for sensitive actions",
+        "Conversation state management with Redis",
+        "Cost tracking and token budget enforcement"
+      ],
+      "mediaIdeas": [
+        "Agent loop flowchart (observe → think → act → observe)",
+        "Comparison table: chatbot vs agent capabilities",
+        "Architecture diagram of a production agent system"
+      ],
+      "contextForGeneration": "Agentic AI refers to AI systems that can work toward goals with limited supervision by planning steps and using tools. In 2026, the pattern is 'agents plus guardrails' — autonomous capabilities with safety controls. Key APIs: OpenAI's function calling (tools parameter) and Anthropic's tool_use feature. The METR study showed that while developers believe AI makes them faster, autonomous systems need careful design to actually improve productivity. Gartner predicts 40% of enterprise apps will include task-specific AI agents by end of 2026. Reference: https://thenewstack.io/5-key-trends-shaping-agentic-development-in-2026/"
+    },
+    {
+      "date": "2026-02-17",
+      "category": "trending",
+      "slug": "redis-7-features-in-2026-you-need-to-know",
+      "title": "Redis 7 in 2026 — Features that'll actually change how you cache and store data",
+      "description": "A candid look at Redis 7's new modules and capabilities that go beyond the usual key-value stuff and how to use them effectively today.",
+      "tags": [
+        "Redis",
+        "databases",
+        "caching",
+        "trending",
+        "performance"
+      ],
+      "status": "planned",
+      "angle": "Most posts list features, but I'll focus on how Redis 7 can solve common, real-world caching and data problems better than before.",
+      "outline": [
+        "Summary of Redis 7 key feature updates",
+        "Using RedisJSON and RedisGraph in practical apps",
+        "Performance improvements and cluster scaling",
+        "Combining Redis streams with pub/sub",
+        "When not to upgrade or use Redis 7 features",
+        "Examples from real projects"
+      ],
+      "codeIdeas": [
+        "RedisJSON CRUD example in Node.js",
+        "Simple RedisGraph query usage",
+        "Using Redis streams to implement an event feed"
+      ],
+      "mediaIdeas": [
+        "Feature comparison table Redis 6 vs 7",
+        "Cluster architecture diagram"
+      ]
+    },
+    {
+      "date": "2026-02-20",
+      "category": "deep-dive",
+      "slug": "testing-nestjs-microservices-effectively",
+      "title": "How to create reliable tests for NestJS microservices without losing your mind",
+      "description": "A clear strategy to write maintainable unit and integration tests for NestJS microservices, covering mocks, E2E, and CI best practices.",
+      "tags": [
+        "NestJS",
+        "testing",
+        "microservices",
+        "TypeScript",
+        "DevTools"
+      ],
+      "status": "planned",
+      "angle": "Testing microservices scares a lot of devs; I break it down into practical steps that can fit real project workflows and automation.",
+      "outline": [
+        "Test pyramid explained for microservices",
+        "Unit testing controllers and services with Jest",
+        "Mocking inter-service communication",
+        "Integration and end-to-end test approaches",
+        "Setting up CI pipelines with tests",
+        "Dealing with flaky tests and debugging tips"
+      ],
+      "codeIdeas": [
+        "Jest unit test examples with NestJS services",
+        "Mocked transport layer for microservice calls",
+        "Sample E2E test scenario with multiple services"
+      ],
+      "mediaIdeas": [
+        "Test pyramid infographic",
+        "CI/CD pipeline flow showing test stages"
+      ]
+    },
+    {
+      "date": "2026-02-24",
+      "category": "tutorial",
+      "slug": "astro-component-patterns-for-react-devs",
+      "title": "Astro component patterns for React devs easing into this new frontier",
+      "description": "A friendly guide for React developers to adopt Astro's island architecture with practical component patterns and integrations.",
+      "tags": [
+        "Astro",
+        "React",
+        "web development",
+        "tutorial",
+        "components"
+      ],
+      "status": "planned",
+      "angle": "Many React devs struggle understanding Astro's partial hydration; this tutorial bridges that gap with concrete examples and pros/cons.",
+      "outline": [
+        "Overview of Astro's island architecture",
+        "Creating Astro components and mixing React components",
+        "Partial hydration strategies explained",
+        "State management in hybrid Astro+React apps",
+        "Optimizing bundle size and load time",
+        "Deployment considerations"
+      ],
+      "codeIdeas": [
+        "Astro project setup with React integration",
+        "Example of partial hydration in Astro component",
+        "Hybrid component passing props and events"
+      ],
+      "mediaIdeas": [
+        "Diagram comparing React SPA vs Astro hydration",
+        "Bundle size before/after image"
+      ]
+    },
+    {
+      "date": "2026-02-27",
+      "category": "trending",
+      "slug": "vibe-coding-productivity-myth-or-reality",
+      "title": "Vibe coding in 2026 — Are AI coding tools actually making us faster?",
+      "description": "A critical look at the productivity claims of AI coding assistants, what the research actually shows, and how to use these tools effectively without falling into common traps.",
+      "tags": [
+        "AI",
+        "vibe coding",
+        "productivity",
+        "Claude Code",
+        "GitHub Copilot",
+        "trending",
+        "developer experience"
+      ],
+      "status": "planned",
+      "angle": "Vibe coding was Collins' Word of the Year for 2025 and is now mainstream. But while 84% of developers use AI tools, a METR study found they may actually be 19% slower. Let's separate the hype from reality.",
+      "outline": [
+        "What is vibe coding and why it went mainstream in 2026",
+        "The productivity paradox: perceived vs measured speed gains",
+        "Breaking down the METR study: why experienced devs got slower",
+        "Where AI coding tools genuinely excel (boilerplate, tests, explaining code)",
+        "The hidden costs: context switching, review burden, and skill atrophy",
+        "A framework for effective AI-assisted development",
+        "Security concerns: CVE awareness and vulnerable dependencies",
+        "Finding your personal productivity balance"
+      ],
+      "codeIdeas": [
+        "Example of AI-generated code that looks right but has subtle bugs",
+        "Prompt patterns that consistently produce better results",
+        "Code review checklist for AI-generated code"
+      ],
+      "mediaIdeas": [
+        "Chart comparing perceived vs actual productivity from studies",
+        "Decision tree: when to use AI assistance vs write manually",
+        "Timeline of AI coding tool adoption (2022-2026)"
+      ],
+      "contextForGeneration": "Vibe coding was named Collins Dictionary's Word of the Year for 2025. As of 2026, 84% of developers use or plan to use AI tools (Stack Overflow 2025 survey), with 51% using them daily. However, a July 2025 METR study found that while developers believed AI made them 20% faster, objective tests showed they were actually 19% slower. AI tools excel at boilerplate code, writing tests, fixing bugs, and explaining unfamiliar code. Security is a major concern — AI tools trained on historical repos lack real-time CVE awareness. Key tools in 2026: Claude Code, GitHub Copilot, Cursor, Devin. Reference: https://www.technologyreview.com/2025/12/15/1128352/rise-of-ai-coding-developers-2026/ and https://devops.com/3-notable-software-development-trends-for-2026-and-beyond/"
+    }
+  ]
+}
