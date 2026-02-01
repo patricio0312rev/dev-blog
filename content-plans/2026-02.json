@@ -1,0 +1,268 @@
+{
+  "month": "2026-02",
+  "startDate": "2026-02-01",
+  "endDate": "2026-02-28",
+  "articles": [
+    {
+      "date": "2026-02-03",
+      "category": "trending",
+      "slug": "nextjs-15-whats-really-new",
+      "title": "Next.js 15 dropped — Here’s what actually changes under the hood",
+      "description": "Discover the key features and breaking changes in Next.js 15 and how they impact your existing and future apps.",
+      "tags": [
+        "NextJS",
+        "React",
+        "web development",
+        "trending",
+        "JavaScript"
+      ],
+      "status": "planned",
+      "angle": "Cut through the hype to understand which Next.js 15 changes matter most to real projects and how to adopt them painlessly.",
+      "outline": [
+        "Overview of Next.js 15 main release notes",
+        "Improved routing and middleware updates",
+        "Changes in server components and streaming",
+        "Migration tips and gotchas",
+        "Performance gains and benchmarks",
+        "How this shifts your app architecture"
+      ],
+      "codeIdeas": [
+        "Before/after examples of routing changes",
+        "Middleware usage demo",
+        "Implementing streaming server components"
+      ],
+      "mediaIdeas": [
+        "Diagram comparing old vs new routing flow",
+        "Timeline of Next.js releases"
+      ]
+    },
+    {
+      "date": "2026-02-05",
+      "category": "tutorial",
+      "slug": "serverless-python-with-aws-lambda-in-2026",
+      "title": "How to build and deploy serverless Python APIs with AWS Lambda in 2026",
+      "description": "Step-by-step guide on using the latest AWS Lambda features to build fast, scalable Python APIs without managing any servers.",
+      "tags": [
+        "Python",
+        "AWS",
+        "serverless",
+        "API",
+        "tutorial"
+      ],
+      "status": "planned",
+      "angle": "Answer the common pain point of getting started with AWS Lambda + Python using up-to-date tools and deployment practices to avoid buried config hell.",
+      "outline": [
+        "Why serverless in 2026 still makes sense with Python",
+        "Setting up AWS Lambda with the newest AWS CDK",
+        "Writing a simple Python API handler",
+        "Deploying and testing the function",
+        "Monitoring and cold start improvements",
+        "Cost and scaling considerations"
+      ],
+      "codeIdeas": [
+        "Basic Lambda Python handler with API Gateway integration",
+        "CDK deployment script snippet",
+        "Sample unit test for Lambda function"
+      ],
+      "mediaIdeas": [
+        "Architecture diagram of AWS Lambda + API Gateway setup"
+      ]
+    },
+    {
+      "date": "2026-02-10",
+      "category": "deep-dive",
+      "slug": "refactoring-a-monolith-to-nestjs-microservices",
+      "title": "Refactoring legacy Node.js monoliths into NestJS microservices the right way",
+      "description": "Deep dive into strategies and pitfalls when breaking down large Node.js apps into clean, maintainable NestJS microservices.",
+      "tags": [
+        "NestJS",
+        "Node.js",
+        "microservices",
+        "architecture",
+        "refactoring"
+      ],
+      "status": "planned",
+      "angle": "Most guides skip the messy parts of refactoring — I’ll show you the practical trade-offs, incremental moves, and testing needed for real world success.",
+      "outline": [
+        "Identifying service boundaries in legacy code",
+        "Incremental refactoring vs rewrite debates",
+        "Setting up communication with NestJS microservices",
+        "State management and database per service",
+        "Testing strategy for distributed services",
+        "Managing deployment and observability"
+      ],
+      "codeIdeas": [
+        "Example of NestJS microservice communication with message brokers",
+        "Refactoring a monolithic function to a service handler",
+        "Test mocks for inter-service calls"
+      ],
+      "mediaIdeas": [
+        "Service boundary visualization",
+        "Before/after architectural diagrams"
+      ]
+    },
+    {
+      "date": "2026-02-13",
+      "category": "tutorial",
+      "slug": "building-ai-chatbots-with-nodejs-and-openai-2026",
+      "title": "Building smarter AI chatbots using Node.js and OpenAI in 2026",
+      "description": "Hands-on tutorial integrating the latest OpenAI API features with Node.js for creating context-aware, useful chatbots.",
+      "tags": [
+        "AI",
+        "Node.js",
+        "OpenAI",
+        "chatbots",
+        "tutorial"
+      ],
+      "status": "planned",
+      "angle": "Show how to add real conversational intelligence with modern OpenAI capabilities while handling context, errors, and performance smoothly.",
+      "outline": [
+        "Overview of new OpenAI API capabilities relevant to chatbots",
+        "Setting up a Node.js project with OpenAI client",
+        "Creating a context-aware chat endpoint",
+        "Managing conversation history and token limits",
+        "Adding customizable personality prompts",
+        "Deploying chatbot on Vercel or AWS Lambda"
+      ],
+      "codeIdeas": [
+        "Node.js Express API for chatbot",
+        "OpenAI API call with conversation context",
+        "Error handling and rate limit mitigation"
+      ],
+      "mediaIdeas": [
+        "Conversation flow diagram",
+        "Response timing comparison chart"
+      ]
+    },
+    {
+      "date": "2026-02-17",
+      "category": "trending",
+      "slug": "redis-7-features-in-2026-you-need-to-know",
+      "title": "Redis 7 in 2026 — Features that’ll actually change how you cache and store data",
+      "description": "A candid look at Redis 7’s new modules and capabilities that go beyond the usual key-value stuff and how to use them effectively today.",
+      "tags": [
+        "Redis",
+        "databases",
+        "caching",
+        "trending",
+        "performance"
+      ],
+      "status": "planned",
+      "angle": "Most posts list features, but I’ll focus on how Redis 7 can solve common, real-world caching and data problems better than before.",
+      "outline": [
+        "Summary of Redis 7 key feature updates",
+        "Using RedisJSON and RedisGraph in practical apps",
+        "Performance improvements and cluster scaling",
+        "Combining Redis streams with pub/sub",
+        "When not to upgrade or use Redis 7 features",
+        "Examples from real projects"
+      ],
+      "codeIdeas": [
+        "RedisJSON CRUD example in Node.js",
+        "Simple RedisGraph query usage",
+        "Using Redis streams to implement an event feed"
+      ],
+      "mediaIdeas": [
+        "Feature comparison table Redis 6 vs 7",
+        "Cluster architecture diagram"
+      ]
+    },
+    {
+      "date": "2026-02-20",
+      "category": "deep-dive",
+      "slug": "testing-nestjs-microservices-effectively",
+      "title": "How to create reliable tests for NestJS microservices without losing your mind",
+      "description": "A clear strategy to write maintainable unit and integration tests for NestJS microservices, covering mocks, E2E, and CI best practices.",
+      "tags": [
+        "NestJS",
+        "testing",
+        "microservices",
+        "TypeScript",
+        "DevTools"
+      ],
+      "status": "planned",
+      "angle": "Testing microservices scares a lot of devs; I break it down into practical steps that can fit real project workflows and automation.",
+      "outline": [
+        "Test pyramid explained for microservices",
+        "Unit testing controllers and services with Jest",
+        "Mocking inter-service communication",
+        "Integration and end-to-end test approaches",
+        "Setting up CI pipelines with tests",
+        "Dealing with flaky tests and debugging tips"
+      ],
+      "codeIdeas": [
+        "Jest unit test examples with NestJS services",
+        "Mocked transport layer for microservice calls",
+        "Sample E2E test scenario with multiple services"
+      ],
+      "mediaIdeas": [
+        "Test pyramid infographic",
+        "CI/CD pipeline flow showing test stages"
+      ]
+    },
+    {
+      "date": "2026-02-24",
+      "category": "tutorial",
+      "slug": "astro-component-patterns-for-react-devs",
+      "title": "Astro component patterns for React devs easing into this new frontier",
+      "description": "A friendly guide for React developers to adopt Astro’s island architecture with practical component patterns and integrations.",
+      "tags": [
+        "Astro",
+        "React",
+        "web development",
+        "tutorial",
+        "components"
+      ],
+      "status": "planned",
+      "angle": "Many React devs struggle understanding Astro’s partial hydration; this tutorial bridges that gap with concrete examples and pros/cons.",
+      "outline": [
+        "Overview of Astro’s island architecture",
+        "Creating Astro components and mixing React components",
+        "Partial hydration strategies explained",
+        "State management in hybrid Astro+React apps",
+        "Optimizing bundle size and load time",
+        "Deployment considerations"
+      ],
+      "codeIdeas": [
+        "Astro project setup with React integration",
+        "Example of partial hydration in Astro component",
+        "Hybrid component passing props and events"
+      ],
+      "mediaIdeas": [
+        "Diagram comparing React SPA vs Astro hydration",
+        "Bundle size before/after image"
+      ]
+    },
+    {
+      "date": "2026-02-26",
+      "category": "trending",
+      "slug": "typescript-5-2-new-exact-types-explained",
+      "title": "TypeScript 5.2 exact types and why you should start using them now",
+      "description": "Explaining the hot new exact types feature in TS 5.2 with practical examples showing how it catches more bugs and improves refactoring safety.",
+      "tags": [
+        "TypeScript",
+        "JavaScript",
+        "trending",
+        "typing",
+        "developer experience"
+      ],
+      "status": "planned",
+      "angle": "This feature feels subtle but can drastically reduce type bugs; I’ll show its magic with real coding examples you can apply today.",
+      "outline": [
+        "What are exact types and how they differ from current type behavior",
+        "Code examples revealing common pitfalls fixed by exact types",
+        "How exact types help during code refactors",
+        "Integration with existing codebases",
+        "Limitations and things to watch for"
+      ],
+      "codeIdeas": [
+        "Comparison of interface typing with and without exact types",
+        "Example refactor showing bug catch due to exact types",
+        "Complex nested object typing with exact types"
+      ],
+      "mediaIdeas": [
+        "Side-by-side type safety comparison infographic"
+      ]
+    }
+  ]
+}
