@@ -7,7 +7,7 @@
       "date": "2026-02-03",
       "category": "trending",
       "slug": "nextjs-15-whats-really-new",
-      "title": "Next.js 15 dropped — Here’s what actually changes under the hood",
+      "title": "Next.js 15 dropped — Here's what actually changes under the hood",
       "description": "Discover the key features and breaking changes in Next.js 15 and how they impact your existing and future apps.",
       "tags": [
         "NextJS",
@@ -69,6 +69,47 @@
       ]
     },
     {
+      "date": "2026-02-08",
+      "category": "tutorial",
+      "slug": "building-your-first-mcp-server",
+      "title": "Building your first MCP server — Connect AI assistants to your own tools",
+      "description": "Step-by-step tutorial on creating a Model Context Protocol (MCP) server that lets Claude, ChatGPT, and other AI assistants interact with your custom tools and data sources.",
+      "tags": [
+        "MCP",
+        "AI",
+        "TypeScript",
+        "tutorial",
+        "Claude",
+        "ChatGPT",
+        "Anthropic"
+      ],
+      "status": "planned",
+      "angle": "MCP has become the de-facto standard for connecting AI agents to external tools (97M+ monthly SDK downloads). This practical guide gets you from zero to a working MCP server that any major AI assistant can use.",
+      "outline": [
+        "What is MCP and why it matters in 2026 (adopted by Anthropic, OpenAI, Google)",
+        "MCP architecture: hosts, clients, servers, and the protocol flow",
+        "Setting up your TypeScript MCP server project with the official SDK",
+        "Implementing your first tool: a simple calculator example",
+        "Adding resources: exposing data to AI assistants",
+        "Testing your server with Claude Desktop and VS Code",
+        "Registering your server in the MCP Registry",
+        "Security considerations and best practices"
+      ],
+      "codeIdeas": [
+        "Basic MCP server setup with @modelcontextprotocol/sdk",
+        "Tool definition with input schema validation",
+        "Resource provider implementation",
+        "Error handling patterns for MCP tools",
+        "Configuration for Claude Desktop (claude_desktop_config.json)"
+      ],
+      "mediaIdeas": [
+        "MCP architecture diagram showing host/client/server relationship",
+        "Flowchart of a tool invocation request/response cycle",
+        "Screenshot of MCP server running in Claude Desktop"
+      ],
+      "contextForGeneration": "MCP (Model Context Protocol) was open-sourced by Anthropic in November 2024 and has been adopted by OpenAI, Google, and the broader AI ecosystem. In December 2025, it was donated to the Linux Foundation's Agentic AI Foundation (AAIF). As of early 2026, MCP has 97M+ monthly SDK downloads and is supported in Claude, ChatGPT, VS Code, Cursor, and many other platforms. The latest spec (2025-11-25) includes async operations, statelessness, and server identity features. Official SDKs exist for TypeScript, Python, C#, and Java. Reference: https://modelcontextprotocol.io and https://github.com/modelcontextprotocol/modelcontextprotocol"
+    },
+    {
       "date": "2026-02-10",
       "category": "deep-dive",
       "slug": "refactoring-a-monolith-to-nestjs-microservices",
@@ -82,7 +123,7 @@
         "refactoring"
       ],
       "status": "planned",
-      "angle": "Most guides skip the messy parts of refactoring — I’ll show you the practical trade-offs, incremental moves, and testing needed for real world success.",
+      "angle": "Most guides skip the messy parts of refactoring — I'll show you the practical trade-offs, incremental moves, and testing needed for real world success.",
       "outline": [
         "Identifying service boundaries in legacy code",
         "Incremental refactoring vs rewrite debates",
@@ -104,42 +145,50 @@
     {
       "date": "2026-02-13",
       "category": "tutorial",
-      "slug": "building-ai-chatbots-with-nodejs-and-openai-2026",
-      "title": "Building smarter AI chatbots using Node.js and OpenAI in 2026",
-      "description": "Hands-on tutorial integrating the latest OpenAI API features with Node.js for creating context-aware, useful chatbots.",
+      "slug": "building-agentic-ai-nodejs-tool-use",
+      "title": "Building agentic AI applications with Node.js — From chatbots to autonomous agents",
+      "description": "Learn how to build AI agents that can use tools, make decisions, and complete multi-step tasks autonomously using Node.js and the OpenAI/Anthropic APIs.",
       "tags": [
         "AI",
         "Node.js",
         "OpenAI",
-        "chatbots",
+        "Anthropic",
+        "agentic AI",
+        "tool use",
         "tutorial"
       ],
       "status": "planned",
-      "angle": "Show how to add real conversational intelligence with modern OpenAI capabilities while handling context, errors, and performance smoothly.",
+      "angle": "2026 is the year of 'agents plus guardrails'. Move beyond simple chatbots to build AI that can actually do things — call APIs, query databases, and complete workflows — while maintaining safety and control.",
       "outline": [
-        "Overview of new OpenAI API capabilities relevant to chatbots",
-        "Setting up a Node.js project with OpenAI client",
-        "Creating a context-aware chat endpoint",
-        "Managing conversation history and token limits",
-        "Adding customizable personality prompts",
-        "Deploying chatbot on Vercel or AWS Lambda"
+        "What makes an AI agent different from a chatbot",
+        "The agent loop: observe, think, act, repeat",
+        "Implementing tool use with OpenAI's function calling",
+        "Implementing tool use with Anthropic's tool_use feature",
+        "Building guardrails: limiting scope and requiring confirmation",
+        "Handling multi-step tasks with memory and state",
+        "Error recovery and graceful degradation",
+        "Production deployment: logging, monitoring, and cost control"
       ],
       "codeIdeas": [
-        "Node.js Express API for chatbot",
-        "OpenAI API call with conversation context",
-        "Error handling and rate limit mitigation"
+        "Basic agent loop implementation in TypeScript",
+        "Tool definitions for common operations (API calls, file operations)",
+        "Confirmation middleware for sensitive actions",
+        "Conversation state management with Redis",
+        "Cost tracking and token budget enforcement"
       ],
       "mediaIdeas": [
-        "Conversation flow diagram",
-        "Response timing comparison chart"
-      ]
+        "Agent loop flowchart (observe → think → act → observe)",
+        "Comparison table: chatbot vs agent capabilities",
+        "Architecture diagram of a production agent system"
+      ],
+      "contextForGeneration": "Agentic AI refers to AI systems that can work toward goals with limited supervision by planning steps and using tools. In 2026, the pattern is 'agents plus guardrails' — autonomous capabilities with safety controls. Key APIs: OpenAI's function calling (tools parameter) and Anthropic's tool_use feature. The METR study showed that while developers believe AI makes them faster, autonomous systems need careful design to actually improve productivity. Gartner predicts 40% of enterprise apps will include task-specific AI agents by end of 2026. Reference: https://thenewstack.io/5-key-trends-shaping-agentic-development-in-2026/"
     },
     {
       "date": "2026-02-17",
       "category": "trending",
       "slug": "redis-7-features-in-2026-you-need-to-know",
-      "title": "Redis 7 in 2026 — Features that’ll actually change how you cache and store data",
-      "description": "A candid look at Redis 7’s new modules and capabilities that go beyond the usual key-value stuff and how to use them effectively today.",
+      "title": "Redis 7 in 2026 — Features that'll actually change how you cache and store data",
+      "description": "A candid look at Redis 7's new modules and capabilities that go beyond the usual key-value stuff and how to use them effectively today.",
       "tags": [
         "Redis",
         "databases",
@@ -148,7 +197,7 @@
         "performance"
       ],
       "status": "planned",
-      "angle": "Most posts list features, but I’ll focus on how Redis 7 can solve common, real-world caching and data problems better than before.",
+      "angle": "Most posts list features, but I'll focus on how Redis 7 can solve common, real-world caching and data problems better than before.",
       "outline": [
         "Summary of Redis 7 key feature updates",
         "Using RedisJSON and RedisGraph in practical apps",
@@ -205,7 +254,7 @@
       "category": "tutorial",
       "slug": "astro-component-patterns-for-react-devs",
       "title": "Astro component patterns for React devs easing into this new frontier",
-      "description": "A friendly guide for React developers to adopt Astro’s island architecture with practical component patterns and integrations.",
+      "description": "A friendly guide for React developers to adopt Astro's island architecture with practical component patterns and integrations.",
       "tags": [
         "Astro",
         "React",
@@ -214,9 +263,9 @@
         "components"
       ],
       "status": "planned",
-      "angle": "Many React devs struggle understanding Astro’s partial hydration; this tutorial bridges that gap with concrete examples and pros/cons.",
+      "angle": "Many React devs struggle understanding Astro's partial hydration; this tutorial bridges that gap with concrete examples and pros/cons.",
       "outline": [
-        "Overview of Astro’s island architecture",
+        "Overview of Astro's island architecture",
         "Creating Astro components and mixing React components",
         "Partial hydration strategies explained",
         "State management in hybrid Astro+React apps",
@@ -234,35 +283,43 @@
       ]
     },
     {
-      "date": "2026-02-26",
+      "date": "2026-02-27",
       "category": "trending",
-      "slug": "typescript-5-2-new-exact-types-explained",
-      "title": "TypeScript 5.2 exact types and why you should start using them now",
-      "description": "Explaining the hot new exact types feature in TS 5.2 with practical examples showing how it catches more bugs and improves refactoring safety.",
+      "slug": "vibe-coding-productivity-myth-or-reality",
+      "title": "Vibe coding in 2026 — Are AI coding tools actually making us faster?",
+      "description": "A critical look at the productivity claims of AI coding assistants, what the research actually shows, and how to use these tools effectively without falling into common traps.",
       "tags": [
-        "TypeScript",
-        "JavaScript",
+        "AI",
+        "vibe coding",
+        "productivity",
+        "Claude Code",
+        "GitHub Copilot",
         "trending",
-        "typing",
         "developer experience"
       ],
       "status": "planned",
-      "angle": "This feature feels subtle but can drastically reduce type bugs; I’ll show its magic with real coding examples you can apply today.",
+      "angle": "Vibe coding was Collins' Word of the Year for 2025 and is now mainstream. But while 84% of developers use AI tools, a METR study found they may actually be 19% slower. Let's separate the hype from reality.",
       "outline": [
-        "What are exact types and how they differ from current type behavior",
-        "Code examples revealing common pitfalls fixed by exact types",
-        "How exact types help during code refactors",
-        "Integration with existing codebases",
-        "Limitations and things to watch for"
+        "What is vibe coding and why it went mainstream in 2026",
+        "The productivity paradox: perceived vs measured speed gains",
+        "Breaking down the METR study: why experienced devs got slower",
+        "Where AI coding tools genuinely excel (boilerplate, tests, explaining code)",
+        "The hidden costs: context switching, review burden, and skill atrophy",
+        "A framework for effective AI-assisted development",
+        "Security concerns: CVE awareness and vulnerable dependencies",
+        "Finding your personal productivity balance"
       ],
       "codeIdeas": [
-        "Comparison of interface typing with and without exact types",
-        "Example refactor showing bug catch due to exact types",
-        "Complex nested object typing with exact types"
+        "Example of AI-generated code that looks right but has subtle bugs",
+        "Prompt patterns that consistently produce better results",
+        "Code review checklist for AI-generated code"
       ],
       "mediaIdeas": [
-        "Side-by-side type safety comparison infographic"
-      ]
+        "Chart comparing perceived vs actual productivity from studies",
+        "Decision tree: when to use AI assistance vs write manually",
+        "Timeline of AI coding tool adoption (2022-2026)"
+      ],
+      "contextForGeneration": "Vibe coding was named Collins Dictionary's Word of the Year for 2025. As of 2026, 84% of developers use or plan to use AI tools (Stack Overflow 2025 survey), with 51% using them daily. However, a July 2025 METR study found that while developers believed AI made them 20% faster, objective tests showed they were actually 19% slower. AI tools excel at boilerplate code, writing tests, fixing bugs, and explaining unfamiliar code. Security is a major concern — AI tools trained on historical repos lack real-time CVE awareness. Key tools in 2026: Claude Code, GitHub Copilot, Cursor, Devin. Reference: https://www.technologyreview.com/2025/12/15/1128352/rise-of-ai-coding-developers-2026/ and https://devops.com/3-notable-software-development-trends-for-2026-and-beyond/"
     }
   ]
 }
