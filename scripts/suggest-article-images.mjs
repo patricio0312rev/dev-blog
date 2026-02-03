@@ -5,91 +5,20 @@ import "dotenv/config";
  */
 
 export function analyzeArticleForImages(articleData) {
-  const { title, category, tags, outline = [], codeIdeas = [] } = articleData;
+  const { title, category, tags } = articleData;
 
-  const imageRequests = [];
-
-  // 1. Hero image (always needed)
+  // Only generate hero image - in-article images should be Mermaid diagrams
+  // Stock photos of "code on laptop" don't add value to technical articles
   const heroQuery = generateImprovedHeroQuery(title, category, tags);
-  imageRequests.push({
+
+  return [{
     query: heroQuery,
     purpose: "hero",
     orientation: "landscape",
     placement: "frontmatter",
     section: null,
     alt: generateAltText("hero", null, title, tags),
-  });
-
-  // 2. Analyze outline for diagram opportunities
-  outline.forEach((section, idx) => {
-    const sectionLower = section.toLowerCase();
-
-    // Architecture/structure sections
-    if (
-      sectionLower.includes("architecture") ||
-      sectionLower.includes("structure") ||
-      sectionLower.includes("folder") ||
-      sectionLower.includes("directory")
-    ) {
-      imageRequests.push({
-        query: generateTechQuery(tags, section, "architecture system design"),
-        purpose: "diagram",
-        orientation: "landscape",
-        placement: `after-section-${idx}`,
-        section: section,
-        alt: generateAltText("diagram", section, title, tags),
-      });
-    }
-
-    // Comparison sections
-    if (
-      sectionLower.includes("vs") ||
-      sectionLower.includes("comparison") ||
-      sectionLower.includes("before and after") ||
-      sectionLower.includes("differences")
-    ) {
-      imageRequests.push({
-        query: generateTechQuery(tags, section, "comparison contrast side-by-side"),
-        purpose: "comparison",
-        orientation: "landscape",
-        placement: `after-section-${idx}`,
-        section: section,
-        alt: generateAltText("comparison", section, title, tags),
-      });
-    }
-
-    // Workflow sections
-    if (
-      sectionLower.includes("workflow") ||
-      sectionLower.includes("flow") ||
-      sectionLower.includes("process") ||
-      sectionLower.includes("pipeline")
-    ) {
-      imageRequests.push({
-        query: generateTechQuery(tags, section, "workflow process automation"),
-        purpose: "flow-diagram",
-        orientation: "landscape",
-        placement: `after-section-${idx}`,
-        section: section,
-        alt: generateAltText("flow-diagram", section, title, tags),
-      });
-    }
-  });
-
-  // 3. Code-heavy articles get IDE screenshot
-  if (codeIdeas.length > 2) {
-    imageRequests.push({
-      query: generateTechQuery(tags, null, "code editor programming workspace"),
-      purpose: "screenshot",
-      orientation: "landscape",
-      placement: "mid-article",
-      section: "Code Examples",
-      alt: generateAltText("screenshot", "Code Examples", title, tags),
-    });
-  }
-
-  // Limit to 4 images max
-  return imageRequests.slice(0, 4);
+  }];
 }
 
 function generateImprovedHeroQuery(title, category, tags) {
@@ -146,27 +75,6 @@ function generateImprovedHeroQuery(title, category, tags) {
   };
 
   return categoryQueries[category] || "software development code";
-}
-
-function generateTechQuery(tags, section, fallback) {
-  // Extract meaningful terms from section title if available
-  const sectionKeywords = section
-    ? section.toLowerCase()
-        .replace(/[^a-z0-9\s]/g, " ")
-        .split(/\s+/)
-        .filter(w => w.length > 3)
-        .slice(0, 2)
-        .join(" ")
-    : "";
-
-  const primaryTag = tags[0] || "";
-
-  // Build a more contextual query
-  if (sectionKeywords && primaryTag) {
-    return `${primaryTag} ${sectionKeywords} ${fallback}`;
-  }
-
-  return primaryTag ? `${primaryTag} ${fallback}` : fallback;
 }
 
 /**
