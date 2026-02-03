@@ -5,74 +5,6 @@
   "articles": [
     {
       "date": "2026-02-03",
-      "category": "trending",
-      "slug": "nextjs-15-whats-really-new",
-      "title": "Next.js 15 dropped — Here's what actually changes under the hood",
-      "description": "Discover the key features and breaking changes in Next.js 15 and how they impact your existing and future apps.",
-      "tags": [
-        "NextJS",
-        "React",
-        "web development",
-        "trending",
-        "JavaScript"
-      ],
-      "status": "published",
-      "angle": "Cut through the hype to understand which Next.js 15 changes matter most to real projects and how to adopt them painlessly.",
-      "outline": [
-        "Overview of Next.js 15 main release notes",
-        "Improved routing and middleware updates",
-        "Changes in server components and streaming",
-        "Migration tips and gotchas",
-        "Performance gains and benchmarks",
-        "How this shifts your app architecture"
-      ],
-      "codeIdeas": [
-        "Before/after examples of routing changes",
-        "Middleware usage demo",
-        "Implementing streaming server components"
-      ],
-      "mediaIdeas": [
-        "Diagram comparing old vs new routing flow",
-        "Timeline of Next.js releases"
-      ],
-      "entrySlug": "2026-02-03-nextjs-15-whats-really-new",
-      "heroImage": "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzAxNDA4NjJ8&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageCount": 3
-    },
-    {
-      "date": "2026-02-05",
-      "category": "tutorial",
-      "slug": "serverless-python-with-aws-lambda-in-2026",
-      "title": "How to build and deploy serverless Python APIs with AWS Lambda in 2026",
-      "description": "Step-by-step guide on using the latest AWS Lambda features to build fast, scalable Python APIs without managing any servers.",
-      "tags": [
-        "Python",
-        "AWS",
-        "serverless",
-        "API",
-        "tutorial"
-      ],
-      "status": "planned",
-      "angle": "Answer the common pain point of getting started with AWS Lambda + Python using up-to-date tools and deployment practices to avoid buried config hell.",
-      "outline": [
-        "Why serverless in 2026 still makes sense with Python",
-        "Setting up AWS Lambda with the newest AWS CDK",
-        "Writing a simple Python API handler",
-        "Deploying and testing the function",
-        "Monitoring and cold start improvements",
-        "Cost and scaling considerations"
-      ],
-      "codeIdeas": [
-        "Basic Lambda Python handler with API Gateway integration",
-        "CDK deployment script snippet",
-        "Sample unit test for Lambda function"
-      ],
-      "mediaIdeas": [
-        "Architecture diagram of AWS Lambda + API Gateway setup"
-      ]
-    },
-    {
-      "date": "2026-02-08",
       "category": "tutorial",
       "slug": "building-your-first-mcp-server",
       "title": "Building your first MCP server — Connect AI assistants to your own tools",
@@ -111,6 +43,38 @@
         "Screenshot of MCP server running in Claude Desktop"
       ],
       "contextForGeneration": "MCP (Model Context Protocol) was open-sourced by Anthropic in November 2024 and has been adopted by OpenAI, Google, and the broader AI ecosystem. In December 2025, it was donated to the Linux Foundation's Agentic AI Foundation (AAIF). As of early 2026, MCP has 97M+ monthly SDK downloads and is supported in Claude, ChatGPT, VS Code, Cursor, and many other platforms. The latest spec (2025-11-25) includes async operations, statelessness, and server identity features. Official SDKs exist for TypeScript, Python, C#, and Java. Reference: https://modelcontextprotocol.io and https://github.com/modelcontextprotocol/modelcontextprotocol"
+    },
+    {
+      "date": "2026-02-05",
+      "category": "tutorial",
+      "slug": "serverless-python-with-aws-lambda-in-2026",
+      "title": "How to build and deploy serverless Python APIs with AWS Lambda in 2026",
+      "description": "Step-by-step guide on using the latest AWS Lambda features to build fast, scalable Python APIs without managing any servers.",
+      "tags": [
+        "Python",
+        "AWS",
+        "serverless",
+        "API",
+        "tutorial"
+      ],
+      "status": "planned",
+      "angle": "Answer the common pain point of getting started with AWS Lambda + Python using up-to-date tools and deployment practices to avoid buried config hell.",
+      "outline": [
+        "Why serverless in 2026 still makes sense with Python",
+        "Setting up AWS Lambda with the newest AWS CDK",
+        "Writing a simple Python API handler",
+        "Deploying and testing the function",
+        "Monitoring and cold start improvements",
+        "Cost and scaling considerations"
+      ],
+      "codeIdeas": [
+        "Basic Lambda Python handler with API Gateway integration",
+        "CDK deployment script snippet",
+        "Sample unit test for Lambda function"
+      ],
+      "mediaIdeas": [
+        "Architecture diagram of AWS Lambda + API Gateway setup"
+      ]
     },
     {
       "date": "2026-02-10",
