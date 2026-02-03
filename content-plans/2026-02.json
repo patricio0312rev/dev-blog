@@ -18,7 +18,7 @@
         "ChatGPT",
         "Anthropic"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "MCP has become the de-facto standard for connecting AI agents to external tools (97M+ monthly SDK downloads). This practical guide gets you from zero to a working MCP server that any major AI assistant can use.",
       "outline": [
         "What is MCP and why it matters in 2026 (adopted by Anthropic, OpenAI, Google)",
@@ -42,7 +42,9 @@
         "Flowchart of a tool invocation request/response cycle",
         "Screenshot of MCP server running in Claude Desktop"
       ],
-      "contextForGeneration": "MCP (Model Context Protocol) was open-sourced by Anthropic in November 2024 and has been adopted by OpenAI, Google, and the broader AI ecosystem. In December 2025, it was donated to the Linux Foundation's Agentic AI Foundation (AAIF). As of early 2026, MCP has 97M+ monthly SDK downloads and is supported in Claude, ChatGPT, VS Code, Cursor, and many other platforms. The latest spec (2025-11-25) includes async operations, statelessness, and server identity features. Official SDKs exist for TypeScript, Python, C#, and Java. Reference: https://modelcontextprotocol.io and https://github.com/modelcontextprotocol/modelcontextprotocol"
+      "contextForGeneration": "MCP (Model Context Protocol) was open-sourced by Anthropic in November 2024 and has been adopted by OpenAI, Google, and the broader AI ecosystem. In December 2025, it was donated to the Linux Foundation's Agentic AI Foundation (AAIF). As of early 2026, MCP has 97M+ monthly SDK downloads and is supported in Claude, ChatGPT, VS Code, Cursor, and many other platforms. The latest spec (2025-11-25) includes async operations, statelessness, and server identity features. Official SDKs exist for TypeScript, Python, C#, and Java. Reference: https://modelcontextprotocol.io and https://github.com/modelcontextprotocol/modelcontextprotocol",
+      "entrySlug": "2026-02-03-building-your-first-mcp-server",
+      "heroImage": "https://images.unsplash.com/photo-1578163236808-296558070a4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzAxNTg2NTd8&ixlib=rb-4.1.0&q=80&w=1080"
     },
     {
       "date": "2026-02-05",
