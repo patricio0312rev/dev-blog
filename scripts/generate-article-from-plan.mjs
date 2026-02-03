@@ -209,70 +209,6 @@ function buildFrontmatter(planned, heroImage) {
   return lines.join("\n");
 }
 
-function insertImagesIntoArticle(articleBody, inArticleImages) {
-  if (!inArticleImages || inArticleImages.length === 0) {
-    return articleBody;
-  }
-  
-  let updatedBody = articleBody;
-  
-  // Insert images at strategic points based on section headers
-  inArticleImages.forEach((image, idx) => {
-    let insertionPoint = "";
-    
-    // Try to find the section header
-    if (image.section) {
-      const sectionRegex = new RegExp(`(##\\s+${image.section.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'i');
-      const match = updatedBody.match(sectionRegex);
-      
-      if (match) {
-        // Insert after the section and its first paragraph
-        const afterSection = updatedBody.indexOf('\n\n', match.index + match[0].length);
-        if (afterSection !== -1) {
-          insertionPoint = afterSection;
-        }
-      }
-    }
-    
-    // Fallback: insert at specific positions
-    if (!insertionPoint) {
-      const sections = updatedBody.split(/##\s+/);
-      if (image.placement === "mid-article" && sections.length > 2) {
-        const midPoint = Math.floor(sections.length / 2);
-        insertionPoint = updatedBody.indexOf(`## ${sections[midPoint]}`);
-      } else if (image.placement === "before-conclusion") {
-        const conclusionIndex = updatedBody.toLowerCase().lastIndexOf('## conclusion') ||
-                               updatedBody.toLowerCase().lastIndexOf('## wrapping up') ||
-                               updatedBody.toLowerCase().lastIndexOf('## final thoughts');
-        if (conclusionIndex !== -1) {
-          insertionPoint = conclusionIndex;
-        }
-      }
-    }
-    
-    // Generate markdown for the image
-    const imageMarkdown = `\n\n![${image.alt}](${image.url})\n${image.author ? `*Image by ${image.author} on Unsplash*` : ''}\n\n`;
-    
-    if (insertionPoint && insertionPoint > 0) {
-      updatedBody = 
-        updatedBody.slice(0, insertionPoint) + 
-        imageMarkdown + 
-        updatedBody.slice(insertionPoint);
-    } else {
-      // Fallback: add before the signature
-      const signatureIndex = updatedBody.indexOf('Until next time, happy coding');
-      if (signatureIndex !== -1) {
-        updatedBody = 
-          updatedBody.slice(0, signatureIndex) + 
-          imageMarkdown + 
-          updatedBody.slice(signatureIndex);
-      }
-    }
-  });
-  
-  return updatedBody;
-}
-
 // ---------- Main -----------------------------------------------------------
 
 async function main() {
@@ -360,20 +296,12 @@ async function main() {
   const images = await fetchArticleImages(imageRequests);
   
   const heroImage = images.find(img => img.purpose === "hero");
-  const inArticleImages = images.filter(img => img.purpose !== "hero");
-  
+
   if (heroImage) {
     console.log(`\n✅ Hero image: ${heroImage.url}`);
     if (heroImage.author) {
       console.log(`   Credit: ${heroImage.author}`);
     }
-  }
-  
-  if (inArticleImages.length > 0) {
-    console.log(`\n📷 In-article images: ${inArticleImages.length}`);
-    inArticleImages.forEach((img, idx) => {
-      console.log(`   ${idx + 1}. ${img.purpose}: ${img.section || 'General'}`);
-    });
   }
 
   // ---------- Build prompt for the article --------------------------------
@@ -407,11 +335,6 @@ async function main() {
   const codeIdeasText = codeIdeas.map((c) => `- ${c}`).join("\n") || "- (none)";
   const mediaIdeasText = mediaIdeas.map((m) => `- ${m}`).join("\n") || "- (none)";
 
-  // Generate image placement hints for the AI
-  const imagePlacementHints = inArticleImages.map((img, idx) => 
-    `- After section "${img.section || 'mid-article'}": Add a placeholder for ${img.purpose} image`
-  ).join("\n");
-
   const articlePrompt = [
     `Today is ${today}.`,
     "",
@@ -436,13 +359,10 @@ async function main() {
     "Media ideas:",
     mediaIdeasText,
     "",
-    "Image placeholders (will be inserted automatically):",
-    imagePlacementHints || "- No specific image placements needed",
-    "",
     "CRITICAL INSTRUCTIONS:",
     "DO NOT include the frontmatter - it will be added automatically.",
-    "DO NOT add image markdown - images will be inserted automatically.",
-    "DO NOT use placeholder image URLs like https://example.com/placeholder-*.png",
+    "DO NOT add image markdown or placeholder image URLs.",
+    "Use Mermaid diagrams for any visual illustrations (architecture, flows, comparisons).",
     "",
     "DIAGRAMS WITH MERMAID.JS:",
     "For architecture, flow, or comparison diagrams, use Mermaid.js code blocks.",
@@ -541,22 +461,19 @@ async function main() {
     process.exit(1);
   }
 
-  // Insert images into article body
-  const articleWithImages = insertImagesIntoArticle(articleBody, inArticleImages);
-
   // Build complete MDX with frontmatter + body
   const frontmatter = buildFrontmatter(
     { date, category, baseSlug, title, description, tags },
     heroImage
   );
-  
-  const completeMdx = `${frontmatter}\n\n${articleWithImages.trim()}\n`;
+
+  const completeMdx = `${frontmatter}\n\n${articleBody.trim()}\n`;
 
   fs.writeFileSync(outPath, completeMdx, "utf8");
 
   console.log(`\n✅ Article generated at: ${outPath}`);
   console.log(`   Slug: ${entrySlug}`);
-  console.log(`   Images: ${images.length} (1 hero + ${inArticleImages.length} in-article)`);
+  console.log(`   Hero image: ${heroImage ? 'Yes' : 'No'}`);
 
   // Update content plan
   if (plan && Array.isArray(plan.articles)) {
@@ -572,7 +489,6 @@ async function main() {
         status: "published",
         entrySlug,
         heroImage: heroImage?.url,
-        imageCount: images.length,
       };
       savePlanForMonth(monthKey, plan);
       console.log(
