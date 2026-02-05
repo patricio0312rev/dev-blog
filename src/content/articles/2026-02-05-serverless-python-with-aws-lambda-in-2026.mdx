@@ -1,0 +1,109 @@
+---
+title: "How to build and deploy serverless Python APIs with AWS Lambda in 2026"
+description: "Step-by-step guide on using the latest AWS Lambda features to build fast, scalable Python APIs without managing any servers."
+category: "tutorial"
+publishDate: "2026-02-05"
+tags:
+  - Python
+  - AWS
+  - serverless
+  - API
+  - tutorial
+slug: "serverless-python-with-aws-lambda-in-2026"
+heroImage: "https://images.unsplash.com/photo-1505685296765-3a2736de412f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzAzMTMzMzd8&ixlib=rb-4.1.0&q=80&w=1080"
+heroImageAlt: "Hero image for article about How to build and deploy serverless Python APIs with AWS Lambda in 2026"
+heroImageAuthor: "Nick Karvounis"
+heroImageAuthorUrl: "https://unsplash.com/@nickkarvounis"
+---
+
+In the ever-evolving landscape of cloud computing, serverless architectures have firmly established themselves as a cornerstone for building scalable and cost-effective applications. In 2026, with the advent of newer technologies and enhancements, leveraging serverless with Python on AWS Lambda has become more powerful and streamlined than ever before. Whether you're a seasoned developer or just getting your feet wet in the cloud, understanding how to efficiently build and deploy Python APIs on AWS Lambda is crucial. This guide will walk you through the process using the latest tools and practices, ensuring you sidestep the notorious configuration hell and focus on what truly matters—writing great code.
+
+## Why Serverless in 2026 Still Makes Sense with Python
+
+Serverless computing has continued to gain traction for its ability to let developers focus on code rather than managing servers. In 2026, this paradigm is particularly compelling for Python developers due to several reasons:
+- **Simplicity:** Writing Python functions for AWS Lambda is straightforward, allowing for rapid development and deployment cycles.
+- **Scalability:** AWS Lambda automatically scales your application by running code in response to events, making it ideal for unpredictable workloads.
+- **Cost-Effectiveness:** With pay-per-use pricing, you only pay for the compute time you consume, which can lead to significant cost savings, especially for applications with variable traffic.
+
+## Setting Up AWS Lambda with the Newest AWS CDK
+
+The AWS Cloud Development Kit (CDK) has revolutionized how we deploy serverless applications by providing a high-level construct library that abstracts away the boilerplate cloud formation templates. Here's how you can set up a basic AWS Lambda function using the AWS CDK:
+
+```ts filename="lambda-stack.ts"
+import * as lambda from '@aws-cdk/aws-lambda';
+import * as apigateway from '@aws-cdk/aws-apigateway';
+import * as cdk from '@aws-cdk/core';
+
+class LambdaStack extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    const handler = new lambda.Function(this, 'MyFunction', {
+      runtime: lambda.Runtime.PYTHON_3_8,
+      code: lambda.Code.fromAsset('path/to/your/code'),
+      handler: 'index.handler',
+    });
+
+    new apigateway.LambdaRestApi(this, 'Endpoint', {
+      handler,
+    });
+  }
+}
+```
+
+This snippet defines a CDK stack that creates a new Lambda function and exposes it via API Gateway. You'll need to replace `'path/to/your/code'` with the path to your Python code.
+
+## Writing a Simple Python API Handler
+
+The core of your serverless application is the Lambda function itself. Here's a basic example of a Python handler that integrates with API Gateway:
+
+```python filename="index.py"
+def handler(event, context):
+    return {
+        'statusCode': 200,
+        'body': 'Hello from Lambda!'
+    }
+```
+
+This function simply returns a 200 HTTP status code with a greeting message. It's the most basic form of a Python API handler but serves as a great starting point.
+
+## Deploying and Testing the Function
+
+With your AWS CDK setup and Python handler ready, deploying your function is as simple as running the CDK deploy command:
+
+```bash
+cdk deploy
+```
+
+After deployment, you can test your Lambda function via the API Gateway URL provided by the CDK output. Use tools like Postman or Curl to send requests and validate the behavior of your API.
+
+## Monitoring and Cold Start Improvements
+
+Monitoring and optimizing for cold starts are crucial aspects of maintaining a serverless application. AWS has made significant improvements in this area by enhancing the Lambda service with features like Provisioned Concurrency and Advanced Monitoring. These tools enable you to keep tabs on your application's performance and reduce cold start times, ensuring a smoother experience for your end users.
+
+## Cost and Scaling Considerations
+
+While AWS Lambda offers a cost-effective solution for many use cases, it's important to understand the pricing model and how it scales. Lambda pricing is based on the number of requests and the duration of code execution. For applications with high traffic, leveraging Reserved Concurrency and Auto Scaling can help manage costs while maintaining performance.
+
+### Sample Unit Test for Lambda Function
+
+Testing is a critical part of the development process. Here's a simple unit test for your Lambda function using Python's `unittest` framework:
+
+```python filename="test_handler.py"
+import unittest
+from index import handler
+
+class TestHandler(unittest.TestCase):
+    def test_handler_response(self):
+        response = handler({}, {})  # Empty event and context
+        self.assertEqual(response['statusCode'], 200)
+        self.assertEqual(response['body'], 'Hello from Lambda!')
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+This test validates that the handler returns the correct status code and body, ensuring your function behaves as expected.
+
+Until next time, happy coding 👨‍💻  
+– Patricio Marroquin 💜
