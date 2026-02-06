@@ -64,7 +64,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
       try {
         const pagefind = await import(
-          /* @ts-ignore */
+          /* @ts-expect-error - Pagefind is generated at build time */
           /* @vite-ignore */ "/pagefind/pagefind.js"
         );
 
