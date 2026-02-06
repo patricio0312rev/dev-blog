@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useSyncExternalStore } from "react";
 import { Sun, Moon } from "lucide-react";
 
 type Theme = "light" | "dark";
@@ -15,12 +15,15 @@ function setTheme(theme: Theme) {
 }
 
 export const ThemeToggle: React.FC = () => {
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+
   const [theme, setThemeState] = useState<Theme>(getTheme);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-
     // Listen for changes from other components/tabs
     const observer = new MutationObserver(() => {
       setThemeState(getTheme());
