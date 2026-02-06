@@ -11,6 +11,17 @@ import { ArticleCategoryBadge } from "@/components/articles";
 import { TagList } from "@/components/ui";
 import type { ArticleCategory } from "@/types";
 
+interface PagefindData {
+  url: string;
+  excerpt?: string;
+  meta?: {
+    title?: string;
+    category?: string;
+    tags?: string;
+    publish_date?: string;
+  };
+}
+
 interface SearchResult {
   id: string;
   url: string;
@@ -55,7 +66,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
-  const pagefindRef = useRef<{ search: (query: string) => Promise<{ results: { id: string; data: () => Promise<Record<string, unknown>> }[] }> } | null>(null);
+  const pagefindRef = useRef<{ search: (query: string) => Promise<{ results: { id: string; data: () => Promise<PagefindData> }[] }> } | null>(null);
 
   // Load Pagefind library
   useEffect(() => {
@@ -169,10 +180,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
         const searchResults: SearchResult[] = await Promise.all(
           search.results.map(async (result) => {
-            const data = await result.data() as Record<string, string | Record<string, string>>;
+            const data = await result.data();
 
             // Strip HTML tags from excerpt
-            const cleanExcerpt = stripHtml(data.excerpt || "");
+            const cleanExcerpt = stripHtml(data.excerpt ?? "");
 
             return {
               id: result.id,
