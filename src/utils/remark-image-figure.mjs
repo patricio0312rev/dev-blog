@@ -9,6 +9,16 @@
  */
 import { visit } from "unist-util-visit";
 
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function parseCaption(text) {
   // Try to parse "Caption by Author on Unsplash" or "Image by Author on Unsplash"
   const unsplashPattern = /^(?:Image |Photo )?by\s+(.+?)\s+on\s+Unsplash$/i;
@@ -115,7 +125,7 @@ export default function remarkImageFigure() {
         <circle cx="9" cy="9" r="2"/>
         <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
       </svg>
-      <span>Photo by <a href="${authorUrl}?utm_source=patriciomarroquin_dev&utm_medium=referral" target="_blank" rel="noopener noreferrer">${caption.author}</a> on <a href="https://unsplash.com/?utm_source=patriciomarroquin_dev&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></span>
+      <span>Photo by <a href="${escapeHtml(authorUrl)}?utm_source=patriciomarroquin_dev&utm_medium=referral" target="_blank" rel="noopener noreferrer">${escapeHtml(caption.author)}</a> on <a href="https://unsplash.com/?utm_source=patriciomarroquin_dev&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></span>
     </figcaption>`;
         } else {
           captionHtml = `
@@ -125,14 +135,14 @@ export default function remarkImageFigure() {
         <circle cx="9" cy="9" r="2"/>
         <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
       </svg>
-      <span>${caption.text}</span>
+      <span>${escapeHtml(caption.text)}</span>
     </figcaption>`;
         }
       }
 
       const figureHtml = `<figure class="article-figure not-prose">
   <div class="figure-image-wrapper">
-    <img src="${url}" alt="${alt || ""}" loading="lazy" decoding="async" />
+    <img src="${escapeHtml(url)}" alt="${escapeHtml(alt || "")}" loading="lazy" decoding="async" />
   </div>${captionHtml}
 </figure>`;
 
