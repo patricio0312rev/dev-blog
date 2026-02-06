@@ -9,6 +9,16 @@
  */
 import { visit } from "unist-util-visit";
 
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function extractTitle(meta, mermaidCode) {
   // Try to extract from meta (e.g., title="Agent Flow")
   if (meta) {
@@ -52,7 +62,7 @@ export default function remarkMermaidPre() {
       <path d="M3 3v18h18"/>
       <path d="m19 9-5 5-4-4-3 3"/>
     </svg>
-    <span>${title ? `Diagram: ${title}` : "Diagram"}</span>
+    <span>${title ? `Diagram: ${escapeHtml(title)}` : "Diagram"}</span>
   </div>
   <div class="mermaid-wrapper-content">
     <pre class="mermaid" data-mermaid-src="${encoded}"></pre>
