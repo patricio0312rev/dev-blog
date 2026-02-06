@@ -9,11 +9,9 @@ function getTheme(): Theme {
 }
 
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>("light");
+  const [theme, setThemeState] = useState<Theme>(getTheme);
 
   useEffect(() => {
-    setThemeState(getTheme());
-
     const observer = new MutationObserver(() => {
       setThemeState(getTheme());
     });
