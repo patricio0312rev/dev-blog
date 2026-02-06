@@ -95,12 +95,18 @@ function parseArticleFrontmatter(content) {
   return { frontmatter, body, data };
 }
 
+function escapeYamlString(str) {
+  if (!str) return "";
+  return String(str).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
 function updateFrontmatterField(frontmatter, field, value) {
+  const escaped = escapeYamlString(value);
   const regex = new RegExp(`^${field}:.*$`, 'm');
   if (regex.test(frontmatter)) {
-    return frontmatter.replace(regex, `${field}: "${value}"`);
+    return frontmatter.replace(regex, `${field}: "${escaped}"`);
   }
-  return frontmatter + `\n${field}: "${value}"`;
+  return frontmatter + `\n${field}: "${escaped}"`;
 }
 
 async function updateArticleHeroImage(filepath) {
