@@ -786,6 +786,7 @@ const seriesName = series ? series.split("-").map(w => w.charAt(0).toUpperCase()
         try {
           window.mermaid.initialize({
             startOnLoad: false,
+            securityLevel: "strict",
             theme: isDark ? "dark" : "default",
             themeVariables: isDark ? {
               primaryColor: "#3f3f46",
