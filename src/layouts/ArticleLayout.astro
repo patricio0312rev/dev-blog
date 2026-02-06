@@ -72,7 +72,7 @@ const CategoryIcon = catStyle.Icon;
 const allArticles = await getCollection("articles");
 
 const related = allArticles
-  .filter((entry) => entry.slug !== article.slug)
+  .filter((entry) => entry.slug !== article.slug && !entry.data.draft)
   .map((entry) => {
     const data = entry.data as CollectionEntry<"articles">["data"];
     const overlap = (data.tags || []).filter((t: string) =>
@@ -569,6 +569,10 @@ const seriesName = series ? series.split("-").map(w => w.charAt(0).toUpperCase()
           progressEl.style.width = value + "%";
         };
 
+        if (window.__readingProgressHandler) {
+          window.removeEventListener("scroll", window.__readingProgressHandler);
+        }
+        window.__readingProgressHandler = updateProgress;
         updateProgress();
         window.addEventListener("scroll", updateProgress, { passive: true });
 
@@ -671,8 +675,11 @@ const seriesName = series ? series.split("-").map(w => w.charAt(0).toUpperCase()
         });
       }
 
-      initArticleFeatures();
-      document.addEventListener("astro:page-load", initArticleFeatures);
+      if (!window.__articleFeaturesRegistered) {
+        window.__articleFeaturesRegistered = true;
+        initArticleFeatures();
+        document.addEventListener("astro:page-load", initArticleFeatures);
+      }
 
       // Table of Contents
       function initTableOfContents() {
@@ -726,8 +733,11 @@ const seriesName = series ? series.split("-").map(w => w.charAt(0).toUpperCase()
         }
       }
 
-      initTableOfContents();
-      document.addEventListener("astro:page-load", initTableOfContents);
+      if (!window.__tocRegistered) {
+        window.__tocRegistered = true;
+        initTableOfContents();
+        document.addEventListener("astro:page-load", initTableOfContents);
+      }
     </script>
 
     <!-- Mermaid client-side rendering -->
@@ -807,36 +817,38 @@ const seriesName = series ? series.split("-").map(w => w.charAt(0).toUpperCase()
         }
       }
 
-      // Watch for theme changes
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.attributeName === "data-theme" && window.mermaid) {
-            // Re-render - need to restore original content first
-            document.querySelectorAll(".mermaid-wrapper-content").forEach((wrapper) => {
-              const pre = wrapper.querySelector("pre.mermaid[data-mermaid-src]");
-              if (pre && pre.dataset.processed) {
-                // Reset and re-render
-                const encoded = pre.dataset.mermaidSrc;
-                if (encoded) {
-                  pre.textContent = atob(encoded);
-                  pre.removeAttribute("data-processed");
+      if (!window.__mermaidRegistered) {
+        window.__mermaidRegistered = true;
+
+        // Watch for theme changes
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.attributeName === "data-theme" && window.mermaid) {
+              document.querySelectorAll(".mermaid-wrapper-content").forEach((wrapper) => {
+                const pre = wrapper.querySelector("pre.mermaid[data-mermaid-src]");
+                if (pre && pre.dataset.processed) {
+                  const encoded = pre.dataset.mermaidSrc;
+                  if (encoded) {
+                    pre.textContent = atob(encoded);
+                    pre.removeAttribute("data-processed");
+                  }
                 }
-              }
-            });
-            renderMermaid();
-          }
+              });
+              renderMermaid();
+            }
+          });
         });
-      });
 
-      observer.observe(document.documentElement, { attributes: true });
+        observer.observe(document.documentElement, { attributes: true });
 
-      // Wait for DOM to be ready
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initMermaid);
-      } else {
-        initMermaid();
+        // Wait for DOM to be ready
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initMermaid);
+        } else {
+          initMermaid();
+        }
+        document.addEventListener("astro:page-load", initMermaid);
       }
-      document.addEventListener("astro:page-load", initMermaid);
     </script>
   </article></BaseLayout
 >
