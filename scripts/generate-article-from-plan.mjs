@@ -74,6 +74,8 @@ async function fetchUnsplashImage(query) {
       alt: data.alt_description || data.description || query,
       author: data.user.name,
       authorUrl: data.user.links.html,
+      unsplashUrl: data.links.html,
+      downloadLocation: data.links.download_location,
     };
   } catch (error) {
     console.error(`  ❌ Failed to fetch from Unsplash:`, error.message);
