@@ -71,6 +71,11 @@ function getPicsumImage(query) {
   };
 }
 
+function escapeYamlString(str) {
+  if (!str) return "";
+  return String(str).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
 function parseArticleFrontmatter(content) {
   const match = content.match(/^---\n([\s\S]*?)\n---/);
   if (!match) return null;
@@ -149,20 +154,20 @@ async function addImagesToArticle(filepath) {
   
   // Add hero image to frontmatter
   let updatedFrontmatter = frontmatter +
-    `\nheroImage: "${heroImage.url}"` +
-    `\nheroImageAlt: "${heroImage.alt}"`;
+    `\nheroImage: "${escapeYamlString(heroImage.url)}"` +
+    `\nheroImageAlt: "${escapeYamlString(heroImage.alt)}"`;
 
   if (heroImage.author) {
-    updatedFrontmatter += `\nheroImageAuthor: "${heroImage.author}"`;
+    updatedFrontmatter += `\nheroImageAuthor: "${escapeYamlString(heroImage.author)}"`;
   }
   if (heroImage.authorUrl) {
-    updatedFrontmatter += `\nheroImageAuthorUrl: "${heroImage.authorUrl}"`;
+    updatedFrontmatter += `\nheroImageAuthorUrl: "${escapeYamlString(heroImage.authorUrl)}"`;
   }
   if (heroImage.unsplashUrl) {
-    updatedFrontmatter += `\nheroImageUnsplashUrl: "${heroImage.unsplashUrl}"`;
+    updatedFrontmatter += `\nheroImageUnsplashUrl: "${escapeYamlString(heroImage.unsplashUrl)}"`;
   }
   if (heroImage.downloadLocation) {
-    updatedFrontmatter += `\nheroImageDownloadLocation: "${heroImage.downloadLocation}"`;
+    updatedFrontmatter += `\nheroImageDownloadLocation: "${escapeYamlString(heroImage.downloadLocation)}"`;
   }
   
   const updatedContent = `---\n${updatedFrontmatter}\n---${body}`;
