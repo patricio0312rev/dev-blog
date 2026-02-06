@@ -28,9 +28,9 @@ export interface ImageSearchParams {
     
     if (!accessKey) {
       console.warn("UNSPLASH_ACCESS_KEY not configured, using fallback");
-      return getPexelsImage(params) || getPicsumImage(params);
+      return (await getPexelsImage(params)) || getPicsumImage(params);
     }
-  
+
     try {
       const url = new URL("https://api.unsplash.com/photos/random");
       url.searchParams.set("query", params.query);
@@ -59,7 +59,7 @@ export interface ImageSearchParams {
       };
     } catch (error) {
       console.error("Failed to fetch from Unsplash:", error);
-      return getPexelsImage(params) || getPicsumImage(params);
+      return (await getPexelsImage(params)) || getPicsumImage(params);
     }
   }
   
