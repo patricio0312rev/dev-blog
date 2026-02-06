@@ -47,6 +47,8 @@ async function fetchUnsplashImage(query) {
       alt: data.alt_description || data.description || query,
       author: data.user.name,
       authorUrl: data.user.links.html,
+      unsplashUrl: data.links.html,
+      downloadLocation: data.links.download_location,
     };
   } catch (error) {
     console.error("Failed to fetch from Unsplash:", error.message);
@@ -146,10 +148,22 @@ async function addImagesToArticle(filepath) {
   }
   
   // Add hero image to frontmatter
-  const updatedFrontmatter = frontmatter + 
+  let updatedFrontmatter = frontmatter +
     `\nheroImage: "${heroImage.url}"` +
-    `\nheroImageAlt: "${heroImage.alt}"` +
-    (heroImage.author ? `\n# Image by ${heroImage.author} on Unsplash (${heroImage.authorUrl})` : '');
+    `\nheroImageAlt: "${heroImage.alt}"`;
+
+  if (heroImage.author) {
+    updatedFrontmatter += `\nheroImageAuthor: "${heroImage.author}"`;
+  }
+  if (heroImage.authorUrl) {
+    updatedFrontmatter += `\nheroImageAuthorUrl: "${heroImage.authorUrl}"`;
+  }
+  if (heroImage.unsplashUrl) {
+    updatedFrontmatter += `\nheroImageUnsplashUrl: "${heroImage.unsplashUrl}"`;
+  }
+  if (heroImage.downloadLocation) {
+    updatedFrontmatter += `\nheroImageDownloadLocation: "${heroImage.downloadLocation}"`;
+  }
   
   const updatedContent = `---\n${updatedFrontmatter}\n---${body}`;
   
