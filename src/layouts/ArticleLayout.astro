@@ -344,7 +344,7 @@ const seriesName = series ? series.split("-").map(w => w.charAt(0).toUpperCase()
               score,
             })
           )}
-          client:load
+          client:visible
         />
       )
     }
@@ -492,7 +492,7 @@ const seriesName = series ? series.split("-").map(w => w.charAt(0).toUpperCase()
     </footer>
 
     <!-- Comments -->
-    <GiscusComments client:load term={`/blog/${article.slug}`} />
+    <GiscusComments client:visible term={`/blog/${article.slug}`} />
 
     <!-- Article JSON-LD -->
     <script
