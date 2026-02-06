@@ -26,11 +26,9 @@ function saveList(list: BookmarkedArticle[]) {
 }
 
 export function useReadingList() {
-  const [bookmarks, setBookmarks] = useState<BookmarkedArticle[]>([]);
+  const [bookmarks, setBookmarks] = useState<BookmarkedArticle[]>(getStoredList);
 
   useEffect(() => {
-    setBookmarks(getStoredList());
-
     const handleUpdate = () => setBookmarks(getStoredList());
     window.addEventListener("reading-list-updated", handleUpdate);
     window.addEventListener("storage", handleUpdate);
