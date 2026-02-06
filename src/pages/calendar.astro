@@ -2,7 +2,26 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ContentCalendarPage from "@/views/ContentCalendarPage";
 
-const planModules = import.meta.glob<{ default: any }>(
+interface PlanArticle {
+  slug?: string;
+  id?: string;
+  entrySlug?: string;
+  date?: string;
+  scheduledDate?: string;
+  title: string;
+  description?: string;
+  summary?: string;
+  category: string;
+  tags?: string[];
+  status?: string;
+}
+
+interface ContentPlan {
+  articles?: PlanArticle[];
+  items?: PlanArticle[];
+}
+
+const planModules = import.meta.glob<{ default: ContentPlan }>(
   "/content-plans/*.json",
   { eager: true }
 );
@@ -14,7 +33,7 @@ const allArticles = Object.values(planModules)
     if (Array.isArray(data.items)) return data.items;
     return [];
   })
-  .map((article: any) => {
+  .map((article) => {
     const baseSlug: string = article.slug || article.id || "";
     const date: string = article.date || article.scheduledDate || "";
 
