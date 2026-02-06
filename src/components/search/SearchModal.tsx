@@ -55,7 +55,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
-  const pagefindRef = useRef<any>(null);
+  const pagefindRef = useRef<{ search: (query: string) => Promise<{ results: { id: string; data: () => Promise<Record<string, unknown>> }[] }> } | null>(null);
 
   // Load Pagefind library
   useEffect(() => {
@@ -168,8 +168,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         const search = await pagefindRef.current.search(searchQuery);
 
         const searchResults: SearchResult[] = await Promise.all(
-          search.results.map(async (result: any) => {
-            const data = await result.data();
+          search.results.map(async (result) => {
+            const data = await result.data() as Record<string, string | Record<string, string>>;
 
             // Strip HTML tags from excerpt
             const cleanExcerpt = stripHtml(data.excerpt || "");
