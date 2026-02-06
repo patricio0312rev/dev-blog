@@ -15,12 +15,11 @@ function setTheme(theme: Theme) {
 }
 
 export const ThemeToggle: React.FC = () => {
-  const [theme, setThemeState] = useState<Theme>("light");
+  const [theme, setThemeState] = useState<Theme>(getTheme);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    setThemeState(getTheme());
 
     // Listen for changes from other components/tabs
     const observer = new MutationObserver(() => {
