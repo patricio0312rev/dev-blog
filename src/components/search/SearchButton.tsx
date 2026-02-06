@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useSyncExternalStore } from "react";
 import { Search } from "lucide-react";
 import { cn } from "@/utils";
 
@@ -8,15 +8,15 @@ interface SearchButtonProps {
   className?: string;
 }
 
+const getIsMac = () => navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+const subscribe = () => () => {};
+
 export const SearchButton: React.FC<SearchButtonProps> = ({
   onClick,
   variant = "navbar",
   className,
 }) => {
-  // Detect OS for correct keyboard shortcut display
-  const isMac =
-    typeof window !== "undefined" &&
-    navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+  const isMac = useSyncExternalStore(subscribe, getIsMac, () => false);
   const shortcutKey = isMac ? "⌘" : "Ctrl";
 
   if (variant === "navbar") {
