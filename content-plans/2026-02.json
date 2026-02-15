@@ -93,7 +93,7 @@
         "architecture",
         "refactoring"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Most guides skip the messy parts of refactoring — I'll show you the practical trade-offs, incremental moves, and testing needed for real world success.",
       "outline": [
         "Identifying service boundaries in legacy code",
@@ -111,7 +111,9 @@
       "mediaIdeas": [
         "Service boundary visualization",
         "Before/after architectural diagrams"
-      ]
+      ],
+      "entrySlug": "2026-02-10-refactoring-a-monolith-to-nestjs-microservices",
+      "heroImage": "https://images.unsplash.com/photo-1669023414180-4dcf35d943e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzA3NDYxNzB8&ixlib=rb-4.1.0&q=80&w=1080"
     },
     {
       "date": "2026-02-13",
