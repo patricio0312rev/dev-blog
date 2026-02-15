@@ -130,7 +130,7 @@
         "tool use",
         "tutorial"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "2026 is the year of 'agents plus guardrails'. Move beyond simple chatbots to build AI that can actually do things — call APIs, query databases, and complete workflows — while maintaining safety and control.",
       "outline": [
         "What makes an AI agent different from a chatbot",
@@ -154,7 +154,9 @@
         "Comparison table: chatbot vs agent capabilities",
         "Architecture diagram of a production agent system"
       ],
-      "contextForGeneration": "Agentic AI refers to AI systems that can work toward goals with limited supervision by planning steps and using tools. In 2026, the pattern is 'agents plus guardrails' — autonomous capabilities with safety controls. Key APIs: OpenAI's function calling (tools parameter) and Anthropic's tool_use feature. The METR study showed that while developers believe AI makes them faster, autonomous systems need careful design to actually improve productivity. Gartner predicts 40% of enterprise apps will include task-specific AI agents by end of 2026. Reference: https://thenewstack.io/5-key-trends-shaping-agentic-development-in-2026/"
+      "contextForGeneration": "Agentic AI refers to AI systems that can work toward goals with limited supervision by planning steps and using tools. In 2026, the pattern is 'agents plus guardrails' — autonomous capabilities with safety controls. Key APIs: OpenAI's function calling (tools parameter) and Anthropic's tool_use feature. The METR study showed that while developers believe AI makes them faster, autonomous systems need careful design to actually improve productivity. Gartner predicts 40% of enterprise apps will include task-specific AI agents by end of 2026. Reference: https://thenewstack.io/5-key-trends-shaping-agentic-development-in-2026/",
+      "entrySlug": "2026-02-13-building-agentic-ai-nodejs-tool-use",
+      "heroImage": "https://images.unsplash.com/photo-1564931768730-7e4d8e240044?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzEwMDQxNzB8&ixlib=rb-4.1.0&q=80&w=1080"
     },
     {
       "date": "2026-02-17",
