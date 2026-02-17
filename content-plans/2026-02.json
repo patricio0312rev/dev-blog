@@ -171,7 +171,7 @@
         "trending",
         "performance"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Most posts list features, but I'll focus on how Redis 7 can solve common, real-world caching and data problems better than before.",
       "outline": [
         "Summary of Redis 7 key feature updates",
@@ -189,7 +189,9 @@
       "mediaIdeas": [
         "Feature comparison table Redis 6 vs 7",
         "Cluster architecture diagram"
-      ]
+      ],
+      "entrySlug": "2026-02-17-redis-7-features-in-2026-you-need-to-know",
+      "heroImage": "https://images.unsplash.com/photo-1744868562210-fffb7fa882d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzEzNTA3MTR8&ixlib=rb-4.1.0&q=80&w=1080"
     },
     {
       "date": "2026-02-20",
