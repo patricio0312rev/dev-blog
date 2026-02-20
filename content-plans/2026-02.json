@@ -204,7 +204,7 @@
         "TypeScript",
         "DevTools"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Testing microservices scares a lot of devs; I break it down into practical steps that can fit real project workflows and automation.",
       "outline": [
         "Test pyramid explained for microservices",
@@ -222,7 +222,9 @@
       "mediaIdeas": [
         "Test pyramid infographic",
         "CI/CD pipeline flow showing test stages"
-      ]
+      ],
+      "entrySlug": "2026-02-20-testing-nestjs-microservices-effectively",
+      "heroImage": "https://images.unsplash.com/photo-1687603858673-a08a2dc2302c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzE2MDg3NTh8&ixlib=rb-4.1.0&q=80&w=1080"
     },
     {
       "date": "2026-02-24",
