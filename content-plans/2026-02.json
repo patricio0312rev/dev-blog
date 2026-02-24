@@ -241,7 +241,7 @@
         "tutorial",
         "components"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Many React devs struggle understanding Astro's partial hydration; this tutorial bridges that gap with concrete examples and pros/cons.",
       "outline": [
         "Overview of Astro's island architecture",
@@ -259,7 +259,9 @@
       "mediaIdeas": [
         "Diagram comparing React SPA vs Astro hydration",
         "Bundle size before/after image"
-      ]
+      ],
+      "entrySlug": "2026-02-24-astro-component-patterns-for-react-devs",
+      "heroImage": "https://images.unsplash.com/photo-1650234083227-74c0700b295a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzE5NTU1Nzh8&ixlib=rb-4.1.0&q=80&w=1080"
     },
     {
       "date": "2026-02-27",
