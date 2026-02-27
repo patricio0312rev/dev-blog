@@ -276,7 +276,7 @@
         "trending",
         "developer experience"
       ],
-      "status": "planned",
+      "status": "published",
       "angle": "Vibe coding was Collins' Word of the Year for 2025 and is now mainstream. But while 84% of developers use AI tools, a METR study found they may actually be 19% slower. Let's separate the hype from reality.",
       "outline": [
         "What is vibe coding and why it went mainstream in 2026",
@@ -298,7 +298,9 @@
         "Decision tree: when to use AI assistance vs write manually",
         "Timeline of AI coding tool adoption (2022-2026)"
       ],
-      "contextForGeneration": "Vibe coding was named Collins Dictionary's Word of the Year for 2025. As of 2026, 84% of developers use or plan to use AI tools (Stack Overflow 2025 survey), with 51% using them daily. However, a July 2025 METR study found that while developers believed AI made them 20% faster, objective tests showed they were actually 19% slower. AI tools excel at boilerplate code, writing tests, fixing bugs, and explaining unfamiliar code. Security is a major concern — AI tools trained on historical repos lack real-time CVE awareness. Key tools in 2026: Claude Code, GitHub Copilot, Cursor, Devin. Reference: https://www.technologyreview.com/2025/12/15/1128352/rise-of-ai-coding-developers-2026/ and https://devops.com/3-notable-software-development-trends-for-2026-and-beyond/"
+      "contextForGeneration": "Vibe coding was named Collins Dictionary's Word of the Year for 2025. As of 2026, 84% of developers use or plan to use AI tools (Stack Overflow 2025 survey), with 51% using them daily. However, a July 2025 METR study found that while developers believed AI made them 20% faster, objective tests showed they were actually 19% slower. AI tools excel at boilerplate code, writing tests, fixing bugs, and explaining unfamiliar code. Security is a major concern — AI tools trained on historical repos lack real-time CVE awareness. Key tools in 2026: Claude Code, GitHub Copilot, Cursor, Devin. Reference: https://www.technologyreview.com/2025/12/15/1128352/rise-of-ai-coding-developers-2026/ and https://devops.com/3-notable-software-development-trends-for-2026-and-beyond/",
+      "entrySlug": "2026-02-27-vibe-coding-productivity-myth-or-reality",
+      "heroImage": "https://images.unsplash.com/photo-1762330467475-a565d04e1808?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDc5MDV8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzIyMTMzNzh8&ixlib=rb-4.1.0&q=80&w=1080"
     }
   ]
 }
