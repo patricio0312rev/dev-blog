@@ -1,0 +1,305 @@
+{
+  "month": "2026-03",
+  "startDate": "2026-03-01",
+  "endDate": "2026-03-31",
+  "articles": [
+    {
+      "date": "2026-03-03",
+      "category": "trending",
+      "slug": "nextjs-16-whats-new-for-server-components",
+      "title": "Next.js 16 dropped: What’s actually useful about the new Server Components",
+      "description": "Cut through the hype and learn which Next.js 16 Server Component features really improve your app performance and dev experience.",
+      "tags": [
+        "nextjs",
+        "react",
+        "server-components",
+        "webperf",
+        "trending",
+        "javascript"
+      ],
+      "status": "planned",
+      "angle": "Many posts hype Next.js releases but few focus on practical advantages and pitfalls of Server Components in real projects.",
+      "outline": [
+        "Brief overview of Server Components in Next.js 16",
+        "What improved under the hood versus v15",
+        "How to integrate Server Components incrementally",
+        "Performance impact in typical apps",
+        "Caveats and limitations to watch out for now"
+      ],
+      "codeIdeas": [
+        "Basic example transforming a Client Component to Server Component",
+        "Measuring render time with and without Server Components",
+        "Fallbacks handling when mixing Client and Server Components"
+      ],
+      "mediaIdeas": [
+        "Diagram comparing Server vs Client Component rendering flow",
+        "Before/after render time performance graph"
+      ]
+    },
+    {
+      "date": "2026-03-05",
+      "category": "tutorial",
+      "slug": "building-ai-powered-chatbots-with-nodejs-and-openai",
+      "title": "How to build an AI-powered chatbot with Node.js and OpenAI’s latest API",
+      "description": "Step-by-step guide to create a low-latency, conversational chatbot using Node.js, OpenAI’s new API, and WebSocket for real-time messaging.",
+      "tags": [
+        "nodejs",
+        "openai",
+        "chatbot",
+        "ai",
+        "tutorial",
+        "websocket"
+      ],
+      "status": "planned",
+      "angle": "A lot of chatter about AI chatbots but little solid, production-ready Node.js examples showing real-time integration and scaling tips.",
+      "outline": [
+        "Setting up OpenAI API in Node.js project",
+        "Creating a WebSocket server for real-time chat",
+        "Connecting client and server for live interaction",
+        "Handling message throttling and errors gracefully",
+        "Deploying and scaling on Vercel or AWS"
+      ],
+      "codeIdeas": [
+        "Node.js server setup with WebSocket and OpenAI calls",
+        "Client-side React component communicating with backend",
+        "Error handling with retry logic on API failures"
+      ],
+      "mediaIdeas": [
+        "Flowchart of message lifecycle between client, server, and OpenAI",
+        "Screenshot of working chatbot UI"
+      ]
+    },
+    {
+      "date": "2026-03-10",
+      "category": "deep-dive",
+      "slug": "solid-principles-applied-to-nodejs-backends",
+      "title": "Applying SOLID principles to Node.js backend projects without overengineering",
+      "description": "Deep dive on making SOLID principles work for real Node.js backends, balancing maintainability with practical engineering constraints.",
+      "tags": [
+        "nodejs",
+        "architecture",
+        "solid",
+        "backend",
+        "best-practices",
+        "deep-dive"
+      ],
+      "status": "planned",
+      "angle": "SOLID often sounds great in theory but tricky in Node.js services—this article shares honest lessons and workable patterns.",
+      "outline": [
+        "Brief SOLID recap for backend devs",
+        "Applying Single Responsibility Principle to controllers and services",
+        "Dependency Injection patterns in Node.js",
+        "Interface Segregation and avoiding god objects",
+        "Open/Closed Principle with feature toggles and plugins",
+        "Testing strategies aligned with SOLID"
+      ],
+      "codeIdeas": [
+        "Refactoring a monolithic controller into SRP-compliant modules",
+        "DI container example with TypeScript",
+        "Interface segregation via smaller abstract service interfaces"
+      ],
+      "mediaIdeas": [
+        "Diagram showing class relationships before and after refactor",
+        "Code snippet side-by-side comparison"
+      ]
+    },
+    {
+      "date": "2026-03-12",
+      "category": "trending",
+      "slug": "aws-graviton3-hands-on-performance-review",
+      "title": "AWS Graviton3 CPUs in 2026: What I learned deploying real workloads",
+      "description": "A candid look at the promises vs reality of switching to AWS Graviton3-based instances for Node.js and Python apps.",
+      "tags": [
+        "aws",
+        "graviton3",
+        "performance",
+        "nodejs",
+        "python",
+        "cloud",
+        "trending"
+      ],
+      "status": "planned",
+      "angle": "Cloud vendors hype new ARM CPUs but costs, compatibility, and performance nuances often bite. Here’s a real-world perspective.",
+      "outline": [
+        "Overview of Graviton3 improvements",
+        "Benchmarking Node.js and Python apps on Graviton3",
+        "Common gotchas and incompatibilities",
+        "Cost analysis and deployment tips",
+        "When NOT to jump on Graviton3"
+      ],
+      "codeIdeas": [
+        "Benchmark script comparing CPU and memory usage",
+        "Simple Node.js AWS Lambda optimized for ARM architecture"
+      ],
+      "mediaIdeas": [
+        "Performance comparison charts (x86 vs Graviton3)",
+        "AWS console screenshots of deployment setup"
+      ]
+    },
+    {
+      "date": "2026-03-17",
+      "category": "tutorial",
+      "slug": "end-to-end-testing-nextjs-apps-with-cypress-and-testing-library",
+      "title": "Making your Next.js app bulletproof: end-to-end testing with Cypress & Testing Library",
+      "description": "Walkthrough writing maintainable E2E tests that actually catch regressions in Next.js apps using Cypress and Testing Library.",
+      "tags": [
+        "nextjs",
+        "testing",
+        "cypress",
+        "testing-library",
+        "tutorial",
+        "frontend"
+      ],
+      "status": "planned",
+      "angle": "Many devs neglect E2E or write fragile tests. This guide covers solid test design practices and realistic scenarios.",
+      "outline": [
+        "Setup Cypress + Testing Library in Next.js",
+        "Writing user-centric E2E tests",
+        "Mocking backend API responses",
+        "Debugging flaky tests and best practices",
+        "CI integration tips to catch issues early"
+      ],
+      "codeIdeas": [
+        "Basic user login flow test with Cypress",
+        "Using Testing Library queries inside Cypress tests",
+        "Mocking fetch/XHR for consistent test runs"
+      ],
+      "mediaIdeas": [
+        "Cypress test runner UI screenshot",
+        "Diagram of test flow interacting with app and mocks"
+      ]
+    },
+    {
+      "date": "2026-03-20",
+      "category": "deep-dive",
+      "slug": "designing-scalable-microservices-with-nestjs",
+      "title": "Designing scalable microservices with NestJS: patterns that actually work",
+      "description": "Explore proven architectural patterns and pitfalls for building maintainable and scalable microservices in NestJS.",
+      "tags": [
+        "nestjs",
+        "microservices",
+        "architecture",
+        "nodejs",
+        "backend",
+        "deep-dive"
+      ],
+      "status": "planned",
+      "angle": "Microservices hype often forgets real-life complexity. This article shares practical NestJS patterns that reduce coupling and boost dev velocity.",
+      "outline": [
+        "When to use microservices vs monoliths in Node.js projects",
+        "Communication patterns: synchronous vs asynchronous",
+        "Event-driven architecture and message brokers",
+        "Service discovery and fault tolerance",
+        "Organizing NestJS modules for scalability",
+        "Testing microservices end-to-end"
+      ],
+      "codeIdeas": [
+        "NestJS event emitter example for async communication",
+        "Message broker integration (e.g. Redis, RabbitMQ) example",
+        "Sample module organization showing bounded contexts"
+      ],
+      "mediaIdeas": [
+        "Microservices communication flow diagram",
+        "Code module dependency graph"
+      ]
+    },
+    {
+      "date": "2026-03-24",
+      "category": "tutorial",
+      "slug": "intro-to-astro-yevoting-server-rendering-guide",
+      "title": "Getting started with Astro in 2026: a fresh guide to server rendering and modern builds",
+      "description": "An up-to-date tutorial on building fast, server-rendered websites with Astro that play well with React and TypeScript.",
+      "tags": [
+        "astro",
+        "server-rendering",
+        "react",
+        "typescript",
+        "tutorial",
+        "webdev"
+      ],
+      "status": "planned",
+      "angle": "Astro keeps evolving; this guide helps devs leverage the latest improvements for performant modern sites with practical tips.",
+      "outline": [
+        "Astro project setup with React and TypeScript",
+        "Understanding Astro’s partial hydration",
+        "Server rendering pages with data-fetching",
+        "Optimizing build size and assets",
+        "Deploying Astro projects (Vercel, Netlify)"
+      ],
+      "codeIdeas": [
+        "Minimal Astro page using React components",
+        "Implementing a data loader in Astro",
+        "Configuring Astro build for minimal client JS"
+      ],
+      "mediaIdeas": [
+        "Build size comparison chart",
+        "Visual of hydration boundary"
+      ]
+    },
+    {
+      "date": "2026-03-27",
+      "category": "trending",
+      "slug": "typescript-6x-new-feature-breakdown",
+      "title": "TypeScript 6.x is out — here are the features I’m actually excited to use",
+      "description": "A candid, dev-to-dev look at TypeScript 6.x new features with real examples and borderline opinionated takes on what’s worth your time.",
+      "tags": [
+        "typescript",
+        "2026",
+        "javascript",
+        "trending",
+        "developer-experience"
+      ],
+      "status": "planned",
+      "angle": "Not every TS release is equally useful; this article skips the fluff and focuses on features that improve daily dev life.",
+      "outline": [
+        "Overview of the headline TS 6.x features",
+        "New type system improvements I use immediately",
+        "Tooling & performance upgrades",
+        "Features I probably won’t use (and why)",
+        "Tips for migrating existing codebases"
+      ],
+      "codeIdeas": [
+        "Using new template literal types",
+        "Example of narrowed control flow enhancements",
+        "Refactoring legacy code with new TS features"
+      ],
+      "mediaIdeas": [
+        "Before/after code snippet comparisons",
+        "Feature support timeline graphic"
+      ]
+    },
+    {
+      "date": "2026-03-30",
+      "category": "deep-dive",
+      "slug": "redis-caching-strategies-with-nodejs-explained",
+      "title": "Redis caching strategies with Node.js: how to decide what and when to cache",
+      "description": "Go beyond basic caching. Learn strategic approaches to Redis caching that improve performance without creating stale data nightmares.",
+      "tags": [
+        "redis",
+        "nodejs",
+        "caching",
+        "performance",
+        "backend",
+        "deep-dive"
+      ],
+      "status": "planned",
+      "angle": "Caching isn’t just ‘put it in Redis’. This article drills into strategic decisions based on data volatility, consistency, and app architecture.",
+      "outline": [
+        "Why caching is more than just speed",
+        "Cache aside vs write-through vs write-back explained",
+        "When to use TTL, refresh strategies, and invalidation",
+        "Handling cache stampedes and race conditions",
+        "Practical Redis code patterns with Node.js"
+      ],
+      "codeIdeas": [
+        "Implementing cache aside in an Express route",
+        "Using Redis Lua scripts for atomic updates",
+        "TTL and refresh cache wrapper function example"
+      ],
+      "mediaIdeas": [
+        "Diagram of cache strategy workflows",
+        "Sequence diagram for cache hit vs miss"
+      ]
+    }
+  ]
+}
